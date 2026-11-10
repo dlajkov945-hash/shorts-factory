@@ -126,7 +126,7 @@ class Frame:
         r = np.sqrt(((xx - self.W / 2) / (self.W / 2)) ** 2 + ((yy - self.H / 2) / (self.H / 2)) ** 2)
         self.vig = np.clip(1.08 - 0.32 * r ** 2, 0.55, 1.0).astype(np.float32)
         g = np.random.default_rng(7)
-        self.grain = [g.integers(-6, 7, (self.H, self.W, 1), dtype=np.int16) for _ in range(4)]
+        self.grain = [g.integers(-3, 4, (self.H, self.W, 1), dtype=np.int16) for _ in range(4)]
         self.shade = Image.fromarray((np.broadcast_to(a, (self.H, self.W)) * 255).astype(np.uint8), "L")
 
 def big_text(F, base, s, t, t0, pal):
@@ -262,7 +262,7 @@ def main(plan_path, out_path):
     photos = {i: load_photo(os.path.join(ROOT, sc["photo"]), F.W, F.H) for i, sc in enumerate(scenes) if sc.get("photo")}
     all_words = [w for sc in scenes for w in sc["_words"]]
     ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{F.W}x{F.H}", "-r", str(FPS),
-                           "-i", "-", "-i", apath, "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+                           "-i", "-", "-i", apath, "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-maxrate", "6M", "-bufsize", "12M", "-pix_fmt", "yuv420p",
                            "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", out_path], stdin=subprocess.PIPE)
     env_cache = {}
     for fi in range(nfr):
