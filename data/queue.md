@@ -9,3 +9,4 @@
 | nosleep.mp4 | Что будет, если не спать неделю? | (см. plans/nosleep.json) | 2026-11-13 20:00 | собран |
 | moon_whatif.mp4 | Что если Луна исчезнет сегодня ночью? | (см. plans/moon_whatif.json) | 2026-11-14 13:00 | собран |
 | money_mistake.mp4 | Вам по ошибке пришли 5 миллионов. Что бы вы сделали? | (см. plans/money_mistake.json) | 2026-11-14 20:00 | собран |
+| keyboard_history.mp4 | Почему буквы на клавиатуре стоят не по алфавиту? | (см. plans/keyboard_history.json) | 2026-11-15 13:00 | собран |

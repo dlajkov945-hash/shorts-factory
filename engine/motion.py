@@ -56,6 +56,9 @@ def main(plan_path, out_path, stills=False):
             if e.get("on"):
                 hit = next((w for w in sw if norm(w["w"]).startswith(norm(e["on"]))), None)
                 e["_at"] = round((hit["t0"] - sc["t0"]) - 0.05, 3) if hit else e.get("at", 0)
+            for k in [k for k in list(e) if k.endswith("_on") and k != "until_on"]:
+                hit = next((w for w in sw if norm(w["w"]).startswith(norm(e[k]))), None)
+                if hit: e[k[:-3]] = round(hit["t0"] - sc["t0"] - e.get("_at", e.get("at", 0)), 3)
             if e.get("until_on"):
                 hit = next((w for w in sw if norm(w["w"]).startswith(norm(e["until_on"]))), None)
                 if hit: e["until"] = round(hit["t0"] - sc["t0"] - 0.05, 3)

@@ -1,0 +1,185 @@
+{
+ "id": "keyboard_history",
+ "engine": "motion",
+ "theme": "light",
+ "label": "история вещей",
+ "brand": "лайков",
+ "title": "Почему буквы на клавиатуре стоят не по алфавиту?",
+ "description": "Раскладке QWERTY полтора века, она родилась для печатной машинки. А русская ЙЦУКЕН устроена по другому принципу.\n\n#историявещей #клавиатура #факты #интересно #shorts",
+ "music": "chill",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "scenes": [
+  {
+   "say": "Почему́ бу́квы на клавиату́ре стоя́т так стра́нно, а не по алфави́ту?",
+   "audio": "assets/audio/keyboard_history/s0.mp3",
+   "hl": [
+    "странно",
+    "алфавиту"
+   ],
+   "els": [
+    {
+     "v": "keys",
+     "layout": "ru",
+     "y": 0.33,
+     "s": 0.95,
+     "from": "none",
+     "typing": true
+    },
+    {
+     "v": "mascot",
+     "y": 0.57,
+     "s": 0.62,
+     "from": "none",
+     "mood": "happy"
+    },
+    {
+     "v": "note",
+     "text": "АБВГД?",
+     "bubble": true,
+     "x": 0.73,
+     "y": 0.47,
+     "size": 46,
+     "from": "pop",
+     "on": "алфавиту",
+     "sfx": "pop"
+    }
+   ]
+  },
+  {
+   "say": "Англи́йская раскла́дка Кве́рти родила́сь в семидеся́тых года́х девятна́дцатого ве́ка, для печа́тной маши́нки.",
+   "audio": "assets/audio/keyboard_history/s1.mp3",
+   "hl": [
+    "Кверти"
+   ],
+   "els": [
+    {
+     "v": "keys",
+     "layout": "en",
+     "y": 0.33,
+     "s": 0.95,
+     "from": "right",
+     "hl": "QWERTY",
+     "color": "#ff5a1f",
+     "hlAt_on": "Кверти"
+    },
+    {
+     "v": "tag",
+     "text": "1870-е|ПЕЧАТНАЯ МАШИНКА",
+     "y": 0.445,
+     "from": "up",
+     "on": "семидесятых"
+    },
+    {
+     "v": "mascot",
+     "y": 0.57,
+     "s": 0.62,
+     "from": "none",
+     "look": -1
+    }
+   ]
+  },
+  {
+   "say": "Счита́ется, что бу́квы разнесли́, что́бы рычажки́ маши́нки не цепля́лись друг за дру́га.",
+   "audio": "assets/audio/keyboard_history/s2.mp3",
+   "hl": [
+    "не",
+    "цеплялись"
+   ],
+   "els": [
+    {
+     "v": "keys",
+     "layout": "en",
+     "y": 0.33,
+     "s": 0.95,
+     "from": "none",
+     "typing": true
+    },
+    {
+     "v": "note",
+     "text": "клац клац",
+     "x": 0.3,
+     "y": 0.45,
+     "size": 44,
+     "rot": -6,
+     "from": "pop",
+     "on": "рычажки",
+     "sfx": "tick"
+    },
+    {
+     "v": "mascot",
+     "y": 0.57,
+     "s": 0.62,
+     "from": "none",
+     "mood": "shock",
+     "on": "цеплялись",
+     "shake": true
+    }
+   ]
+  },
+  {
+   "say": "А ру́сская йцуке́н устро́ена ина́че: са́мые ча́стые бу́квы стоя́т в це́нтре, под са́мыми си́льными па́льцами.",
+   "audio": "assets/audio/keyboard_history/s3.mp3",
+   "hl": [
+    "в",
+    "центре"
+   ],
+   "exit": "whip",
+   "els": [
+    {
+     "v": "keys",
+     "layout": "ru",
+     "y": 0.33,
+     "s": 0.95,
+     "from": "left",
+     "hl": "АПРОЕНИТ",
+     "color": "#7a5cff",
+     "hlAt_on": "частые"
+    },
+    {
+     "v": "tag",
+     "text": "О Е А И Н Т|САМЫЕ ЧАСТЫЕ",
+     "y": 0.445,
+     "from": "up",
+     "on": "центре"
+    },
+    {
+     "v": "mascot",
+     "y": 0.57,
+     "s": 0.62,
+     "from": "none",
+     "mood": "happy"
+    }
+   ]
+  },
+  {
+   "say": "Так что ва́ша клавиату́ра не сло́мана. Она́ про́сто из девятна́дцатого ве́ка.",
+   "audio": "assets/audio/keyboard_history/s4.mp3",
+   "hl": [
+    "девятнадцатого",
+    "века"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "els": [
+    {
+     "v": "text",
+     "text": "ЕЙ *150+* ЛЕТ",
+     "size": 140,
+     "y": 0.3,
+     "from": "slam",
+     "rot": -4,
+     "on": "девятнадцатого",
+     "keepCaps": true
+    },
+    {
+     "v": "mascot",
+     "y": 0.52,
+     "s": 0.8,
+     "from": "pop",
+     "mood": "happy"
+    }
+   ]
+  }
+ ]
+}

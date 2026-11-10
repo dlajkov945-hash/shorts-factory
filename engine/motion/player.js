@@ -20,7 +20,7 @@ const noise1 = (x, seed = 0) => { const i = Math.floor(x), f = x - i, r = (k) =>
 const THEMES = {
   dark:   { bg0: '#070a12', bg1: '#111a2e', fg: '#ffffff', acc: '#ffb21a', acc2: '#3fa9ff', sub: '#8a93a8', cap: 'IDB', capSize: 80, upper: true, capY: 1330, hud: 'label', panel: '#151c2c', line: '#2a3550' },
   heist:  { bg0: '#09080c', bg1: '#1a1016', fg: '#ffffff', acc: '#ff3b3b', acc2: '#ffb21a', sub: '#8d8590', cap: 'IDX', capSize: 66, upper: false, capY: 1320, hud: 'stats', panel: '#16131a', line: '#2c2530' },
-  light:  { bg0: '#f6f1ea', bg1: '#ece4f6', fg: '#16151a', acc: '#ff5a1f', acc2: '#7a5cff', sub: '#8a8378', cap: 'IDB', capSize: 76, upper: true, capY: 1180, hud: 'top', panel: '#ffffff', line: '#e2dace' },
+  light:  { bg0: '#f6f1ea', bg1: '#ece4f6', fg: '#16151a', acc: '#ff5a1f', acc2: '#7a5cff', sub: '#8a8378', cap: 'IDB', capSize: 76, upper: true, capY: 1330, hud: 'top', panel: '#ffffff', line: '#e2dace' },
   doodle: { bg0: '#efe7d6', bg1: '#e8dec9', fg: '#2a2622', acc: '#e0452b', acc2: '#2f6fd6', sub: '#7a7064', cap: 'Hand', capSize: 92, upper: false, capY: 1300, hud: 'none', panel: '#fbf7ee', line: '#2a2622' },
   neon:   { bg0: '#05030c', bg1: '#120a2a', fg: '#ffffff', acc: '#19f0ff', acc2: '#ff2bd6', sub: '#7d77a8', cap: 'Unb', capSize: 64, upper: true, capY: 1330, hud: 'label', panel: '#0f0b22', line: '#2a2156' },
 };
@@ -541,6 +541,20 @@ V.choices = (e, lt, t) => { // answer options A / B / C
     ctx.fillStyle = o.color || T.acc; rr(-410, -h / 2 + 18, h - 36, h - 36, 18); ctx.fill();
     font('IDB', 54); ctx.fillStyle = '#0b0b0b'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(o.key || 'АБВГ'[i], -410 + (h - 36) / 2, 3);
     font('IDX', 50); ctx.fillStyle = T.fg; ctx.textAlign = 'left'; ctx.fillText(o.text, -270, 3); ctx.textBaseline = 'alphabetic'; ctx.restore();
+  });
+};
+V.keys = (e, lt, t) => { // keyboard: layout ru|en, hl letters light up at hlAt, typing = random presses
+  const rows = e.layout === 'en' ? ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'] : ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ'];
+  const k = 76, g = 10, light = D.theme === 'light' || D.theme === 'doodle', hl = e.hl || '', hk = clamp((lt - (e.hlAt ?? .6)) / .4);
+  const pressed = e.typing ? rng(hash('k' + Math.floor(t * 9)))() : -1;
+  rows.forEach((row, r) => {
+    const w = row.length * (k + g) - g, y = (r - 1) * (k + g) - k / 2;
+    [...row].forEach((ch, i) => {
+      const x = -w / 2 + i * (k + g) + r * 18, on = hl.includes(ch), pr = e.typing && Math.floor(pressed * 30) === r * 11 + i;
+      ctx.fillStyle = light ? '#d9d2c6' : '#05060a'; rr(x, y + 6, k, k, 14); ctx.fill();
+      ctx.fillStyle = on && hk > 0 ? alphaCol(e.color || T.acc, .25 + .75 * hk) : (light ? '#ffffff' : '#1d2333'); rr(x, y + (pr ? 6 : 0), k, k, 14); ctx.fill();
+      font('IDX', 36); ctx.fillStyle = on && hk > .5 ? '#fff' : (light ? '#2a2733' : '#cfd6e6'); ctx.textAlign = 'center'; ctx.fillText(ch, x + k / 2, y + k / 2 + 13 + (pr ? 6 : 0));
+    });
   });
 };
 V.progress = (e, lt) => {
