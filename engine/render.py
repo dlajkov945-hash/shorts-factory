@@ -20,7 +20,7 @@ Scene fields:
 """
 import json, math, os, random, re, subprocess, sys, wave
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import audio as AU
@@ -122,6 +122,11 @@ class Frame:
         self.cx = (self.L + self.R) // 2
         y = np.linspace(0, 1, self.H)[:, None]
         a = np.clip(0.30 + 0.45 * (np.abs(y - 0.45) * 2) ** 1.6, 0, 0.82)
+        yy, xx = np.mgrid[0:self.H, 0:self.W]
+        r = np.sqrt(((xx - self.W / 2) / (self.W / 2)) ** 2 + ((yy - self.H / 2) / (self.H / 2)) ** 2)
+        self.vig = np.clip(1.08 - 0.32 * r ** 2, 0.55, 1.0).astype(np.float32)
+        g = np.random.default_rng(7)
+        self.grain = [g.integers(-6, 7, (self.H, self.W, 1), dtype=np.int16) for _ in range(4)]
         self.shade = Image.fromarray((np.broadcast_to(a, (self.H, self.W)) * 255).astype(np.uint8), "L")
 
 def big_text(F, base, s, t, t0, pal):
@@ -270,6 +275,13 @@ def main(plan_path, out_path):
             dark = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 255)); dark.putalpha(F.shade); bg.alpha_composite(dark)
         elif sc.get("env") or sc.get("chars"):
             bg = CH.env_layer(sc.get("env", "paper" if style == "doodle" else "room"), F.W, F.H, tt, pal, style, seed=si)
+            if style not in ("pixel",):
+                bg = bg.filter(ImageFilter.GaussianBlur(2.2))  # depth of field: background soft, characters sharp
+            sh = ImageDraw.Draw(bg, "RGBA")
+            for c in sc.get("chars", []):
+                ccx = F.L + (F.R - F.L) * c.get("x", 0.5); ccy = (1440 if F.vertical else 1010) + c.get("y", 0)
+                rw = 150 * c.get("scale", 1.0)
+                sh.ellipse((ccx - rw, ccy - 18, ccx + rw, ccy + 22), fill=(0, 0, 0, 70))
             for pr in sc.get("props", []):
                 px = F.L + (F.R - F.L) * pr.get("x", 0.5); py = F.T + (F.B - F.T) * pr.get("y", 0.5)
                 CH.prop(bg, pr["kind"], px, py, pr.get("s", 1.0), tt, style, seed=si, pal=pal)
@@ -317,7 +329,10 @@ def main(plan_path, out_path):
             caption_block(F, d, sc.get("text", ""), tt, sc["_t0"] + 0.2, pal)
         else:
             captions(F, d, all_words, tt, pal)
-        ff.stdin.write(bg.convert("RGB").tobytes())
+        out = np.asarray(bg.convert("RGB"), dtype=np.int16)
+        out = (out * F.vig[..., None]).astype(np.int16)
+        out += F.grain[fi % len(F.grain)]
+        ff.stdin.write(np.clip(out, 0, 255).astype(np.uint8).tobytes())
     ff.stdin.close(); ff.wait()
     print(json.dumps({"out": out_path, "duration": round(total, 1)}))
 
