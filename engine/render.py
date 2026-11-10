@@ -157,13 +157,13 @@ def big_text(base, s, t, t0, pal):
     k = pop(t, t0)
     if k <= 0 or not s: return
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
-    size = 150 if len(s) <= 8 else 118 if len(s) <= 14 else 92
+    size = 96 if len(s) <= 8 else 80 if len(s) <= 14 else 66
     f = font(F_BLACK, size)
     lines = wrap(d, s.upper(), f, SAFE_R - SAFE_L)
     lh = int(size * 1.05); y = 620 - len(lines) * lh // 2
     for ln in lines:
         tw, _ = text_size(d, ln, f); x = (SAFE_L + SAFE_R) // 2 - tw // 2
-        d.text((x, y), ln, font=f, fill=pal["acc"], stroke_width=12, stroke_fill=(10, 10, 16))
+        d.text((x, y), ln, font=f, fill=pal["acc"], stroke_width=9, stroke_fill=(10, 10, 16))
         y += lh
     if k != 1:
         sc = max(0.01, k)
@@ -178,7 +178,7 @@ def big_text(base, s, t, t0, pal):
 def chip(d, s, t, t0, pal, y=300):
     k = ease_out((t - t0) / 0.3)
     if k <= 0 or not s: return
-    f = font(F_BOLD, 46)
+    f = font(F_BOLD, 40)
     tw, th = text_size(d, s, f)
     x = (SAFE_L + SAFE_R) // 2 - tw // 2
     yy = y - (1 - k) * 40
@@ -191,7 +191,7 @@ def captions(d, words, t, pal):
         if a <= t < b + 0.15: cur = i
     if cur is None: return
     g0 = cur - cur % 3; group = words[g0:g0 + 3]
-    f = font(F_BLACK, 74)
+    f = font(F_BLACK, 60)
     s = " ".join(w for w, _, _ in group)
     lines = wrap(d, s, f, SAFE_R - SAFE_L)
     y = CAP_Y
@@ -200,9 +200,9 @@ def captions(d, words, t, pal):
         for tok in ln.split(" "):
             idx = next((j for j, (w, _, _) in enumerate(group) if w == tok), None)
             col = pal["acc"] if idx is not None and g0 + idx == cur else (255, 255, 255)
-            d.text((x, y), tok, font=f, fill=col, stroke_width=10, stroke_fill=(0, 0, 0))
+            d.text((x, y), tok, font=f, fill=col, stroke_width=8, stroke_fill=(0, 0, 0))
             x += text_size(d, tok + " ", f)[0]
-        y += 90
+        y += 74
 
 def progress(d, t, dur, pal):
     d.rounded_rectangle((SAFE_L, 230, SAFE_R, 238), 4, fill=(255, 255, 255, 60))
@@ -270,7 +270,6 @@ def main(plan_path, out_path):
         if si not in photos: particles(d, tt, pal, si)
         flash = 1 - (tt - sc["_t0"] + 0.2) / 0.18
         if si > 0 and 0 < flash <= 1: d.rectangle((0, 0, W, H), fill=(255, 255, 255, int(110 * flash)))
-        progress(d, tt, total, pal)
         chip(d, sc.get("chip", ""), tt, sc["_t0"] - 0.1, pal)
         big_text(bg, sc.get("big", ""), tt, sc["_t0"] + 0.05, pal)
         d = ImageDraw.Draw(bg, "RGBA")
