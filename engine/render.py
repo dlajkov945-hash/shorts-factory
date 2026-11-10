@@ -270,13 +270,34 @@ def main(plan_path, out_path):
             dark = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 255)); dark.putalpha(F.shade); bg.alpha_composite(dark)
         elif sc.get("env") or sc.get("chars"):
             bg = CH.env_layer(sc.get("env", "paper" if style == "doodle" else "room"), F.W, F.H, tt, pal, style, seed=si)
+            for pr in sc.get("props", []):
+                px = F.L + (F.R - F.L) * pr.get("x", 0.5); py = F.T + (F.B - F.T) * pr.get("y", 0.5)
+                CH.prop(bg, pr["kind"], px, py, pr.get("s", 1.0), tt, style, seed=si, pal=pal)
             for c in sc.get("chars", []):
                 spec = cast.get(c["id"], CH.DEFAULT_CHARS["boy"])
                 sc_scale = c.get("scale", 1.0) * (1.35 if F.vertical else 1.0)
                 cx = F.L + (F.R - F.L) * c.get("x", 0.5); cy = (1440 if F.vertical else 1010) + c.get("y", 0)
+                ent = c.get("enter")
+                if ent:
+                    k = 1 - ease_out((tt - sc["_t0"] + 0.1) / 0.5)
+                    if ent == "left": cx -= k * 900
+                    elif ent == "right": cx += k * 900
+                    elif ent == "bottom": cy += k * 900
                 a = amp[fi] if c.get("speak") else 0.0
                 CH.character(bg, spec, cx, cy, sc_scale, tt, c.get("pose", "idle"), a, style, seed=hash(c["id"]) % 97, look=c.get("look", 0), facing=c.get("facing", 1))
+            for pr in sc.get("props_front", []):
+                px = F.L + (F.R - F.L) * pr.get("x", 0.5); py = F.T + (F.B - F.T) * pr.get("y", 0.5)
+                CH.prop(bg, pr["kind"], px, py, pr.get("s", 1.0), tt, style, seed=si + 5, pal=pal)
             bg = CH.stylize(bg, style, pal)
+            cam = sc.get("cam")
+            if cam:
+                z = 1 + 0.10 * p if cam == "in" else 1.10 - 0.10 * p if cam == "out" else 1.06
+                pan = (p - 0.5) * 0.08 * F.W if cam == "pan" else 0
+                cw, chh = F.W / z, F.H / z
+                cxm = min(max(F.W / 2 + pan, cw / 2), F.W - cw / 2); cym = min(max(F.H * 0.55, chh / 2), F.H - chh / 2)
+                bg = bg.transform((F.W, F.H), Image.EXTENT, (cxm - cw / 2, cym - chh / 2, cxm + cw / 2, cym + chh / 2), Image.BILINEAR)
+            if sc.get("shake"):
+                ox = int(math.sin(tt * 50) * 10 * max(0, 1 - (tt - sc["_t0"]) / 0.6)); bg = bg.transform((F.W, F.H), Image.AFFINE, (1, 0, ox, 0, 1, 0))
         else:
             y = np.linspace(0, 1, F.H)[:, None]; x = np.linspace(0, 1, F.W)[None, :]
             mixv = np.clip(y * 0.8 + (0.5 + 0.5 * np.sin(x * 3 + y * 2 + tt * 0.6)) * 0.25, 0, 1)[..., None]
@@ -287,7 +308,8 @@ def main(plan_path, out_path):
             F.big_y, F.cap_y = (440, 580) if has_chars else (520, 1180)
         d = ImageDraw.Draw(bg, "RGBA")
         flash = 1 - (tt - sc["_t0"] + 0.2) / 0.18
-        if si > 0 and 0 < flash <= 1: d.rectangle((0, 0, F.W, F.H), fill=(255, 255, 255, int(90 * flash)))
+        if si > 0 and 0 < flash <= 1:
+            bg = Image.blend(bg, Image.new("RGBA", (F.W, F.H), (255, 255, 255, 255)), 0.28 * flash); d = ImageDraw.Draw(bg, "RGBA")
         chip(F, d, sc.get("chip", ""), tt, sc["_t0"] - 0.1, pal)
         big_text(F, bg, sc.get("big", ""), tt, sc["_t0"] + 0.05, pal)
         d = ImageDraw.Draw(bg, "RGBA")

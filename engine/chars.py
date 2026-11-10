@@ -262,3 +262,93 @@ def stylize(img, style, pal):
         w, h = img.size
         return img.resize((w // 8, h // 8), Image.NEAREST).resize((w, h), Image.NEAREST)
     return img
+
+# ------------------------------------------------------------ props
+def prop(img, kind, x, y, s, t, style="flat", seed=0, pal=None):
+    d = ImageDraw.Draw(img, "RGBA")
+    acc = (pal or {}).get("acc", (255, 210, 63))
+    w = max(3, int(6 * s))
+    bob = math.sin(t * 2.5 + seed) * 8 * s
+    y = y + bob
+    if kind == "clock":
+        ell(d, (x - 110 * s, y - 110 * s, x + 110 * s, y + 110 * s), (250, 250, 250), style, t, seed, width=w + 4)
+        for k in range(12):
+            a = k / 12 * 2 * math.pi
+            d.line([(x + math.cos(a) * 85 * s, y + math.sin(a) * 85 * s), (x + math.cos(a) * 98 * s, y + math.sin(a) * 98 * s)], fill=INK, width=w)
+        ah = t * 2.0; am = t * 12.0
+        d.line([(x, y), (x + math.cos(ah) * 50 * s, y + math.sin(ah) * 50 * s)], fill=INK, width=w + 4)
+        d.line([(x, y), (x + math.cos(am) * 80 * s, y + math.sin(am) * 80 * s)], fill=(220, 50, 50), width=w)
+    elif kind == "coffee":
+        rrect(d, (x - 70 * s, y - 60 * s, x + 70 * s, y + 90 * s), 20 * s, (245, 245, 240), style, t, seed, width=w)
+        d.arc((x + 50 * s, y - 20 * s, x + 120 * s, y + 50 * s), -90, 90, fill=INK, width=w + 2)
+        d.rectangle((x - 60 * s, y - 50 * s, x + 60 * s, y - 30 * s), fill=(110, 60, 30))
+        for k in range(3):
+            sx = x - 40 * s + k * 40 * s; ph = t * 3 + k
+            pts = [(sx + math.sin(ph + j * 0.6) * 12 * s, y - 80 * s - j * 18 * s) for j in range(6)]
+            d.line(pts, fill=(255, 255, 255, 170), width=w)
+    elif kind == "bed":
+        rrect(d, (x - 220 * s, y - 40 * s, x + 220 * s, y + 70 * s), 20 * s, (120, 90, 200), style, t, seed, width=w)
+        rrect(d, (x - 200 * s, y - 90 * s, x - 90 * s, y - 30 * s), 25 * s, (250, 250, 250), style, t, seed + 1, width=w)
+        d.rectangle((x - 230 * s, y + 70 * s, x - 200 * s, y + 130 * s), fill=INK); d.rectangle((x + 200 * s, y + 70 * s, x + 230 * s, y + 130 * s), fill=INK)
+    elif kind == "brain":
+        for k, (dx, dy, r) in enumerate([(-50, -10, 70), (40, -20, 75), (-10, 40, 65), (60, 35, 55), (-60, 45, 50)]):
+            ell(d, (x + (dx - r) * s, y + (dy - r) * s, x + (dx + r) * s, y + (dy + r) * s), (255, 150, 170), style, t, seed + k, width=w)
+        for k in range(4):
+            a = t * 4 + k
+            d.arc((x - 60 * s + k * 30 * s, y - 40 * s, x - 10 * s + k * 30 * s, y + 20 * s), 200, 340, fill=(200, 80, 110), width=w)
+    elif kind == "phone":
+        rrect(d, (x - 70 * s, y - 130 * s, x + 70 * s, y + 130 * s), 22 * s, (30, 30, 40), style, t, seed, width=w)
+        glow = int(150 + 100 * math.sin(t * 6))
+        d.rounded_rectangle((x - 58 * s, y - 112 * s, x + 58 * s, y + 112 * s), int(14 * s), fill=(90, 170, 255, glow))
+    elif kind == "zzz":
+        for k in range(3):
+            ph = (t * 0.8 + k / 3) % 1
+            fx, fy = x + ph * 60 * s + k * 10 * s, y - ph * 160 * s
+            sz = int((30 + 25 * ph) * s)
+            d.text((fx, fy), "Z", fill=(255, 255, 255, int(255 * (1 - ph))), font=None if sz < 1 else _zfont(sz))
+    elif kind == "sweat":
+        for k in range(2):
+            ph = (t * 1.5 + k * 0.5) % 1
+            sx, sy = x + k * 40 * s, y + ph * 80 * s
+            d.ellipse((sx - 12 * s, sy - 12 * s, sx + 12 * s, sy + 18 * s), fill=(120, 200, 255, int(255 * (1 - ph))))
+    elif kind == "dizzy":
+        for k in range(4):
+            a = t * 4 + k * math.pi / 2
+            sx, sy = x + math.cos(a) * 90 * s, y + math.sin(a) * 25 * s
+            _star(d, sx, sy, 22 * s, acc)
+    elif kind == "question":
+        d.text((x - 40 * s, y - 90 * s), "?", fill=acc, font=_zfont(int(160 * s)), stroke_width=int(8 * s), stroke_fill=INK)
+    elif kind == "exclaim":
+        d.text((x - 30 * s, y - 90 * s), "!", fill=(255, 80, 80), font=_zfont(int(170 * s)), stroke_width=int(8 * s), stroke_fill=INK)
+    elif kind == "lightning":
+        if int(t * 6) % 3:
+            poly(d, [(x, y - 120 * s), (x - 50 * s, y + 10 * s), (x - 5 * s, y + 10 * s), (x - 30 * s, y + 130 * s), (x + 60 * s, y - 20 * s), (x + 10 * s, y - 20 * s)], (255, 230, 60), style, t, seed, width=w)
+    elif kind == "heart":
+        k = 1 + 0.12 * abs(math.sin(t * 6))
+        r = 60 * s * k
+        d.ellipse((x - r, y - r * 0.6, x, y + r * 0.4), fill=(240, 60, 90)); d.ellipse((x, y - r * 0.6, x + r, y + r * 0.4), fill=(240, 60, 90))
+        d.polygon([(x - r * 0.98, y - r * 0.05), (x + r * 0.98, y - r * 0.05), (x, y + r)], fill=(240, 60, 90))
+    elif kind == "money":
+        for k in range(6):
+            ph = (t * 0.6 + k / 6) % 1
+            fx = x + math.sin(k * 2.3 + t) * 160 * s; fy = y - 200 * s + ph * 400 * s
+            d.rounded_rectangle((fx - 50 * s, fy - 26 * s, fx + 50 * s, fy + 26 * s), int(6 * s), fill=(90, 190, 100, int(255 * (1 - ph))), outline=(40, 120, 50, int(255 * (1 - ph))), width=3)
+    elif kind == "calendar":
+        rrect(d, (x - 110 * s, y - 120 * s, x + 110 * s, y + 110 * s), 18 * s, (250, 250, 250), style, t, seed, width=w)
+        d.rectangle((x - 104 * s, y - 114 * s, x + 104 * s, y - 60 * s), fill=(230, 70, 70))
+
+_zf = {}
+def _zfont(size):
+    from PIL import ImageFont
+    size = max(8, int(size))
+    if size not in _zf:
+        _zf[size] = ImageFont.truetype("/usr/share/fonts/opentype/inter/InterDisplay-Black.otf", size)
+    return _zf[size]
+
+def _star(d, x, y, r, col):
+    pts = []
+    for k in range(10):
+        a = -math.pi / 2 + k * math.pi / 5
+        rr = r if k % 2 == 0 else r * 0.45
+        pts.append((x + math.cos(a) * rr, y + math.sin(a) * rr))
+    d.polygon(pts, fill=col, outline=INK)
