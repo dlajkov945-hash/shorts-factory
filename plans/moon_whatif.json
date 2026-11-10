@@ -1,0 +1,286 @@
+{
+ "id": "moon_whatif",
+ "engine": "motion",
+ "theme": "dark",
+ "label": "ЧТО ЕСЛИ · ЛУНА",
+ "title": "Что если Луна исчезнет сегодня ночью?",
+ "description": "Ночи станут темнее, приливы втрое слабее, а у Земли начнёт качаться ось. Что ещё изменится без Луны.\n\n#чтоесли #космос #луна #наука #shorts",
+ "music": "mystery",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "scenes": [
+  {
+   "say": "Что е́сли сего́дня но́чью Луна́ про́сто исче́знет?",
+   "audio": "assets/audio/moon_whatif/s0.mp3",
+   "hl": [
+    "Луна"
+   ],
+   "tint": "#9fb6ff",
+   "els": [
+    {
+     "v": "city",
+     "y": 0.62,
+     "from": "none",
+     "dark": 0.6
+    },
+    {
+     "v": "icon",
+     "name": "moon",
+     "color": "#e9e6d4",
+     "y": 0.24,
+     "s": 0.75,
+     "from": "pop",
+     "on": "Луна",
+     "until_on": "исчезнет",
+     "exit": "grow"
+    },
+    {
+     "v": "person",
+     "y": 0.56,
+     "s": 0.55,
+     "pose": "think",
+     "look": 1,
+     "from": "none",
+     "at": 0
+    },
+    {
+     "v": "text",
+     "text": "*?*",
+     "size": 260,
+     "y": 0.24,
+     "from": "pop",
+     "on": "исчезнет",
+     "keepCaps": true,
+     "sfx": "glitch"
+    }
+   ],
+   "sfx": []
+  },
+  {
+   "say": "Пе́рвое, что вы заме́тите: но́чи ста́нут намно́го темне́е. Да́же в полнолу́ние.",
+   "audio": "assets/audio/moon_whatif/s1.mp3",
+   "hl": [
+    "темнее"
+   ],
+   "tint": "#3a4a8a",
+   "els": [
+    {
+     "v": "chip",
+     "n": "01",
+     "text": "НОЧЬ",
+     "y": 0.2,
+     "from": "down"
+    },
+    {
+     "v": "city",
+     "y": 0.62,
+     "from": "fade",
+     "dark": 0.93
+    },
+    {
+     "v": "person",
+     "y": 0.56,
+     "s": 0.55,
+     "pose": "scared",
+     "from": "none",
+     "on": "темнее"
+    }
+   ]
+  },
+  {
+   "say": "Прили́вы ста́нут приме́рно втро́е слабе́е. Их бу́дет дви́гать то́лько Со́лнце.",
+   "audio": "assets/audio/moon_whatif/s2.mp3",
+   "hl": [
+    "втрое"
+   ],
+   "tint": "#1f8fff",
+   "sfx": [
+    "pop"
+   ],
+   "els": [
+    {
+     "v": "chip",
+     "n": "02",
+     "text": "МОРЕ",
+     "y": 0.2,
+     "from": "down"
+    },
+    {
+     "v": "bars",
+     "y": 0.355,
+     "from": "up",
+     "hi": 1,
+     "items": [
+      {
+       "label": "С Луной",
+       "value": 100,
+       "text": "100%"
+      },
+      {
+       "label": "Без Луны",
+       "value": 33,
+       "text": "33%"
+      }
+     ]
+    },
+    {
+     "v": "waves",
+     "y": 0.545,
+     "w": 900,
+     "h": 360,
+     "from": "up",
+     "to": 34,
+     "drop": 1.0,
+     "amp0": 120,
+     "amp1": 34
+    },
+    {
+     "v": "icon",
+     "name": "sun",
+     "color": "#ffc23a",
+     "y": 0.52,
+     "x": 0.8,
+     "s": 0.35,
+     "from": "pop",
+     "on": "Солнце"
+    }
+   ]
+  },
+  {
+   "say": "Кора́ллы на Большо́м Барье́рном ри́фе ме́чут икру́ все ра́зом, по сигна́лу полнолу́ния. Без Луны́ э́тот сигна́л пропадёт.",
+   "audio": "assets/audio/moon_whatif/s3.mp3",
+   "hl": [
+    "разом",
+    "пропадёт"
+   ],
+   "tint": "#ff5fa2",
+   "els": [
+    {
+     "v": "chip",
+     "n": "03",
+     "text": "КОРАЛЛЫ",
+     "y": 0.2,
+     "from": "down"
+    },
+    {
+     "v": "grid",
+     "n": 60,
+     "cols": 10,
+     "size": 50,
+     "onFrac": 0.6,
+     "shape": "dot",
+     "rise": true,
+     "riseAt": 2.4,
+     "color": "#ff7fb6",
+     "speed": 0.02,
+     "y": 0.44,
+     "from": "fade",
+     "until_on": "Без"
+    },
+    {
+     "v": "tag",
+     "text": "СИГНАЛ|ПОЛНОЛУНИЕ",
+     "y": 0.565,
+     "from": "up",
+     "on": "полнолуния"
+    },
+    {
+     "v": "icon",
+     "name": "cross",
+     "color": "#ff3b3b",
+     "y": 0.42,
+     "s": 0.9,
+     "from": "slam",
+     "on": "пропадёт",
+     "sfx": "boom"
+    }
+   ]
+  },
+  {
+   "say": "А са́мое стра́шное: Луна́ де́ржит накло́н земно́й о́си. Без неё за миллио́ны лет ось начнёт кача́ться, а вме́сте с ней и кли́мат.",
+   "audio": "assets/audio/moon_whatif/s4.mp3",
+   "hl": [
+    "качаться",
+    "климат"
+   ],
+   "tint": "#2f7bff",
+   "sfx": [
+    "riser"
+   ],
+   "els": [
+    {
+     "v": "chip",
+     "n": "04",
+     "text": "ОСЬ",
+     "y": 0.2,
+     "from": "down"
+    },
+    {
+     "v": "planet",
+     "earth": true,
+     "color": "#2f7bff",
+     "hi": "#bfe0ff",
+     "shade": "#061433",
+     "axis": true,
+     "tilt": 23,
+     "wobble": 0,
+     "y": 0.42,
+     "s": 1.1,
+     "from": "pop",
+     "until_on": "Без"
+    },
+    {
+     "v": "planet",
+     "earth": true,
+     "color": "#2f7bff",
+     "hi": "#bfe0ff",
+     "shade": "#061433",
+     "axis": true,
+     "tilt": 23,
+     "wobble": 28,
+     "axisColor": "#ff3b3b",
+     "y": 0.42,
+     "s": 1.1,
+     "from": "none",
+     "on": "Без"
+    },
+    {
+     "v": "tag",
+     "text": "НАКЛОН ОСИ|23°",
+     "y": 0.585,
+     "from": "up",
+     "at": 0.6
+    }
+   ]
+  },
+  {
+   "say": "Так что когда́ в сле́дующий раз уви́дите Луну́, скажи́те ей спаси́бо.",
+   "audio": "assets/audio/moon_whatif/s5.mp3",
+   "hl": [
+    "спасибо"
+   ],
+   "tint": "#9fb6ff",
+   "sfx": [
+    "ding"
+   ],
+   "els": [
+    {
+     "v": "icon",
+     "name": "moon",
+     "color": "#f4f1e0",
+     "y": 0.36,
+     "s": 1.1,
+     "from": "pop",
+     "float": true
+    },
+    {
+     "v": "text",
+     "text": "СПАСИБО,\n*ЛУНА*",
+     "size": 120,
+     "y": 0.555,
+     "from": "up",
+     "on": "спасибо"
+    }
+   ]
+  }
+ ]
+}
