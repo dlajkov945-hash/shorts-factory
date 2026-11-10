@@ -127,11 +127,11 @@ function hud(t, si) {
       const x = x0 + 26 + i * cw;
       font('Mono', 20, 600); ctx.fillStyle = T.sub; ctx.textAlign = 'left'; ctx.fillText(c.label, x, y0 + 36);
       let v = cur[c.key] ?? c.value ?? '';
-      if (typeof v === 'number') { const a = typeof pv[c.key] === 'number' ? pv[c.key] : v; v = Math.round(lerp(a, v, k)); }
+      if (typeof v === 'number') { const a = typeof pv[c.key] === 'number' ? pv[c.key] : v; v = Math.round(lerp(a, v, k)); if (Math.abs(v) >= 10000) v = v.toLocaleString('ru-RU').replace(/\u00a0|,/g, ' '); }
       font('Mono', 36, 800); ctx.fillStyle = c.color || T.fg;
       ctx.fillText(`${v}${c.suffix || ''}`, x, y0 + 80);
       if (c.bar) { // risk bar
-        const vv = typeof v === 'number' ? v : parseFloat(v) || 0;
+        const vv = typeof v === 'number' ? v : parseFloat(String(v).replace(/ /g, '')) || 0;
         ctx.fillStyle = alphaCol('#ffffff', .12); rr(x + 110, y0 + 62, cw - 150, 10, 5); ctx.fill();
         ctx.fillStyle = T.acc; rr(x + 110, y0 + 62, (cw - 150) * clamp(vv / 100), 10, 5); ctx.fill();
       }
@@ -223,7 +223,8 @@ V.phone = (e, lt, t) => {
     ctx.fillStyle = 'rgba(255,255,255,0.92)'; rr(-132, -46, 264, 96, 22); ctx.fill();
     ctx.fillStyle = e.color || T.acc; rr(-118, -30, 44, 44, 12); ctx.fill();
     font('IDX', 24); ctx.fillStyle = '#111'; ctx.textAlign = 'left'; ctx.fillText(n.split('|')[0], -62, -6);
-    font('IM', 20); ctx.fillStyle = '#555'; ctx.fillText(n.split('|')[1] || '', -62, 24); ctx.restore();
+    const sub = n.split('|')[1] || ''; let fs = 20; font('IM', fs); while (textW(sub) > 186 && fs > 12) font('IM', --fs);
+    ctx.fillStyle = '#555'; ctx.fillText(sub, -62, 24); ctx.restore();
   });
 };
 V.heart = (e, lt, t) => {
@@ -529,6 +530,18 @@ V.note = (e) => { // sticky note / speech bubble
   rr(-w / 2, -h / 2, w, h, e.bubble ? 40 : 10); ctx.fill(); noGlow(); ctx.shadowOffsetY = 0;
   if (e.bubble) { ctx.beginPath(); ctx.moveTo(-40, h / 2 - 2); ctx.lineTo(-80, h / 2 + 60); ctx.lineTo(10, h / 2 - 2); ctx.fill(); }
   ctx.fillStyle = e.ink || '#1b1b1b'; ctx.textAlign = 'center'; lines.forEach((l, i) => ctx.fillText(l, 0, -h / 2 + 30 + (i + .8) * (e.size || 54) * 1.2 - 10));
+};
+V.choices = (e, lt, t) => { // answer options A / B / C
+  const opts = e.items, h = 120, gap = 34;
+  opts.forEach((o, i) => {
+    const k = spring(lt - i * (e.step || .45)); if (k <= 0) return;
+    const y = (i - (opts.length - 1) / 2) * (h + gap); ctx.save(); ctx.translate((1 - k) * 600, y);
+    ctx.fillStyle = D.theme === 'light' ? '#ffffff' : 'rgba(255,255,255,0.08)'; rr(-430, -h / 2, 860, h, 26); ctx.fill();
+    ctx.strokeStyle = alphaCol(o.color || T.acc, .9); ctx.lineWidth = 4; ctx.stroke();
+    ctx.fillStyle = o.color || T.acc; rr(-410, -h / 2 + 18, h - 36, h - 36, 18); ctx.fill();
+    font('IDB', 54); ctx.fillStyle = '#0b0b0b'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(o.key || 'АБВГ'[i], -410 + (h - 36) / 2, 3);
+    font('IDX', 50); ctx.fillStyle = T.fg; ctx.textAlign = 'left'; ctx.fillText(o.text, -270, 3); ctx.textBaseline = 'alphabetic'; ctx.restore();
+  });
 };
 V.progress = (e, lt) => {
   const w = e.w || 760, p = lerp(e.from || 0, e.to ?? 1, easeOut(lt / (e.dur || 1.5)));
