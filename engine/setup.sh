@@ -2,7 +2,7 @@
 # Prepare a fresh container: python deps + Piper Russian voices
 set -e
 cd "$(dirname "$0")/.."
-pip install -q --break-system-packages piper-tts pillow numpy 2>/dev/null || true
+pip install -q --break-system-packages piper-tts pillow numpy faster-whisper 2>/dev/null || true
 mkdir -p assets/voices
 for n in dmitri ruslan denis; do
   for e in onnx onnx.json; do

@@ -80,6 +80,41 @@ def load_audio(path):
     with wave.open(tmp) as w:
         return np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
 
+_WH = None
+def align_words(tokens, audio, sr):
+    """Exact word timings from the real voice via faster-whisper; maps script tokens onto recognised words."""
+    global _WH
+    import difflib
+    try:
+        from faster_whisper import WhisperModel
+    except ImportError:
+        return None
+    if _WH is None:
+        _WH = WhisperModel("small", device="cpu", compute_type="int8")
+    idx = np.linspace(0, len(audio) - 1, int(len(audio) * 16000 / sr)).astype(int)
+    a16 = audio[idx].astype(np.float32)
+    segs, _ = _WH.transcribe(a16, language="ru", word_timestamps=True)
+    rec = [(w.word.strip(), w.start, w.end) for sg in segs for w in sg.words]
+    if not rec:
+        return None
+    norm = lambda x: re.sub(r"[^а-яёa-z0-9]", "", x.lower().replace("ё", "е"))
+    sm = difflib.SequenceMatcher(None, [norm(t) for t in tokens], [norm(r[0]) for r in rec])
+    times = [None] * len(tokens)
+    for blk in sm.get_matching_blocks():
+        for k in range(blk.size):
+            times[blk.a + k] = (rec[blk.b + k][1], rec[blk.b + k][2])
+    total = len(audio) / sr
+    known = [i for i, t in enumerate(times) if t]
+    for i in range(len(tokens)):
+        if times[i] is None:
+            prev = max([k for k in known if k < i], default=None); nxt = min([k for k in known if k > i], default=None)
+            a0 = times[prev][1] if prev is not None else 0.0
+            b0 = times[nxt][0] if nxt is not None else total
+            gap = [k for k in range(len(tokens)) if (prev is None or k > prev) and (nxt is None or k < nxt)]
+            j = gap.index(i); step = (b0 - a0) / max(1, len(gap))
+            times[i] = (a0 + j * step, a0 + (j + 1) * step)
+    return times
+
 # ---------------------------------------------------------------- drawing helpers
 def text_size(d, s, f):
     b = d.textbbox((0, 0), s, font=f); return b[2] - b[0], b[3] - b[1]
@@ -174,6 +209,64 @@ def captions(F, d, words, t, pal):
 EMOJI = re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F\u200D]")
 def noemoji(s): return EMOJI.sub("", s or "").strip()
 
+def chunk_words(words, maxchars=16, maxn=3):
+    chunks, cur = [], []
+    for i, w in enumerate(words):
+        cur.append(w)
+        txt = " ".join(x[0] for x in cur)
+        nxt_gap = words[i + 1][1] - w[2] if i + 1 < len(words) else 9
+        if len(cur) >= maxn or len(txt) >= maxchars or re.search(r"[.,!?:;]$", w[0]) or nxt_gap > 0.35:
+            chunks.append(cur); cur = []
+    if cur: chunks.append(cur)
+    return chunks
+
+def captions_pop(F, base, chunks, t, pal):
+    cur = None
+    for ch in chunks:
+        if ch[0][1] - 0.05 <= t < ch[-1][2] + 0.25: cur = ch
+    if not cur: return
+    t0 = cur[0][1] - 0.05
+    k = pop(t, t0, 0.18)
+    f = font(F_BLACK, 84)
+    layer = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
+    words = [w for w, _, _ in cur]
+    widths = [text_size(d, w, f)[0] for w in words]; space = text_size(d, " ", f)[0] + 6
+    total = sum(widths) + space * (len(words) - 1)
+    half = max(1, len(words) // 2)
+    lines = [words] if total <= F.R - F.L else [words[:half], words[half:]]
+    y = F.cap_y; wi = 0
+    for ln in lines:
+        lw = sum(text_size(d, w, f)[0] for w in ln) + space * (len(ln) - 1)
+        x = F.cx - lw // 2
+        for w in ln:
+            ws, we = cur[wi][1], cur[wi][2]
+            active = ws - 0.03 <= t < we + 0.05
+            col = pal["acc"] if active else (255, 255, 255)
+            d.text((x + 5, y + 7), w, font=f, fill=(0, 0, 0, 150), stroke_width=12, stroke_fill=(0, 0, 0, 150))
+            d.text((x, y), w, font=f, fill=col, stroke_width=11, stroke_fill=(12, 12, 18))
+            x += text_size(d, w, f)[0] + space; wi += 1
+        y += 100
+    if k != 1:
+        sc_ = max(0.01, k); cy = F.cap_y + 40
+        lay2 = layer.resize((max(1, int(F.W * sc_)), max(1, int(F.H * sc_))), Image.BILINEAR)
+        out = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 0)); out.paste(lay2, (int(F.cx - F.cx * sc_), int(cy - cy * sc_))); layer = out
+    base.alpha_composite(layer)
+
+def hook_title(F, base, s, t, pal):
+    s = noemoji(s)
+    if not s or t > 2.6: return
+    a = min(1, t / 0.2) * min(1, (2.6 - t) / 0.3)
+    f = font(F_BLACK, 70)
+    layer = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
+    lines = wrap(d, s.upper(), f, F.R - F.L - 80)
+    y = 330
+    for ln in lines:
+        tw, th = text_size(d, ln, f)
+        d.rounded_rectangle((F.cx - tw // 2 - 28, y - 14, F.cx + tw // 2 + 28, y + th + 30), 18, fill=(255, 255, 255, int(240 * a)))
+        d.text((F.cx - tw // 2, y), ln, font=f, fill=(15, 15, 20, int(255 * a)))
+        y += th + 52
+    base.alpha_composite(layer)
+
 def caption_block(F, d, s, t, t0, pal):
     s = noemoji(s)
     k = ease_out((t - t0) / 0.4)
@@ -223,10 +316,15 @@ def main(plan_path, out_path):
             else:
                 wp = os.path.join(work, f"v{i}.wav"); tts(sc["say"], voice, wp, rate); a = load_audio(wp)
             dur = len(a) / SR
-            toks = sc.get("say", "").replace("́", "").split(); wts = [len(re.sub(r"\W", "", x)) + 2 for x in toks]
-            tot = max(1, sum(wts)); acc = t; sc["_words"] = []
-            for tok, wg in zip(toks, wts):
-                dd = dur * 0.94 * wg / tot; sc["_words"].append((tok, acc, acc + dd)); acc += dd
+            toks = sc.get("say", "").replace("\u0301", "").split()
+            al = align_words(toks, a, SR) if plan.get("captions", "pop") == "pop" else None
+            sc["_words"] = []
+            if al:
+                for tok, (a0, b0) in zip(toks, al): sc["_words"].append((tok, t + a0, t + b0))
+            else:
+                wts = [len(re.sub(r"\W", "", x)) + 2 for x in toks]; tot = max(1, sum(wts)); acc = t
+                for tok, wg in zip(toks, wts):
+                    dd = dur * 0.94 * wg / tot; sc["_words"].append((tok, acc, acc + dd)); acc += dd
             parts.append((t, a)); sc["_t0"], sc["_t1"] = t, t + dur; t += dur + 0.18
         else:
             dur = float(sc.get("dur", 3.0)); sc["_words"] = []
@@ -259,7 +357,12 @@ def main(plan_path, out_path):
     amp = np.clip(amp / max(1e-6, np.percentile(amp[amp > 0], 90) if (amp > 0).any() else 1), 0, 1)
 
     # 3) frames
-    photos = {i: load_photo(os.path.join(ROOT, sc["photo"]), F.W, F.H) for i, sc in enumerate(scenes) if sc.get("photo")}
+    photos = {i: load_photo(os.path.join(ROOT, sc.get("photo") or sc.get("image")), F.W, F.H) for i, sc in enumerate(scenes) if sc.get("photo") or sc.get("image")}
+    chunks = chunk_words([w for sc in scenes for w in sc["_words"]])
+    illus = any(sc.get("image") for sc in scenes)
+    if illus and F.vertical: F.cap_y = 600
+    grad = np.linspace(0, 1, F.H)[:, None]
+    low = Image.fromarray((np.broadcast_to(np.clip((grad - 0.5) * 1.6, 0, 0.55), (F.H, F.W)) * 255).astype(np.uint8), "L")
     all_words = [w for sc in scenes for w in sc["_words"]]
     ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{F.W}x{F.H}", "-r", str(FPS),
                            "-i", "-", "-i", apath, "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-maxrate", "6M", "-bufsize", "12M", "-pix_fmt", "yuv420p",
@@ -271,8 +374,20 @@ def main(plan_path, out_path):
         sc = scenes[si]
         p = max(0, min(1, (tt - sc["_t0"] + 0.2) / max(0.5, sc["_t1"] - sc["_t0"] + 0.4)))
         if si in photos:
-            bg = photo_frame(photos[si], p, si + 7, F.W, F.H).convert("RGBA")
-            dark = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 255)); dark.putalpha(F.shade); bg.alpha_composite(dark)
+            if sc.get("image"):
+                punch = 1 + 0.07 * (1 - ease_out((tt - sc["_t0"] + 0.2) / 0.35))
+                bg = photo_frame(photos[si], p, si + 7, F.W, F.H)
+                if punch > 1.001:
+                    cw, chh = F.W / punch, F.H / punch
+                    bg = bg.transform((F.W, F.H), Image.EXTENT, ((F.W - cw) / 2, (F.H - chh) / 2, (F.W + cw) / 2, (F.H + chh) / 2), Image.BILINEAR)
+                bg = bg.convert("RGBA")
+                dark = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 255)); dark.putalpha(low); bg.alpha_composite(dark)
+                if si > 0 and tt - sc["_t0"] + 0.2 < 0.15 and (si - 1) in photos:
+                    pb = photo_frame(photos[si - 1], 1.0, si + 6, F.W, F.H).convert("RGBA")
+                    bg = Image.blend(pb, bg, max(0, min(1, (tt - sc["_t0"] + 0.2) / 0.15)))
+            else:
+                bg = photo_frame(photos[si], p, si + 7, F.W, F.H).convert("RGBA")
+                dark = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 255)); dark.putalpha(F.shade); bg.alpha_composite(dark)
         elif sc.get("env") or sc.get("chars"):
             bg = CH.env_layer(sc.get("env", "paper" if style == "doodle" else "room"), F.W, F.H, tt, pal, style, seed=si)
             if style not in ("pixel",):
@@ -317,15 +432,22 @@ def main(plan_path, out_path):
             particles(F, ImageDraw.Draw(bg, "RGBA"), tt, pal, si)
         has_chars = bool(sc.get("chars")) and si not in photos
         if F.vertical:
-            F.big_y, F.cap_y = (440, 580) if has_chars else (520, 1180)
+            F.big_y, F.cap_y = (440, 580) if has_chars else (520, 600 if illus else 1180)
         d = ImageDraw.Draw(bg, "RGBA")
         flash = 1 - (tt - sc["_t0"] + 0.2) / 0.18
-        if si > 0 and 0 < flash <= 1:
+        if si > 0 and 0 < flash <= 1 and not illus:
             bg = Image.blend(bg, Image.new("RGBA", (F.W, F.H), (255, 255, 255, 255)), 0.28 * flash); d = ImageDraw.Draw(bg, "RGBA")
-        chip(F, d, sc.get("chip", ""), tt, sc["_t0"] - 0.1, pal)
-        big_text(F, bg, sc.get("big", ""), tt, sc["_t0"] + 0.05, pal)
-        d = ImageDraw.Draw(bg, "RGBA")
-        if voice == "none":
+        if illus:
+            hook_title(F, bg, plan.get("hook", ""), tt, pal)
+            if voice != "none": captions_pop(F, bg, chunks, tt, pal)
+            d = ImageDraw.Draw(bg, "RGBA")
+        else:
+            chip(F, d, sc.get("chip", ""), tt, sc["_t0"] - 0.1, pal)
+            big_text(F, bg, sc.get("big", ""), tt, sc["_t0"] + 0.05, pal)
+            d = ImageDraw.Draw(bg, "RGBA")
+        if illus and voice != "none":
+            pass
+        elif voice == "none":
             caption_block(F, d, sc.get("text", ""), tt, sc["_t0"] + 0.2, pal)
         else:
             captions(F, d, all_words, tt, pal)

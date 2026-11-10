@@ -26,208 +26,54 @@
  "scenes": [
   {
    "say": "Что бу́дет, е́сли не спать це́лую неде́лю? Прове́рим на Са́ше.",
-   "env": "room",
-   "cam": "in",
-   "chars": [
-    {
-     "id": "sasha",
-     "x": 0.42,
-     "pose": "happy",
-     "speak": true,
-     "enter": "left"
-    }
-   ],
-   "props": [
-    {
-     "kind": "coffee",
-     "x": 0.85,
-     "y": 0.62,
-     "s": 0.8
-    }
-   ],
-   "big": "7 ДНЕЙ БЕЗ СНА",
-   "chip": "ЭКСПЕРИМЕНТ",
-   "audio": "assets/audio/nosleep/s0.mp3"
+   "audio": "assets/audio/nosleep/s0.mp3",
+   "image": "assets/img/nosleep/s0.png"
   },
   {
    "say": "Шестна́дцать часо́в без сна. Са́ша уже́ начина́ет теря́ть внима́ние и чита́ет оди́н и тот же текст по три ра́за.",
-   "env": "room",
-   "chars": [
-    {
-     "id": "sasha",
-     "x": 0.35,
-     "pose": "think",
-     "speak": true
-    }
-   ],
-   "props": [
-    {
-     "kind": "phone",
-     "x": 0.8,
-     "y": 0.6,
-     "s": 0.9
-    },
-    {
-     "kind": "question",
-     "x": 0.82,
-     "y": 0.35,
-     "s": 0.8
-    }
-   ],
-   "big": "16 ЧАСОВ",
    "sfx": [
     "tick"
    ],
-   "audio": "assets/audio/nosleep/s1.mp3"
+   "audio": "assets/audio/nosleep/s1.mp3",
+   "image": "assets/img/nosleep/s1.png"
   },
   {
    "say": "Су́тки. По иссле́дованиям, координа́ция у челове́ка без сна как у пья́ного.",
-   "env": "room",
-   "cam": "out",
-   "chars": [
-    {
-     "id": "sasha",
-     "x": 0.5,
-     "pose": "shock",
-     "speak": true
-    }
-   ],
-   "props_front": [
-    {
-     "kind": "dizzy",
-     "x": 0.5,
-     "y": 0.47,
-     "s": 1.0
-    }
-   ],
-   "big": "СУТКИ",
    "sfx": [
     "boing"
    ],
-   "audio": "assets/audio/nosleep/s2.mp3"
+   "audio": "assets/audio/nosleep/s2.mp3",
+   "image": "assets/img/nosleep/s2.png"
   },
   {
    "say": "Тре́тьи су́тки. Начина́ются галлюцина́ции. Са́ше ка́жется, что ла́мпа с ним разгова́ривает.",
-   "env": "lab",
-   "shake": true,
-   "chars": [
-    {
-     "id": "sasha",
-     "x": 0.35,
-     "pose": "scared",
-     "speak": true
-    }
-   ],
-   "props": [
-    {
-     "kind": "lightning",
-     "x": 0.8,
-     "y": 0.4,
-     "s": 1.0
-    },
-    {
-     "kind": "exclaim",
-     "x": 0.82,
-     "y": 0.62,
-     "s": 0.8
-    }
-   ],
-   "big": "72 ЧАСА",
    "sfx": [
     "glitch",
     "heart"
    ],
-   "audio": "assets/audio/nosleep/s3.mp3"
+   "audio": "assets/audio/nosleep/s3.mp3",
+   "image": "assets/img/nosleep/s3.png"
   },
   {
    "say": "А ещё мозг начина́ет засыпа́ть сам, на не́сколько секу́нд, пря́мо с откры́тыми глаза́ми.",
-   "env": "room",
-   "cam": "in",
-   "chars": [
-    {
-     "id": "sasha",
-     "x": 0.4,
-     "pose": "sad",
-     "speak": true
-    }
-   ],
-   "props": [
-    {
-     "kind": "brain",
-     "x": 0.82,
-     "y": 0.42,
-     "s": 0.8
-    }
-   ],
-   "props_front": [
-    {
-     "kind": "zzz",
-     "x": 0.55,
-     "y": 0.42,
-     "s": 1.2
-    }
-   ],
-   "big": "МИКРОСОН",
-   "audio": "assets/audio/nosleep/s4.mp3"
+   "audio": "assets/audio/nosleep/s4.mp3",
+   "image": "assets/img/nosleep/s4.png"
   },
   {
    "say": "Реко́рд поста́вил америка́нский шко́льник Рэ́нди Га́рднер. Оди́ннадцать дней без сна, ра́ди шко́льного прое́кта.",
-   "env": "city",
-   "cam": "pan",
-   "chars": [
-    {
-     "id": "boy",
-     "x": 0.35,
-     "pose": "happy",
-     "speak": true,
-     "enter": "right"
-    }
-   ],
-   "props": [
-    {
-     "kind": "calendar",
-     "x": 0.8,
-     "y": 0.45,
-     "s": 0.9
-    }
-   ],
-   "big": "11 ДНЕЙ",
-   "chip": "1963 ГОД",
    "sfx": [
     "ding"
    ],
-   "audio": "assets/audio/nosleep/s5.mp3"
+   "audio": "assets/audio/nosleep/s5.mp3",
+   "image": "assets/img/nosleep/s5.png"
   },
   {
    "say": "Пото́м Ги́ннесс вообще́ переста́л запи́сывать таки́е реко́рды. Сли́шком опа́сно. Так что спи́те, лю́ди.",
-   "env": "room",
-   "chars": [
-    {
-     "id": "sasha",
-     "x": 0.45,
-     "pose": "idle",
-     "speak": true
-    }
-   ],
-   "props": [
-    {
-     "kind": "bed",
-     "x": 0.55,
-     "y": 0.86,
-     "s": 0.9
-    }
-   ],
-   "props_front": [
-    {
-     "kind": "zzz",
-     "x": 0.7,
-     "y": 0.38,
-     "s": 1.3
-    }
-   ],
-   "big": "СПИТЕ",
-   "audio": "assets/audio/nosleep/s6.mp3"
+   "audio": "assets/audio/nosleep/s6.mp3",
+   "image": "assets/img/nosleep/s6.png"
   }
  ],
- "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5"
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Что будет, если не спать неделю?",
+ "captions": "pop"
 }
