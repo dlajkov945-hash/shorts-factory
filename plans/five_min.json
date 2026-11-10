@@ -1,0 +1,18 @@
+{
+  "id": "five_min",
+  "title": "Когда мама сказала «ещё 5 минут» 😂",
+  "description": "Узнали себя? Отметьте того, кто всегда «ещё 5 минут» 😂\n\n#юмор #мультик #жиза #shorts",
+  "format": "silent_funny",
+  "style": "doodle",
+  "palette": "candy",
+  "music": "funny",
+  "voice": "none",
+  "scenes": [
+    {"dur": 2.4, "env": "paper", "chars": [{"id": "mom", "x": 0.5, "pose": "point"}], "text": "Мама: вставай, в школу опоздаешь", "sfx": ["ding"]},
+    {"dur": 2.2, "env": "paper", "chars": [{"id": "boy", "x": 0.5, "pose": "sad"}], "text": "Я: ещё 5 минуточек..."},
+    {"dur": 1.6, "env": "paper", "chars": [{"id": "boy", "x": 0.5, "pose": "idle"}], "big": "5 МИНУТ СПУСТЯ", "sfx": ["tick"]},
+    {"dur": 2.6, "env": "paper", "chars": [{"id": "boy", "x": 0.5, "pose": "shock"}], "text": "Открываю глаза: 11:40", "big": "11:40", "sfx": ["boom"]},
+    {"dur": 2.8, "env": "paper", "chars": [{"id": "boy", "x": 0.35, "pose": "scared"}, {"id": "mom", "x": 0.75, "pose": "happy", "scale": 0.9}], "text": "Мама: доброе утро, солнышко", "sfx": ["boing"]},
+    {"dur": 2.4, "env": "paper", "chars": [{"id": "boy", "x": 0.5, "pose": "think"}], "text": "А у вас так было? 😂"}
+  ]
+}
