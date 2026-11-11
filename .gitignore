@@ -2,3 +2,4 @@ assets/voices/*.onnx
 assets/voices/*.json
 out/
 __pycache__/
+*.conv.wav
