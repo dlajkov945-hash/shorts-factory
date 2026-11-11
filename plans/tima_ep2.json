@@ -1,0 +1,24 @@
+{
+ "id": "tima_ep2",
+ "title": "Я живу на дне океана. Часть 2",
+ "description": "Кто стучал ночью в дверь дома на глубине 300 метров? Тимка взял фонарик и посмотрел в иллюминатор. Ответ оказался страшнее, чем он думал.\n\n#мультик #сериал #домподводой #океан #shorts",
+ "format": "series",
+ "series": "Мальчик в доме под водой",
+ "style": "2d_cartoon",
+ "palette": "ocean",
+ "music": "mystery",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Кто стучит на дне океана?",
+ "captions": "pop",
+ "scenes": [
+  {"say": "Три́ста ме́тров под водо́й. И кто́-то стучи́т в на́шу дверь.", "sfx": ["heart"], "audio": "assets/audio/tima_ep2/s0.mp3", "image": "assets/img/tima_ep2/s0.png"},
+  {"say": "Па́па спит. Я беру́ фона́рик и подхожу́ к иллюмина́тору.", "sfx": ["tick"], "audio": "assets/audio/tima_ep2/s1.mp3", "image": "assets/img/tima_ep2/s1.png"},
+  {"say": "Снару́жи никого́. То́лько пузыри́ и темнота́.", "audio": "assets/audio/tima_ep2/s2.mp3", "image": "assets/img/tima_ep2/s2.png"},
+  {"say": "И вдруг из темноты́ на меня́ смо́трит огро́мный кру́глый глаз.", "sfx": ["boom", "heart"], "audio": "assets/audio/tima_ep2/s3.mp3", "image": "assets/img/tima_ep2/s3.png"},
+  {"say": "Э́то не аку́ла. Э́то ста́рый подво́дный ро́бот, весь в раку́шках.", "sfx": ["glitch"], "audio": "assets/audio/tima_ep2/s4.mp3", "image": "assets/img/tima_ep2/s4.png"},
+  {"say": "На его́ боку́ огро́мная ци́фра два. Ста́нция но́мер два.", "sfx": ["ding"], "audio": "assets/audio/tima_ep2/s5.mp3", "image": "assets/img/tima_ep2/s5.png"},
+  {"say": "Но па́па всегда́ говори́л, что мы еди́нственные, кто живёт на дне́.", "audio": "assets/audio/tima_ep2/s6.mp3", "image": "assets/img/tima_ep2/s6.png"},
+  {"say": "А ро́бот поднима́ет кле́шню и сно́ва стучи́т. Три ра́за. Продолже́ние в сле́дующей се́рии.", "sfx": ["boom"], "audio": "assets/audio/tima_ep2/s7.mp3", "image": "assets/img/tima_ep2/s7.png"}
+ ]
+}
