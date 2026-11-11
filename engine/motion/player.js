@@ -107,16 +107,8 @@ function background(t, si) {
 let prevStats = null;
 function hud(t, si) {
   const s = SC[si];
-  if (T.hud === 'label' && D.label) {
-    font('Mono', 26, 600); ctx.fillStyle = alphaCol('#ffffff', .55); ctx.letterSpacing = '4px';
-    ctx.textAlign = 'left'; ctx.fillText(D.label, 70, 300); ctx.letterSpacing = '0px';
-    return;
-  }
-  if (T.hud === 'top' && D.label) {
-    font('IM', 26); ctx.fillStyle = T.sub; ctx.textAlign = 'left'; ctx.fillText(D.label, 70, 300);
-    if (D.brand) { font('IDX', 30); ctx.fillStyle = T.fg; ctx.textAlign = 'right'; ctx.fillText(D.brand, W - 70, 300); }
-    ctx.fillStyle = T.acc; ctx.fillRect(70, 318, 140, 4); return;
-  }
+  // channel watermark: barely visible, top right. No other name labels (Dima: keep videos clean)
+  if (D.watermark !== false) { font('IDX', 30); ctx.fillStyle = alphaCol(D.theme === 'light' || D.theme === 'doodle' ? '#000000' : '#ffffff', .2); ctx.textAlign = 'right'; ctx.fillText(D.watermark || 'лайков', W - 70, T.hud === 'stats' && D.stats ? 420 : 300); }
   if (T.hud === 'stats' && D.stats) {
     // stat bar: values per scene, numbers tween between scenes
     const cur = s.stats || {}, pv = si > 0 ? (SC[si - 1].stats || {}) : cur, k = easeOut((t - s.t0) / .8);
@@ -563,6 +555,36 @@ V.progress = (e, lt) => {
   font('Mono', 36, 800); ctx.fillStyle = T.fg; ctx.textAlign = 'center'; ctx.fillText(`${Math.round(p * 100)}%`, 0, -50); if (e.label) { font('IDS', 34); ctx.fillText(e.label, 0, 80); }
 };
 
+// ---------------------------------------------------------------- sets (scene backdrops with depth)
+function drawSet(s, t) {
+  const k = s.set; if (!k) return; const light = D.theme === 'light' || D.theme === 'doodle';
+  if (k === 'space') {
+    const r = rng(hash('stars' + (s.t0 | 0)));
+    for (let i = 0; i < 140; i++) { const x = r() * W, y = r() * H * .8, a = .3 + .7 * Math.abs(Math.sin(t * (.5 + r() * 2) + i)); ctx.fillStyle = `rgba(255,255,255,${a * .8})`; ctx.beginPath(); ctx.arc(x, y, r() * 2.4 + .4, 0, 7); ctx.fill(); }
+  }
+  if (k === 'shelf' || k === 'table') { // surface objects stand on, at y = s.setY (default .56)
+    const y = (s.setY || .56) * H, g = ctx.createLinearGradient(0, y, 0, y + 60);
+    g.addColorStop(0, light ? '#e8dccb' : '#3a2a1e'); g.addColorStop(1, light ? '#cdbda6' : '#1c130c');
+    ctx.fillStyle = g; ctx.fillRect(-20, y, W + 40, k === 'shelf' ? 46 : H - y);
+    ctx.fillStyle = light ? 'rgba(255,255,255,0.6)' : 'rgba(255,200,140,0.18)'; ctx.fillRect(-20, y, W + 40, 4);
+    if (k === 'shelf') { ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(-20, y + 46, W + 40, 30); }
+  }
+  if (k === 'room') { // wall + floor with window light
+    const y = (s.setY || .6) * H; ctx.fillStyle = light ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.03)'; ctx.fillRect(0, y, W, H - y);
+    ctx.strokeStyle = light ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    const lg = ctx.createLinearGradient(0, 0, W, H); lg.addColorStop(0, alphaCol(s.tint || T.acc2, .18)); lg.addColorStop(.6, 'rgba(0,0,0,0)'); ctx.fillStyle = lg;
+    ctx.beginPath(); ctx.moveTo(120, 0); ctx.lineTo(420, 0); ctx.lineTo(820, y); ctx.lineTo(320, y); ctx.closePath(); ctx.fill();
+  }
+  if (k === 'rays') { // light shafts from above
+    for (let i = 0; i < 5; i++) { const x = W * (.15 + i * .18) + Math.sin(t * .3 + i) * 30; const g = ctx.createLinearGradient(x, 0, x + 160, H * .7); g.addColorStop(0, alphaCol(s.tint || '#ffffff', .10)); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 70, 0); ctx.lineTo(x + 260, H * .7); ctx.lineTo(x + 120, H * .7); ctx.closePath(); ctx.fill(); }
+  }
+}
+function contactShadow(e, sc) { // soft ellipse under grounded objects
+  const gy = e.groundY ?? 0; ctx.save(); ctx.translate(0, gy); ctx.scale(1, .22);
+  const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 220); g.addColorStop(0, `rgba(0,0,0,${D.theme === 'light' ? .18 : .45})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 220, 0, 7); ctx.fill(); ctx.restore();
+}
+
 // ---------------------------------------------------------------- scene
 function drawScene(t, i) {
   const s = SC[i], next = SC[i + 1];
@@ -572,8 +594,10 @@ function drawScene(t, i) {
   // camera: slow push, exit = zoom-through or whip
   const cz = 1 + (s.cam === 'out' ? .06 * (1 - p) : .045 * p) + .25 * easeIO(outK) * (s.exit === 'whip' ? 0 : 1);
   const wx = s.exit === 'whip' ? -W * 1.1 * easeIO(outK) : 0;
-  ctx.translate(W / 2 + wx, 900); ctx.scale(cz, cz); ctx.translate(-W / 2, -900);
+  const sway = D.sway === false ? 0 : 1;
+  ctx.translate(W / 2 + wx + sway * noise1(t * .25, 'cx') * 10, 900 + sway * noise1(t * .2, 'cy') * 8); ctx.rotate(sway * noise1(t * .15, 'cr') * .004); ctx.scale(cz, cz); ctx.translate(-W / 2, -900);
   ctx.globalAlpha = 1 - (s.exit === 'whip' ? 0 : easeOut(outK));
+  drawSet(s, t);
   for (const e of s.els || []) {
     const at = s.t0 + (e._at ?? e.at ?? 0); let lt = t - at;
     if (lt < 0) { if (i === 0 && (e._at ?? e.at ?? 0) <= 0 && e.from === 'none') lt = 0; else continue; }
@@ -587,6 +611,7 @@ function drawScene(t, i) {
     ctx.translate(x, y); ctx.rotate(o.rot + (e.rot && e.from !== 'slam' ? e.rot * Math.PI / 180 : 0));
     const sc = (e.s || 1) * o.sc; ctx.scale(sc, sc); ctx.globalAlpha *= o.a;
     if (e.shake) { const k = Math.max(0, 1 - lt / .5); ctx.translate(Math.sin(t * 60) * 16 * k, Math.cos(t * 47) * 10 * k); }
+    if (e.ground) contactShadow(e);
     if (V[e.v]) V[e.v](e, lt, t, sd, e);
     ctx.restore();
   }

@@ -10,8 +10,6 @@
 ## План
 ```json
 {"id": "x", "engine": "motion", "theme": "dark|heist|light|doodle|neon",
- "label": "ЧТО ЕСЛИ · 02",            // мелкая подпись сверху (dark/neon/light)
- "brand": "...",                        // light: справа сверху
  "stats": [{"key": "time", "label": "ВРЕМЯ"}, {"key": "risk", "label": "РИСК", "suffix": "%", "bar": true}],  // heist
  "music": "tense|epic|mystery|funny|chill|happy|sad|action", "voice": "eleven|none",
  "scenes": [{"say": "текст с ударе́ниями", "audio": "assets/audio/x/s0.mp3", "hl": ["слово"],
@@ -55,6 +53,7 @@
 - `image` {src: "assets/img/x/s0.png", w, h, mode: "full", zoom} картинка в карточке или на весь кадр (сюда идут AI-картинки из Figma/ChatGPT)
 
 ## Правила качества
+- Не перегружать: в сцене одна главная картинка и максимум одна подпись (chip или tag). Подпись «лайков» в углу ставится сама, еле видная; label/brand больше не используются.
 - Каждые 2–4 сек на экране что-то новое: элемент на ключевом слове (`on`), звук на каждое появление.
 - В сцене 1–3 элемента, не больше. Одна главная картинка по центру.
 - Первый кадр (t=0) уже должен быть интересным: элементы первой сцены с `from: "none"`.

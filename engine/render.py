@@ -451,6 +451,8 @@ def main(plan_path, out_path):
             caption_block(F, d, sc.get("text", ""), tt, sc["_t0"] + 0.2, pal)
         else:
             captions(F, d, all_words, tt, pal)
+        wm = ImageDraw.Draw(bg, "RGBA"); wf = font(F_BOLD, 30)
+        wm.text((F.W - 70 - text_size(wm, "лайков", wf)[0], 280), "лайков", font=wf, fill=(255, 255, 255, 34))
         out = np.asarray(bg.convert("RGB"), dtype=np.int16)
         out = (out * F.vig[..., None]).astype(np.int16)
         out += F.grain[fi % len(F.grain)]
