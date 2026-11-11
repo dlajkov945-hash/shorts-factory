@@ -24,3 +24,9 @@ setBox(t,'НАЗВАНИЕ'); setBox(d,'ОПИСАНИЕ');
    Дата: клик по выпадашке даты в ytcp-datetime-picker, ввести дату. Время: triple_click по полю времени (скриншот, поле справа от даты), напечатать `13:00`, Enter. Проверить `ytcp-datetime-picker input` value.
 8. `document.querySelector('ytcp-uploads-dialog #done-button').click()` (кнопка «Запланировать публикацию»), закрыть окно «Проверка ещё продолжается» кнопкой ОК.
 9. Проверить на странице `.../videos/short`: ролик есть один раз со статусом «Отложенная публикация».
+
+## Поправки 11.11.2026 (вечер), когда панель браузера скрыта
+- Drop перестал срабатывать, работает `input[type=file]` в `ytcp-uploads-file-picker`: `inp.files=dt.files; inp.dispatchEvent(new Event('change',{bubbles:true}))`, ждать появления #textbox.
+- execCommand не работает (страница без фокуса). Название и описание: `Claude_Browser__find "textbox"` → `form_input` по ref (обычно ref_237 и ref_260).
+- Дата: клик по `#datepicker-trigger`, в календаре кликнуть число мышью (скриншот, ряд текущей недели). Время: `find "00:00"` → `form_input` "13:00", потом в JS keydown Enter + change + blur на input. Проверять `#datepicker-trigger` innerText и input value.
+- Кнопку ОК в окне «Проверка ещё продолжается» искать по тексту `ОК` среди видимых ytcp-button.
