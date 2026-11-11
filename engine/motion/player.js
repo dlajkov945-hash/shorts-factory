@@ -630,7 +630,7 @@ const CH = []; (function chunk() {
   flush();
 })();
 function captions(t) {
-  if (!CH.length || D.captions === false) return;
+  if (!CH.length || D.captions === false || D.captions === 'none' || D.captions === 'off') return;
   const cs = SC[sceneAt(t)]; if ((cs.els || []).some((e) => e.v === 'text' && !e.keepCaps && t >= cs.t0 + (e._at ?? e.at ?? 0))) return;
   let ci = -1; for (let k = 0; k < CH.length; k++) if (t >= CH[k][0].t0 - .06) ci = k;
   if (ci < 0) return; const c = CH[ci], end = (CH[ci + 1] ? CH[ci + 1][0].t0 - .06 : c[c.length - 1].t1 + .6);

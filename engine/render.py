@@ -299,6 +299,7 @@ def main(plan_path, out_path):
         base.update({kk: tuple(vv) if isinstance(vv, list) else vv for kk, vv in v.items()}); cast[k] = base
     work = os.path.splitext(out_path)[0] + "_work"; os.makedirs(work, exist_ok=True)
     scenes = plan["scenes"]
+    caps_on = plan.get("captions", "pop") not in (False, "none", "off")
     if voice != "none":
         missing = [w for sc in scenes if not sc.get("audio") for w in stress_lint(sc.get("say", ""))]
         if missing:
@@ -439,7 +440,7 @@ def main(plan_path, out_path):
             bg = Image.blend(bg, Image.new("RGBA", (F.W, F.H), (255, 255, 255, 255)), 0.28 * flash); d = ImageDraw.Draw(bg, "RGBA")
         if illus:
             hook_title(F, bg, plan.get("hook", ""), tt, pal)
-            if voice != "none": captions_pop(F, bg, chunks, tt, pal)
+            if voice != "none" and caps_on: captions_pop(F, bg, chunks, tt, pal)
             d = ImageDraw.Draw(bg, "RGBA")
         else:
             chip(F, d, sc.get("chip", ""), tt, sc["_t0"] - 0.1, pal)
@@ -449,7 +450,7 @@ def main(plan_path, out_path):
             pass
         elif voice == "none":
             caption_block(F, d, sc.get("text", ""), tt, sc["_t0"] + 0.2, pal)
-        else:
+        elif caps_on:
             captions(F, d, all_words, tt, pal)
         wm = ImageDraw.Draw(bg, "RGBA"); wf = font(F_BOLD, 30)
         wm.text((F.W - 70 - text_size(wm, "лайков", wf)[0], 280), "лайков", font=wf, fill=(255, 255, 255, 34))
