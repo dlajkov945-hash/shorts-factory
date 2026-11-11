@@ -61,7 +61,45 @@ def _inst(kind, f, n):
         return x * _env(n, 0.005, 0.15, 0.1) * 0.5
     return _note(f, t) * _env(n)
 
+import os, subprocess
+LIB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
+# plan "music" names -> library files (assets/music/<name>.mp3, ElevenLabs Sound Effects, 30s loops)
+MUSIC_ALIAS = {"chill": "lofi", "sad": "emotional", "action": "epic", "neon": "synthwave", "calm": "lofi"}
+SFX_ALIAS = {"whoosh": ["swish"], "money": ["cash"], "phone": ["notify"], "impact": ["boom"]}
+
+def _load(path):
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True).stdout
+    return np.frombuffer(raw, dtype=np.float32).astype(np.float64)
+
+def lib_music(name):
+    name = MUSIC_ALIAS.get(name, name)
+    p = os.path.join(LIB, "music", name + ".mp3")
+    return p if os.path.exists(p) else None
+
 def music(dur, mood="tense", seed=0, energy=1.0):
+    """Library loop if assets/music/<mood>.mp3 exists (looped with crossfade), else procedural.
+    Prefix "synth:" forces the procedural generator."""
+    if not str(mood).startswith("synth:"):
+        p = lib_music(mood)
+        if p:
+            a = _load(p); n = int(dur * SR); xf = int(1.5 * SR)
+            if len(a) > 2 * xf:
+                out = np.zeros(n + len(a)); pos = 0; first = True
+                while pos < n:
+                    seg = a.copy()
+                    if not first: seg[:xf] *= np.linspace(0, 1, xf)
+                    seg[-xf:] *= np.linspace(1, 0, xf)
+                    out[pos:pos + len(seg)] += seg; pos += len(a) - xf; first = False
+                out = out[:n]
+                fade = int(1.5 * SR); out[-fade:] *= np.linspace(1, 0, fade)
+                out[:int(0.2 * SR)] *= np.linspace(0, 1, int(0.2 * SR))
+                rms = np.sqrt((out ** 2).mean()) or 1
+                out = out / rms * 0.09  # match loudness of the procedural score
+                return np.clip(out, -0.95, 0.95)
+    mood = str(mood).replace("synth:", "")
+    return _music_proc(dur, mood, seed, energy)
+
+def _music_proc(dur, mood="tense", seed=0, energy=1.0):
     cfg = MOODS.get(mood, MOODS["tense"])
     rng = np.random.default_rng(seed)
     n = int(dur * SR)
@@ -116,6 +154,19 @@ def music(dur, mood="tense", seed=0, energy=1.0):
 
 # ---------------- SFX
 def sfx(kind, seed=0):
+    """Library sound from assets/sfx/<kind>.mp3 (ElevenLabs) if present, else synthesized."""
+    names = SFX_ALIAS.get(kind, [kind])
+    files = [os.path.join(LIB, "sfx", nm + ".mp3") for nm in names if os.path.exists(os.path.join(LIB, "sfx", nm + ".mp3"))]
+    if files and not str(kind).startswith("synth:"):
+        a = _load(files[seed % len(files)])
+        if len(a):
+            a = a / max(1e-6, np.abs(a).max()) * 0.45
+            tail = min(len(a), int(0.15 * SR)); a[-tail:] *= np.linspace(1, 0, tail)
+            return a
+    kind = str(kind).replace("synth:", "")
+    return _sfx_proc(kind, seed)
+
+def _sfx_proc(kind, seed=0):
     rng = np.random.default_rng(seed)
     if kind == "whoosh":
         n = int(0.5 * SR); x = rng.standard_normal(n)
