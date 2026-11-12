@@ -535,6 +535,30 @@ V.choices = (e, lt, t) => { // answer options A / B / C
     font('IDX', 50); ctx.fillStyle = T.fg; ctx.textAlign = 'left'; ctx.fillText(o.text, -270, 3); ctx.textBaseline = 'alphabetic'; ctx.restore();
   });
 };
+V.button = (e, lt, t) => { // big glossy 3D push button: n (label on cap), color, press (sec after appear, or press_on word), pulse glow
+  const c = e.color || '#ff2b2b', s = e.size || 1; ctx.scale(s, s);
+  const pt = e.press !== undefined ? lt - e.press : -1;
+  const down = pt >= 0 ? (pt < .12 ? pt / .12 : pt < .45 ? 1 : Math.max(0, 1 - (pt - .45) / .2)) : 0;
+  // base: dark metal cylinder
+  ctx.fillStyle = '#1a1a20'; ctx.beginPath(); ctx.ellipse(0, 90, 300, 95, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = '#2c2c34'; ctx.fillRect(-300, 20, 600, 70); ctx.beginPath(); ctx.ellipse(0, 20, 300, 95, 0, 0, 7); ctx.fill();
+  ctx.strokeStyle = '#4a4a56'; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(0, 20, 300, 95, 0, 0, 7); ctx.stroke();
+  ctx.fillStyle = '#0c0c10'; ctx.beginPath(); ctx.ellipse(0, 10, 235, 72, 0, 0, 7); ctx.fill();
+  // cap: cylinder side + dome, pushed down by `down`
+  const h = 110 - 80 * down, top = 10 - h;
+  const pulse = .55 + .45 * Math.sin(t * 5);
+  glow(alphaCol(c, .9), 40 + 50 * pulse + 80 * down);
+  const dark = alphaCol('#000000', .35);
+  ctx.fillStyle = c; ctx.fillRect(-220, top, 440, h); ctx.beginPath(); ctx.ellipse(0, 10, 220, 66, 0, 0, Math.PI); ctx.fill(); noGlow();
+  ctx.fillStyle = dark; ctx.fillRect(-220, top, 440, h); ctx.beginPath(); ctx.ellipse(0, 10, 220, 66, 0, 0, Math.PI); ctx.fill();
+  const g = ctx.createRadialGradient(-70, top - 40, 10, 0, top, 260); g.addColorStop(0, '#ffffff'); g.addColorStop(.18, c); g.addColorStop(1, alphaCol('#000000', .0));
+  ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(0, top, 220, 66, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = g; ctx.globalAlpha *= .55; ctx.beginPath(); ctx.ellipse(0, top, 220, 66, 0, 0, 7); ctx.fill(); ctx.globalAlpha /= .55;
+  ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.ellipse(-80, top - 22, 70, 16, -.15, 0, 7); ctx.fill();
+  if (e.n !== undefined) { ctx.save(); ctx.translate(0, top); ctx.scale(1, .32); font('IDB', 230); ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(e.n), 0, 10); ctx.restore(); ctx.textBaseline = 'alphabetic'; }
+  // press flash: expanding ring
+  if (pt >= 0 && pt < .9) { const k = pt / .9; ctx.strokeStyle = alphaCol(c, (1 - k) * .9); ctx.lineWidth = 18 * (1 - k) + 2; ctx.beginPath(); ctx.ellipse(0, 10, 240 + 260 * k, 75 + 85 * k, 0, 0, 7); ctx.stroke(); }
+};
 V.keys = (e, lt, t) => { // keyboard: layout ru|en, hl letters light up at hlAt, typing = random presses
   const rows = e.layout === 'en' ? ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'] : ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ'];
   const k = 76, g = 10, light = D.theme === 'light' || D.theme === 'doodle', hl = e.hl || '', hk = clamp((lt - (e.hlAt ?? .6)) / .4);

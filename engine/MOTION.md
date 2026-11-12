@@ -41,6 +41,7 @@
 - `card` {title, url, rows: ["Слева|справа"], hi, button} окно интерфейса
 - `list` {title, rows: ["a|b|c"], hi, hiAt} таблица моно-шрифтом
 - `phone` {time, notes: ["Заголовок|текст"], screen} телефон с уведомлениями
+- `button` {n, color, size, press (сек после появления) или press_on (слово), press_sfx} большая красная 3D кнопка, светится, на press вдавливается с кольцом-вспышкой (для «нажмёте кнопку?»)
 - `choices` {items: [{text, color}]} варианты ответа А/Б/В (для «что бы вы сделали»)
 - `grid` {n, cols, size, onFrac, shape: "dot", rise, faces, label} много плиток/точек
 - `progress` {from, to, label} полоса с процентами; `timer` {from (сек), dir, label}; `clock` {speed}

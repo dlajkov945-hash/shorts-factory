@@ -82,6 +82,7 @@ def main(plan_path, out_path, stills=False):
         for k, name in enumerate(sc.get("sfx", [])): add(AU.sfx(name, i * 10 + k), sc["t0"] + 0.1 * k, 0.8)
         for e in sc.get("els", []):
             if e.get("sfx"): add(AU.sfx(e["sfx"], i * 7 + 3), sc["t0"] + e.get("_at", e.get("at", 0)), 0.7)
+            if e.get("press_sfx") and e.get("press") is not None: add(AU.sfx(e["press_sfx"], i * 7 + 5), sc["t0"] + e.get("_at", e.get("at", 0)) + e["press"], 0.8)
     mix = mix / max(1e-6, np.abs(mix).max()) * 0.92
     apath = os.path.join(work, "mix.wav")
     with wave.open(apath, "w") as w:

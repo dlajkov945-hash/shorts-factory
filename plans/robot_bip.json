@@ -1,0 +1,120 @@
+{
+ "id": "robot_bip",
+ "title": "Маленький робот искал работу. Но нашёл кое что важнее 🤖",
+ "description": "Его выкинули с завода, он провалил три работы подряд... а потом встретил её. Мультик без слов про робота Бипа.\n\n#мультик #робот #добро #безслов #shorts",
+ "format": "без слов, мини история",
+ "style": "3D Pixar",
+ "palette": "night",
+ "music": "emotional",
+ "voice": "none",
+ "captions": false,
+ "scenes": [
+  {
+   "dur": 3.4,
+   "sfx": [
+    "scratch"
+   ],
+   "image": "assets/img/robot_bip/s0.png",
+   "text": ""
+  },
+  {
+   "dur": 3.2,
+   "sfx": [
+    "swish"
+   ],
+   "image": "assets/img/robot_bip/s1.png",
+   "text": ""
+  },
+  {
+   "dur": 3.0,
+   "sfx": [
+    "boing",
+    "pop"
+   ],
+   "image": "assets/img/robot_bip/s2.png",
+   "text": ""
+  },
+  {
+   "dur": 3.0,
+   "sfx": [
+    "boom"
+   ],
+   "image": "assets/img/robot_bip/s3.png",
+   "text": ""
+  },
+  {
+   "dur": 3.0,
+   "sfx": [
+    "whoosh_big",
+    "boing"
+   ],
+   "image": "assets/img/robot_bip/s4.png",
+   "text": ""
+  },
+  {
+   "dur": 3.0,
+   "sfx": [
+    "scratch"
+   ],
+   "image": "assets/img/robot_bip/s5.png",
+   "text": ""
+  },
+  {
+   "dur": 3.0,
+   "sfx": [
+    "boing"
+   ],
+   "image": "assets/img/robot_bip/s6.png",
+   "text": ""
+  },
+  {
+   "dur": 3.8,
+   "sfx": [
+    "heart"
+   ],
+   "image": "assets/img/robot_bip/s7.png",
+   "text": ""
+  },
+  {
+   "dur": 3.4,
+   "sfx": [
+    "tick"
+   ],
+   "image": "assets/img/robot_bip/s8.png",
+   "text": ""
+  },
+  {
+   "dur": 3.4,
+   "sfx": [
+    "riser",
+    "ding"
+   ],
+   "image": "assets/img/robot_bip/s9.png",
+   "text": ""
+  },
+  {
+   "dur": 3.6,
+   "sfx": [
+    "swish"
+   ],
+   "image": "assets/img/robot_bip/s10.png",
+   "text": ""
+  },
+  {
+   "dur": 3.6,
+   "sfx": [
+    "heart"
+   ],
+   "image": "assets/img/robot_bip/s11.png",
+   "text": ""
+  },
+  {
+   "dur": 4.6,
+   "sfx": [
+    "ding"
+   ],
+   "image": "assets/img/robot_bip/s12.png",
+   "text": ""
+  }
+ ]
+}
