@@ -1,0 +1,24 @@
+{
+ "id": "tima_ep3",
+ "title": "Я живу на дне океана. Часть 3",
+ "description": "Робот со станции номер два увёл Тимку к чужому дому на глубине 300 метров. В окнах горит свет, на столе дымится еда, но внутри никого. А потом дверь закрылась сама.\n\n#мультик #сериал #домподводой #океан #shorts",
+ "format": "series",
+ "series": "Мальчик в доме под водой",
+ "style": "3d_pixar",
+ "palette": "ocean",
+ "music": "mystery",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "В этом доме кто-то только что был",
+ "captions": "pop",
+ "scenes": [
+  {"say": "Ста́рый ро́бот поверну́лся и поплы́л в темноту́. И я поплы́л за ним.", "hl": ["поплыл"], "sfx": ["tick"], "audio": "assets/audio/tima_ep3/s0.mp3", "image": "assets/img/tima_ep3/s0.png"},
+  {"say": "Оте́ц спал. Я наде́л скафа́ндр и вы́шел нару́жу, пря́мо в чёрную во́ду.", "sfx": ["swish"], "audio": "assets/audio/tima_ep3/s1.mp3", "image": "assets/img/tima_ep3/s1.png"},
+  {"say": "Ро́бот привёл меня́ к друго́му до́му. Тако́му же, как наш.", "hl": ["другому"], "sfx": ["ding"], "audio": "assets/audio/tima_ep3/s2.mp3", "image": "assets/img/tima_ep3/s2.png"},
+  {"say": "В кру́глых о́кнах горе́л тёплый свет. Зна́чит, там кто́-то живёт.", "hl": ["свет"], "sfx": ["pop"], "audio": "assets/audio/tima_ep3/s3.mp3", "image": "assets/img/tima_ep3/s3.png"},
+  {"say": "Я постуча́л в дверь. Но мне никто́ не отве́тил.", "sfx": ["tick"], "audio": "assets/audio/tima_ep3/s4.mp3", "image": "assets/img/tima_ep3/s4.png"},
+  {"say": "Дверь была́ откры́та. Внутри́ я уви́дел накры́тый стол и два сту́ла.", "hl": ["два"], "sfx": ["swish"], "audio": "assets/audio/tima_ep3/s5.mp3", "image": "assets/img/tima_ep3/s5.png"},
+  {"say": "Еда́ ещё дыми́лась. Бу́дто хозя́ева вы́шли мину́ту наза́д. Но куда́ вы́йти на глубине́ три́ста ме́тров?", "hl": ["минуту", "куда"], "sfx": ["heart"], "audio": "assets/audio/tima_ep3/s6.mp3", "image": "assets/img/tima_ep3/s6.png"},
+  {"say": "И тут свет пога́с. А за мое́й спино́й ти́хо закры́лась дверь. Продолже́ние в сле́дующей се́рии.", "hl": ["погас"], "sfx": ["boom", "glitch"], "audio": "assets/audio/tima_ep3/s7.mp3", "image": "assets/img/tima_ep3/s7.png"}
+ ]
+}
