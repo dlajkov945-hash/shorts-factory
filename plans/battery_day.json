@@ -1,0 +1,386 @@
+{
+ "id": "battery_day",
+ "engine": "motion",
+ "theme": "light",
+ "title": "Когда телефон сел в самый неподходящий момент 🔋😅",
+ "description": "Один день из жизни батарейки. Без слов, но всё понятно 😅\n\n#телефон #батарея #жиза #юмор #безслов #shorts",
+ "format": "без слов, бытовой юмор",
+ "music": "funny",
+ "voice": "none",
+ "captions": false,
+ "scenes": [
+  {
+   "dur": 3.0,
+   "els": [
+    {
+     "v": "battery",
+     "y": 0.36,
+     "s": 1.35,
+     "shake": true,
+     "p0": 1,
+     "p1": 1,
+     "from": "none"
+    },
+    {
+     "v": "person",
+     "pose": "scared",
+     "y": 0.66,
+     "s": 0.9,
+     "from": "none"
+    }
+   ],
+   "sfx": [
+    "heart"
+   ],
+   "tint": "#ff3b3b"
+  },
+  {
+   "dur": 2.4,
+   "els": [
+    {
+     "v": "clock",
+     "speed": -14,
+     "hour": 9,
+     "y": 0.42,
+     "s": 1.1,
+     "from": "pop"
+    }
+   ],
+   "sfx": [
+    "glitch",
+    "riser"
+   ],
+   "tint": "#7a5cff",
+   "exit": "whip"
+  },
+  {
+   "dur": 3.2,
+   "els": [
+    {
+     "v": "phone",
+     "time": "08:00",
+     "screen": "#ffb36b",
+     "y": 0.42,
+     "s": 1.3,
+     "from": "up"
+    },
+    {
+     "v": "person",
+     "pose": "wave",
+     "x": 0.8,
+     "y": 0.7,
+     "s": 0.7,
+     "from": "right",
+     "at": 0.6,
+     "sfx": "pop"
+    }
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "tint": "#ffb21a"
+  },
+  {
+   "dur": 3.4,
+   "els": [
+    {
+     "v": "clock",
+     "speed": 5,
+     "hour": 10,
+     "y": 0.26,
+     "s": 0.8,
+     "from": "pop"
+    },
+    {
+     "v": "battery",
+     "dur": 3.0,
+     "y": 0.58,
+     "s": 1.25,
+     "at": 0.3,
+     "sfx": "tick",
+     "p0": 100,
+     "p1": 64,
+     "from": "up"
+    }
+   ],
+   "sfx": [
+    "swish"
+   ]
+  },
+  {
+   "dur": 3.2,
+   "els": [
+    {
+     "v": "person",
+     "pose": "think",
+     "y": 0.64,
+     "s": 1.05,
+     "from": "pop"
+    },
+    {
+     "v": "battery",
+     "dur": 2.6,
+     "y": 0.28,
+     "s": 0.95,
+     "sfx": "tick",
+     "p0": 64,
+     "p1": 23,
+     "from": "down"
+    }
+   ],
+   "sfx": [
+    "notify"
+   ],
+   "tint": "#ffc21a"
+  },
+  {
+   "dur": 3.2,
+   "els": [
+    {
+     "v": "phone",
+     "time": "21:40",
+     "screen": "#3b2a6b",
+     "y": 0.4,
+     "s": 1.25,
+     "from": "pop"
+    },
+    {
+     "v": "battery",
+     "dur": 2.4,
+     "x": 0.5,
+     "y": 0.8,
+     "s": 0.6,
+     "at": 0.4,
+     "pct": false,
+     "sfx": "tick",
+     "p0": 23,
+     "p1": 5,
+     "from": "up"
+    }
+   ],
+   "sfx": [
+    "notify"
+   ],
+   "tint": "#ff5a1f"
+  },
+  {
+   "dur": 3.0,
+   "els": [
+    {
+     "v": "battery",
+     "dur": 1.2,
+     "y": 0.42,
+     "s": 1.5,
+     "shake": true,
+     "sfx": "boom",
+     "p0": 5,
+     "p1": 1,
+     "from": "slam"
+    },
+    {
+     "v": "sfx",
+     "at": 1.6,
+     "sfx": "heart"
+    }
+   ],
+   "tint": "#ff3b3b"
+  },
+  {
+   "dur": 3.0,
+   "els": [
+    {
+     "v": "person",
+     "pose": "walk",
+     "y": 0.55,
+     "s": 1.15,
+     "from": "left"
+    },
+    {
+     "v": "sfx",
+     "at": 1.2,
+     "sfx": "swish"
+    }
+   ],
+   "sfx": [
+    "whoosh_big"
+   ],
+   "exit": "whip",
+   "set": "room"
+  },
+  {
+   "dur": 3.2,
+   "els": [
+    {
+     "v": "socket",
+     "y": 0.3,
+     "s": 1.3,
+     "from": "pop",
+     "sfx": "ding"
+    },
+    {
+     "v": "person",
+     "pose": "happy",
+     "y": 0.68,
+     "s": 0.85,
+     "from": "up",
+     "at": 0.5,
+     "sfx": "pop"
+    }
+   ],
+   "tint": "#2fd36b",
+   "set": "room"
+  },
+  {
+   "dur": 3.6,
+   "els": [
+    {
+     "v": "plug",
+     "fit": false,
+     "y": 0.52,
+     "s": 1.25,
+     "from": "none"
+    },
+    {
+     "v": "sfx",
+     "at": 0.8,
+     "sfx": "boing"
+    },
+    {
+     "v": "sfx",
+     "at": 1.1,
+     "sfx": "glitch"
+    }
+   ],
+   "sfx": [
+    "swish"
+   ],
+   "tint": "#ff3b3b"
+  },
+  {
+   "dur": 3.0,
+   "els": [
+    {
+     "v": "phone",
+     "time": "",
+     "screen": "#000000",
+     "y": 0.42,
+     "s": 1.3,
+     "from": "none",
+     "shake": true
+    },
+    {
+     "v": "battery",
+     "dur": 0.6,
+     "x": 0.5,
+     "y": 0.8,
+     "s": 0.55,
+     "at": 0.2,
+     "pct": false,
+     "p0": 1,
+     "p1": 0,
+     "from": "pop"
+    }
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "tint": "#111111"
+  },
+  {
+   "dur": 3.0,
+   "els": [
+    {
+     "v": "person",
+     "pose": "think",
+     "y": 0.58,
+     "s": 1.1,
+     "from": "pop"
+    },
+    {
+     "v": "icon",
+     "name": "question",
+     "x": 0.74,
+     "y": 0.3,
+     "s": 0.7,
+     "from": "pop",
+     "at": 0.9,
+     "sfx": "pop"
+    }
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "dur": 3.4,
+   "els": [
+    {
+     "v": "oldphone",
+     "y": 0.45,
+     "s": 1.3,
+     "from": "drop",
+     "float": true,
+     "sfx": "riser"
+    },
+    {
+     "v": "sfx",
+     "at": 0.6,
+     "sfx": "ding"
+    }
+   ],
+   "tint": "#2fd36b"
+  },
+  {
+   "dur": 3.2,
+   "els": [
+    {
+     "v": "versus",
+     "a": {
+      "label": "2026",
+      "value": "0%"
+     },
+     "b": {
+      "label": "2006",
+      "value": "100%",
+      "size": 84
+     },
+     "y": 0.45,
+     "s": 1.2,
+     "from": "pop",
+     "sfx": "pop"
+    }
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "tint": "#2fd36b"
+  },
+  {
+   "dur": 3.8,
+   "els": [
+    {
+     "v": "person",
+     "pose": "happy",
+     "x": 0.34,
+     "y": 0.6,
+     "s": 1.0,
+     "from": "pop"
+    },
+    {
+     "v": "oldphone",
+     "x": 0.76,
+     "y": 0.42,
+     "s": 0.6,
+     "from": "drop",
+     "at": 0.3,
+     "float": true,
+     "sfx": "ding"
+    }
+   ],
+   "sfx": [
+    "boing"
+   ],
+   "tint": "#ffb21a"
+  }
+ ]
+}

@@ -1,0 +1,129 @@
+{
+ "id": "tima_ep4",
+ "title": "Я живу на дне океана. Часть 4",
+ "description": "В тёмном чужом доме на глубине 300 метров Тимка нашёл девочку Миру. Она знает, зачем робот уводит людей. И кто живёт в глубине.\n\n#мультик #сериал #домподводой #океан #shorts",
+ "format": "series",
+ "series": "Мальчик в доме под водой",
+ "style": "3d_pixar",
+ "palette": "ocean",
+ "music": "underwater",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "В темноте кто-то дышал рядом",
+ "captions": "pop",
+ "scenes": [
+  {
+   "say": "В по́лной темноте́ я услы́шал, как кто́-то ды́шит ря́дом со мной.",
+   "hl": [
+    "дышит"
+   ],
+   "sfx": [
+    "heart"
+   ],
+   "audio": "assets/audio/tima_ep4/s0.mp3",
+   "image": "assets/img/tima_ep4/s0.png"
+  },
+  {
+   "say": "Я включи́л фона́рик. У стены́ стоя́ла де́вочка. Приме́рно мое́го во́зраста.",
+   "hl": [
+    "девочка"
+   ],
+   "sfx": [
+    "swish"
+   ],
+   "audio": "assets/audio/tima_ep4/s1.mp3",
+   "image": "assets/img/tima_ep4/s1.png"
+  },
+  {
+   "say": "Она́ прижа́ла па́лец к губа́м и прошепта́ла: ти́ше, он вернётся.",
+   "hl": [
+    "вернётся"
+   ],
+   "sfx": [
+    "tick"
+   ],
+   "audio": "assets/audio/tima_ep4/s2.mp3",
+   "image": "assets/img/tima_ep4/s2.png"
+  },
+  {
+   "say": "Её зову́т Ми́ра. Её семья́ живёт здесь уже́ пять лет.",
+   "hl": [
+    "Мира"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "audio": "assets/audio/tima_ep4/s3.mp3",
+   "image": "assets/img/tima_ep4/s3.png"
+  },
+  {
+   "say": "Вдруг за окно́м проплыла́ тень. Огро́мная, как авто́бус.",
+   "hl": [
+    "тень",
+    "автобус"
+   ],
+   "sfx": [
+    "whoosh_big"
+   ],
+   "audio": "assets/audio/tima_ep4/s4.mp3",
+   "image": "assets/img/tima_ep4/s4.png"
+  },
+  {
+   "say": "Ми́ра сказа́ла: ро́бот не похища́ет люде́й. Он их пря́чет.",
+   "hl": [
+    "прячет"
+   ],
+   "sfx": [
+    "pop"
+   ],
+   "audio": "assets/audio/tima_ep4/s5.mp3",
+   "image": "assets/img/tima_ep4/s5.png"
+  },
+  {
+   "say": "Пря́чет от того́, кто живёт в глубине́.",
+   "hl": [
+    "глубине"
+   ],
+   "sfx": [
+    "riser"
+   ],
+   "audio": "assets/audio/tima_ep4/s6.mp3",
+   "image": "assets/img/tima_ep4/s6.png"
+  },
+  {
+   "say": "Тень разверну́лась и посмотре́ла пря́мо на на́ше окно́.",
+   "hl": [
+    "окно"
+   ],
+   "sfx": [
+    "boom",
+    "glitch"
+   ],
+   "audio": "assets/audio/tima_ep4/s7.mp3",
+   "image": "assets/img/tima_ep4/s7.png"
+  },
+  {
+   "say": "И тут я по́нял. Я забы́л закры́ть дверь до́ма. А там спит оте́ц.",
+   "hl": [
+    "дверь",
+    "отец"
+   ],
+   "sfx": [
+    "heart"
+   ],
+   "audio": "assets/audio/tima_ep4/s8.mp3",
+   "image": "assets/img/tima_ep4/s8.png"
+  },
+  {
+   "say": "Продолже́ние в сле́дующей се́рии. Как ду́маете, что э́то за тень? Напиши́те в коммента́риях.",
+   "hl": [
+    "тень"
+   ],
+   "sfx": [
+    "tick"
+   ],
+   "audio": "assets/audio/tima_ep4/s9.mp3",
+   "image": "assets/img/tima_ep4/s9.png"
+  }
+ ]
+}

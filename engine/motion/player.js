@@ -573,6 +573,55 @@ V.keys = (e, lt, t) => { // keyboard: layout ru|en, hl letters light up at hlAt,
     });
   });
 };
+V.battery = (e, lt, t) => { // big phone battery: pct from->to over dur, colour by level, blinks when low, charging bolt
+  const k = easeOut(lt / (e.dur || 1.6)), p = clamp(lerp(e.p0 ?? 100, e.p1 ?? e.p0 ?? 100, k) / 100);
+  const w = 520, h = 250, col = e.color || (p > .5 ? '#2fd36b' : p > .2 ? '#ffc21a' : '#ff3b3b');
+  const blink = p <= .1 && !e.charging ? (Math.sin(t * 12) > 0 ? 1 : .25) : 1;
+  ctx.fillStyle = D.theme === 'light' || D.theme === 'doodle' ? '#ffffff' : '#10131b'; rr(-w / 2, -h / 2, w, h, 48); ctx.fill();
+  ctx.strokeStyle = D.theme === 'light' ? '#16151a' : '#e8ecf5'; ctx.lineWidth = 18; ctx.stroke();
+  ctx.fillStyle = ctx.strokeStyle; rr(w / 2 + 6, -48, 36, 96, 14); ctx.fill();
+  ctx.globalAlpha *= blink; if (D.theme !== 'light') glow(alphaCol(col, .8), 40); ctx.fillStyle = col;
+  rr(-w / 2 + 24, -h / 2 + 24, Math.max(18, (w - 48) * p), h - 48, 26); ctx.fill(); noGlow(); ctx.globalAlpha /= blink;
+  if (e.charging) { const pu = 1 + .08 * Math.sin(t * 8); ctx.save(); ctx.scale(.42 * pu, .42 * pu); ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#16151a'; ctx.lineWidth = 16;
+    ctx.beginPath(); ctx.moveTo(40, -220); ctx.lineTo(-110, 30); ctx.lineTo(0, 30); ctx.lineTo(-40, 220); ctx.lineTo(110, -40); ctx.lineTo(0, -40); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+  if (e.pct !== false) { font('IDB', 92); ctx.textAlign = 'center'; ctx.fillStyle = col; ctx.globalAlpha *= blink; ctx.fillText(`${Math.round(p * 100)}%`, 0, h / 2 + 120); ctx.globalAlpha /= blink; }
+};
+V.socket = (e, lt, t) => { // wall power outlet (EU), glows softly
+  ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#cfc6b8'; ctx.lineWidth = 6; glow('rgba(0,0,0,0.18)', 30); rr(-150, -150, 300, 300, 46); ctx.fill(); noGlow(); ctx.stroke();
+  ctx.fillStyle = '#f1ece4'; ctx.beginPath(); ctx.arc(0, 0, 105, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#2a2733'; ctx.beginPath(); ctx.arc(-42, 0, 17, 0, 7); ctx.arc(42, 0, 17, 0, 7); ctx.fill();
+  if (e.glow !== false) { ctx.strokeStyle = alphaCol(T.acc, .35 + .25 * Math.sin(t * 4)); ctx.lineWidth = 10; rr(-170, -170, 340, 340, 56); ctx.stroke(); }
+};
+V.plug = (e, lt, t) => { // phone bottom with port, cable plug rises from below; fit:false = bounces off (wrong connector)
+  const fit = e.fit !== false, tTouch = .8;
+  ctx.fillStyle = "#16151a"; rr(-150, -560, 300, 600, 56); ctx.fill(); ctx.fillStyle = "#26324d"; rr(-128, -540, 256, 540, 38); ctx.fill();
+  ctx.fillStyle = '#0a0a0e'; rr(-38, 22, 76, 14, 7); ctx.fill(); // port (narrow)
+  let py = lerp(560, 50, easeOut(lt / tTouch)), sh = 0;
+  if (lt > tTouch) { const b = lt - tTouch; if (fit) py = lerp(50, 30, clamp(b / .15)); else { py = 50 + Math.abs(Math.sin(b * 9)) * 70 * Math.exp(-b * 3); sh = Math.sin(b * 60) * 10 * Math.exp(-b * 4); } }
+  ctx.save(); ctx.translate(sh, py);
+  ctx.strokeStyle = '#f4f1ec'; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 150); ctx.bezierCurveTo(0, 360, 140, 420, 120, 800); ctx.stroke(); ctx.lineCap = 'butt';
+  ctx.fillStyle = '#f4f1ec'; ctx.strokeStyle = '#bdb6aa'; ctx.lineWidth = 5; rr(-58, 20, 116, 140, 22); ctx.fill(); ctx.stroke(); // housing
+  ctx.fillStyle = '#c9ccd4'; if (fit) rr(-30, -4, 60, 26, 6); else rr(-62, -14, 124, 36, 6); ctx.fill(); // connector: wide = wrong
+  ctx.restore();
+  if (lt > tTouch + .25) { const k = spring(lt - tTouch - .25); ctx.save(); ctx.translate(fit ? 0 : 230, fit ? -120 : 10); ctx.scale(.55 * k, .55 * k);
+    ctx.strokeStyle = fit ? '#2fd36b' : '#ff3b3b'; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath();
+    if (fit) { ctx.moveTo(-130, 0); ctx.lineTo(-30, 100); ctx.lineTo(150, -110); } else { ctx.moveTo(-110, -110); ctx.lineTo(110, 110); ctx.moveTo(110, -110); ctx.lineTo(-110, 110); }
+    ctx.stroke(); ctx.lineCap = 'butt'; ctx.restore(); }
+};
+V.oldphone = (e, lt, t) => { // 2000s push-button phone: full battery bars + snake game running on the LCD
+  ctx.fillStyle = '#2b3448'; rr(-150, -360, 300, 720, 70); ctx.fill(); ctx.fillStyle = '#3a465f'; rr(-132, -342, 264, 684, 58); ctx.fill();
+  ctx.fillStyle = '#2b3448'; rr(70, -440, 34, 110, 14); ctx.fill(); // antenna
+  ctx.fillStyle = '#9fc46a'; rr(-104, -290, 208, 190, 14); ctx.fill(); ctx.fillStyle = '#2d3a1c';
+  for (let b = 0; b < 4; b++) ctx.fillRect(-92 + b * 0, -276 + b * 14, 10 + b * 6, 9); // signal bars (left)
+  for (let b = 0; b < 4; b++) ctx.fillRect(88 - 16, -276 + b * 14, 16, 9); // battery bars (right, full)
+  const cell = 11, cols = 14, rows = 9, ox = -77, oy = -232, step = Math.floor(t * 8);
+  const path = []; for (let x = 0; x < cols; x++) path.push([x, 1]); for (let y = 2; y < rows; y++) path.push([cols - 1, y]); for (let x = cols - 2; x >= 0; x--) path.push([x, rows - 1]); for (let y = rows - 2; y > 1; y--) path.push([0, y]);
+  for (let i = 0; i < 7; i++) { const [x, y] = path[((step - i) % path.length + path.length) % path.length]; ctx.fillRect(ox + x * cell, oy + y * cell, cell - 2, cell - 2); }
+  const [fx, fy] = path[(Math.floor(step / path.length) * 17 + 9) % path.length]; ctx.fillRect(ox + fx * cell + 2, oy + (fy === 1 ? 4 : fy) * cell + 2, cell - 5, cell - 5);
+  ctx.fillStyle = '#566482'; rr(-70, -70, 140, 46, 20); ctx.fill();
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) { ctx.fillStyle = '#c9d2e4'; rr(-100 + c * 72, 0 + r * 72, 56, 50, 16); ctx.fill(); }
+  if (e.shine !== false) { const g = ctx.createLinearGradient(-150, -360, 150, 360); g.addColorStop(0, 'rgba(255,255,255,0.18)'); g.addColorStop(.4, 'rgba(255,255,255,0)'); ctx.fillStyle = g; rr(-150, -360, 300, 720, 70); ctx.fill(); }
+};
 V.progress = (e, lt) => {
   const w = e.w || 760, p = lerp(e.from || 0, e.to ?? 1, easeOut(lt / (e.dur || 1.5)));
   ctx.fillStyle = alphaCol(T.fg, .12); rr(-w / 2, -22, w, 44, 22); ctx.fill(); ctx.fillStyle = e.color || T.acc; rr(-w / 2, -22, Math.max(44, w * p), 44, 22); ctx.fill();
