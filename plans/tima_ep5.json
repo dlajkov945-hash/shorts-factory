@@ -1,0 +1,148 @@
+{
+ "id": "tima_ep5",
+ "title": "Я живу на дне океана. Часть 5: Глаз в окне 🐋",
+ "description": "Тимка и Мира вернулись домой, а дверь открыта. Дом качается, в окне огромный глаз, и существо из глубины начинает петь. А потом старый робот номер два впервые заговорил.\n\n#мультик #сериал #домподводой #океан #shorts",
+ "format": "series",
+ "series": "Мальчик в доме под водой",
+ "style": "3d_pixar",
+ "palette": "ocean",
+ "music": "mystery",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Оно пришло к моему дому",
+ "captions": "pop",
+ "scenes": [
+  {
+   "say": "Мы с Ми́рой плы́ли к моему́ до́му так бы́стро, как никогда́ в жи́зни.",
+   "hl": [
+    "быстро"
+   ],
+   "sfx": [
+    "swish"
+   ],
+   "audio": "assets/audio/tima_ep5/s0.mp3",
+   "image": "assets/img/tima_ep5/s0.png"
+  },
+  {
+   "say": "Дверь была́ откры́та. Внутри́ горе́л свет, а оте́ц всё ещё спал.",
+   "hl": [
+    "открыта"
+   ],
+   "sfx": [
+    "tick"
+   ],
+   "audio": "assets/audio/tima_ep5/s1.mp3",
+   "image": "assets/img/tima_ep5/s1.png"
+  },
+  {
+   "say": "И вдруг весь дом закача́лся, как ло́дка в шторм.",
+   "hl": [
+    "закачался"
+   ],
+   "sfx": [
+    "boom",
+    "whoosh_big"
+   ],
+   "audio": "assets/audio/tima_ep5/s2.mp3",
+   "image": "assets/img/tima_ep5/s2.png"
+  },
+  {
+   "say": "За окно́м из темноты́ вы́плыл глаз. Жёлто-зелёный, разме́ром с на́шу дверь.",
+   "hl": [
+    "глаз"
+   ],
+   "sfx": [
+    "riser",
+    "heart"
+   ],
+   "audio": "assets/audio/tima_ep5/s3.mp3",
+   "image": "assets/img/tima_ep5/s3.png"
+  },
+  {
+   "say": "Оте́ц просну́лся, схвати́л фона́рь и закры́л меня́ собо́й.",
+   "hl": [
+    "отец"
+   ],
+   "sfx": [
+    "swish"
+   ],
+   "audio": "assets/audio/tima_ep5/s4.mp3",
+   "image": "assets/img/tima_ep5/s4.png"
+  },
+  {
+   "say": "А пото́м существо́ запе́ло. Ни́зко и гро́мко, как кит.",
+   "hl": [
+    "запело"
+   ],
+   "sfx": [
+    "whoosh_big"
+   ],
+   "audio": "assets/audio/tima_ep5/s5.mp3",
+   "image": "assets/img/tima_ep5/s5.png"
+  },
+  {
+   "say": "И все ла́мпы в до́ме замига́ли ему́ в отве́т.",
+   "hl": [
+    "лампы"
+   ],
+   "sfx": [
+    "ding",
+    "glitch"
+   ],
+   "audio": "assets/audio/tima_ep5/s6.mp3",
+   "image": "assets/img/tima_ep5/s6.png"
+  },
+  {
+   "say": "Ми́ра прошепта́ла: оно́ не напада́ет. Оно́ кого́-то зовёт.",
+   "hl": [
+    "зовёт"
+   ],
+   "sfx": [
+    "heart"
+   ],
+   "audio": "assets/audio/tima_ep5/s7.mp3",
+   "image": "assets/img/tima_ep5/s7.png"
+  },
+  {
+   "say": "В э́тот моме́нт к окну́ подплы́л ро́бот но́мер два.",
+   "hl": [
+    "робот"
+   ],
+   "sfx": [
+    "pop"
+   ],
+   "audio": "assets/audio/tima_ep5/s8.mp3",
+   "image": "assets/img/tima_ep5/s8.png"
+  },
+  {
+   "say": "Его́ фона́рь мига́л в тако́м же ри́тме, как огни́ на спине́ существа́.",
+   "hl": [
+    "ритме"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "audio": "assets/audio/tima_ep5/s9.mp3",
+   "image": "assets/img/tima_ep5/s9.png"
+  },
+  {
+   "say": "И тут ро́бот впервы́е заговори́л. Он посмотре́л на меня́ и сказа́л: она́ пришла́ за тобо́й.",
+   "hl": [
+    "тобой"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "audio": "assets/audio/tima_ep5/s10.mp3",
+   "image": "assets/img/tima_ep5/s10.png"
+  },
+  {
+   "say": "Продолже́ние в сле́дующей се́рии.",
+   "sfx": [
+    "riser"
+   ],
+   "audio": "assets/audio/tima_ep5/s11.mp3",
+   "image": "assets/img/tima_ep5/s11.png"
+  }
+ ]
+}
