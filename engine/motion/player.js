@@ -442,7 +442,7 @@ V.image = (e, lt, t, sd) => { // AI illustration or photo in a rounded card, or 
   if (e.mode === 'full') {
     ctx.save(); ctx.resetTransform(); const sc = Math.max(W / im.width, H / im.height) * z;
     ctx.drawImage(im, W / 2 - im.width * sc / 2 + (e.pan || 0) * p * 60, H / 2 - im.height * sc / 2, im.width * sc, im.height * sc);
-    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,0.35)'); g.addColorStop(.45, 'rgba(0,0,0,0.05)'); g.addColorStop(.62, 'rgba(0,0,0,0.55)'); g.addColorStop(1, 'rgba(0,0,0,0.85)');
+    const g = ctx.createLinearGradient(0, 0, 0, H); const cl = e.clean || D.captions === false; g.addColorStop(0, `rgba(0,0,0,${cl ? .12 : .35})`); g.addColorStop(.45, `rgba(0,0,0,${cl ? 0 : .05})`); g.addColorStop(.62, `rgba(0,0,0,${cl ? .05 : .55})`); g.addColorStop(1, `rgba(0,0,0,${cl ? .3 : .85})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); return;
   }
   const w = e.w || 860, h = e.h || 860; ctx.save();
@@ -628,6 +628,25 @@ V.plug = (e, lt, t) => { // phone bottom with port, cable plug rises from below;
     ctx.strokeStyle = fit ? '#2fd36b' : '#ff3b3b'; ctx.lineWidth = 34; ctx.lineCap = 'round'; ctx.beginPath();
     if (fit) { ctx.moveTo(-130, 0); ctx.lineTo(-30, 100); ctx.lineTo(150, -110); } else { ctx.moveTo(-110, -110); ctx.lineTo(110, 110); ctx.moveTo(110, -110); ctx.lineTo(-110, 110); }
     ctx.stroke(); ctx.lineCap = 'butt'; ctx.restore(); }
+};
+V.wifi = (e, lt, t) => { // Wi-Fi signal: bars b0 -> b1 (0..3) over dur, colour by level, blinks + red cross at 0; card: false = no backing pill
+  const d = e.dur || 1.2, k = clamp(lt / d), b = Math.round(lerp(e.b0 ?? 3, e.b1 ?? (e.b0 ?? 3), easeIO(k)));
+  const col = ['#ff3b3b', '#ff8a1f', '#ffc21a', '#2fd36b'][b], blink = b === 0 && (t * 3) % 1 < .5;
+  if (e.card !== false) { ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 12; rr(-170, -170, 340, 300, 70); ctx.fill(); noGlow(); ctx.shadowOffsetY = 0; }
+  ctx.lineCap = 'round'; ctx.lineWidth = 30;
+  for (let i = 1; i <= 3; i++) { // arcs centred at (0,70)
+    ctx.strokeStyle = i <= b ? col : 'rgba(40,40,50,0.16)'; if (i <= b && b === 3) glow(alphaCol(col, .7), 26);
+    ctx.beginPath(); ctx.arc(0, 75, 50 + i * 42, Math.PI * 1.25, Math.PI * 1.75); ctx.stroke(); noGlow();
+  }
+  ctx.fillStyle = b > 0 ? col : (blink ? '#ff3b3b' : 'rgba(40,40,50,0.3)'); ctx.beginPath(); ctx.arc(0, 75, 20, 0, 7); ctx.fill();
+  if (b === 0) { ctx.strokeStyle = '#ff3b3b'; ctx.lineWidth = 22; ctx.globalAlpha *= blink ? 1 : .55; ctx.beginPath(); ctx.moveTo(60, -10); ctx.lineTo(130, 60); ctx.moveTo(130, -10); ctx.lineTo(60, 60); ctx.stroke(); }
+  ctx.lineCap = 'butt';
+};
+V.loader = (e, lt, t) => { // buffering spinner; stuck: true = it freezes and jerks (bad internet), done_at: sec -> green check
+  if (e.done_at !== undefined && lt > e.done_at) { const q = spring(lt - e.done_at, 12, 7); ctx.scale(.4 + .6 * q, .4 + .6 * q); ctx.fillStyle = '#2fd36b'; ctx.beginPath(); ctx.arc(0, 0, 120, 0, 7); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 26; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-55, 0); ctx.lineTo(-12, 45); ctx.lineTo(60, -40); ctx.stroke(); ctx.lineCap = 'butt'; return; }
+  const sp = e.stuck ? (Math.floor(t * 2) % 3 === 0 ? 0 : 2.5) : 6, a0 = e.stuck ? Math.floor(t * 1.5) * 1.1 : t * sp;
+  ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.beginPath(); ctx.arc(0, 0, 150, 0, 7); ctx.fill();
+  for (let i = 0; i < 10; i++) { const a = a0 + i * Math.PI / 5; ctx.fillStyle = `rgba(255,255,255,${.15 + .85 * i / 9})`; ctx.beginPath(); ctx.arc(Math.cos(a) * 90, Math.sin(a) * 90, 6 + i * 1.6, 0, 7); ctx.fill(); }
 };
 V.oldphone = (e, lt, t) => { // 2000s push-button phone: full battery bars + snake game running on the LCD
   ctx.fillStyle = '#2b3448'; rr(-150, -360, 300, 720, 70); ctx.fill(); ctx.fillStyle = '#3a465f'; rr(-132, -342, 264, 684, 58); ctx.fill();

@@ -227,13 +227,15 @@ def captions_pop(F, base, chunks, t, pal):
     if not cur: return
     t0 = cur[0][1] - 0.05
     k = pop(t, t0, 0.18)
-    f = font(F_BLACK, 84)
     layer = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
     words = [w for w, _, _ in cur]
-    widths = [text_size(d, w, f)[0] for w in words]; space = text_size(d, " ", f)[0] + 6
-    total = sum(widths) + space * (len(words) - 1)
-    half = max(1, len(words) // 2)
-    lines = [words] if total <= F.R - F.L else [words[:half], words[half:]]
+    for fs in (84, 76, 68, 60, 54):  # shrink long words so nothing runs off the frame
+        f = font(F_BLACK, fs)
+        widths = [text_size(d, w, f)[0] for w in words]; space = text_size(d, " ", f)[0] + 6
+        total = sum(widths) + space * (len(words) - 1)
+        half = max(1, len(words) // 2)
+        lines = [words] if total <= F.R - F.L else [words[:half], words[half:]]
+        if max(sum(text_size(d, w, f)[0] for w in ln) + space * (len(ln) - 1) for ln in lines) <= F.R - F.L: break
     y = F.cap_y; wi = 0
     for ln in lines:
         lw = sum(text_size(d, w, f)[0] for w in ln) + space * (len(ln) - 1)
@@ -386,6 +388,15 @@ def main(plan_path, out_path):
                 if si > 0 and tt - sc["_t0"] + 0.2 < 0.15 and (si - 1) in photos:
                     pb = photo_frame(photos[si - 1], 1.0, si + 6, F.W, F.H).convert("RGBA")
                     bg = Image.blend(pb, bg, max(0, min(1, (tt - sc["_t0"] + 0.2) / 0.15)))
+                lt = tt - sc["_t0"] + 0.2
+                if sc.get("shake") and lt < 0.7:  # camera shake on impact (v3 illustrations)
+                    k = 1 - lt / 0.7
+                    bg = bg.transform((F.W, F.H), Image.AFFINE, (1, 0, int(math.sin(tt * 55) * 22 * k), 0, 1, int(math.cos(tt * 43) * 14 * k)))
+                if sc.get("flash"):  # white flash (lightning, camera, explosion); "flash": [sec, ...] for repeated flashes
+                    for ft in (sc["flash"] if isinstance(sc["flash"], list) else [0]):
+                        fk = 1 - (lt - ft) / 0.35
+                        if 0 < fk <= 1:
+                            bg = Image.blend(bg, Image.new("RGBA", (F.W, F.H), (235, 245, 255, 255)), 0.6 * fk)
             else:
                 bg = photo_frame(photos[si], p, si + 7, F.W, F.H).convert("RGBA")
                 dark = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 255)); dark.putalpha(F.shade); bg.alpha_composite(dark)
@@ -440,7 +451,7 @@ def main(plan_path, out_path):
             bg = Image.blend(bg, Image.new("RGBA", (F.W, F.H), (255, 255, 255, 255)), 0.28 * flash); d = ImageDraw.Draw(bg, "RGBA")
         if illus:
             hook_title(F, bg, plan.get("hook", ""), tt, pal)
-            if voice != "none" and caps_on: captions_pop(F, bg, chunks, tt, pal)
+            if voice != "none" and caps_on and not (noemoji(plan.get("hook", "")) and tt <= 2.6): captions_pop(F, bg, chunks, tt, pal)  # hook already shows the first line
             d = ImageDraw.Draw(bg, "RGBA")
         else:
             chip(F, d, sc.get("chip", ""), tt, sc["_t0"] - 0.1, pal)

@@ -1,0 +1,168 @@
+{
+ "id": "lightning",
+ "title": "Что будет, если в тебя ударит молния? ⚡",
+ "description": "Макс думал, что гроза ещё далеко. Что происходит с телом за долю секунды удара, почему 9 из 10 выживают и как один человек пережил молнию 7 раз.\n\n#наука #факты #молния #гроза #мультик #shorts",
+ "format": "science_character",
+ "style": "comic",
+ "palette": "night",
+ "music": "epic",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Что будет, если в тебя ударит молния?",
+ "captions": "pop",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли в тебя́ уда́рит мо́лния?",
+   "audio": "assets/audio/lightning/s0.mp3",
+   "image": "assets/img/lightning/s0.png",
+   "sfx": [
+    "thunder"
+   ],
+   "hl": [
+    "молния"
+   ],
+   "shake": false
+  },
+  {
+   "say": "Ма́кс гуля́л по по́лю и ду́мал, что гроза́ ещё далеко́.",
+   "audio": "assets/audio/lightning/s1.mp3",
+   "image": "assets/img/lightning/s1.png",
+   "sfx": [
+    "swish"
+   ]
+  },
+  {
+   "say": "Но мо́лния мо́жет уда́рить бо́льше чем за пятна́дцать киломе́тров от ту́чи. Пря́мо из я́сного не́ба.",
+   "audio": "assets/audio/lightning/s2.mp3",
+   "image": "assets/img/lightning/s2.png",
+   "sfx": [
+    "riser"
+   ],
+   "hl": [
+    "пятнадцать"
+   ]
+  },
+  {
+   "say": "Вспы́шка! Разря́д горяче́е пове́рхности Со́лнца в пять раз.",
+   "audio": "assets/audio/lightning/s3.mp3",
+   "image": "assets/img/lightning/s3.png",
+   "sfx": [
+    "thunder",
+    "boom"
+   ],
+   "flash": [
+    0,
+    0.5
+   ],
+   "shake": true,
+   "hl": [
+    "Солнца"
+   ]
+  },
+  {
+   "say": "Весь уда́р дли́тся ме́ньше, чем ты успе́ешь моргну́ть.",
+   "audio": "assets/audio/lightning/s4.mp3",
+   "image": "assets/img/lightning/s4.png",
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "И вот что спаса́ет Ма́кса. Бо́льшая часть то́ка бежи́т не внутри́ те́ла, а по ко́же.",
+   "audio": "assets/audio/lightning/s5.mp3",
+   "image": "assets/img/lightning/s5.png",
+   "sfx": [
+    "glitch"
+   ],
+   "hl": [
+    "коже"
+   ]
+  },
+  {
+   "say": "Пот и дождь на ко́же мгнове́нно стано́вятся па́ром. Иногда́ с ног да́же срыва́ет кроссо́вки.",
+   "audio": "assets/audio/lightning/s6.mp3",
+   "image": "assets/img/lightning/s6.png",
+   "sfx": [
+    "whoosh_big",
+    "pop"
+   ]
+  },
+  {
+   "say": "Но се́рдце мо́жет останови́ться. Поэ́тому пе́рвые мину́ты реша́ют всё.",
+   "audio": "assets/audio/lightning/s7.mp3",
+   "image": "assets/img/lightning/s7.png",
+   "sfx": [
+    "heart"
+   ],
+   "hl": [
+    "сердце"
+   ]
+  },
+  {
+   "say": "А на ко́же появля́ется узо́р, как ве́тки де́рева. Э́то фигу́ры Ли́хтенберга.",
+   "audio": "assets/audio/lightning/s8.mp3",
+   "image": "assets/img/lightning/s8.png",
+   "sfx": [
+    "ding"
+   ],
+   "hl": [
+    "Лихтенберга"
+   ]
+  },
+  {
+   "say": "Че́рез не́сколько дней они́ исчеза́ют са́ми.",
+   "audio": "assets/audio/lightning/s9.mp3",
+   "image": "assets/img/lightning/s9.png",
+   "sfx": [
+    "swish"
+   ]
+  },
+  {
+   "say": "Хоро́шая но́вость: из десяти́ челове́к по́сле уда́ра мо́лнии выжива́ют де́вять.",
+   "audio": "assets/audio/lightning/s10.mp3",
+   "image": "assets/img/lightning/s10.png",
+   "sfx": [
+    "ding"
+   ],
+   "hl": [
+    "девять"
+   ]
+  },
+  {
+   "say": "А смотри́тель америка́нского па́рка Рой Са́лливан пережи́л мо́лнию семь раз.",
+   "audio": "assets/audio/lightning/s11.mp3",
+   "image": "assets/img/lightning/s11.png",
+   "sfx": [
+    "thunder"
+   ],
+   "flash": [
+    0.6
+   ],
+   "hl": [
+    "семь"
+   ]
+  },
+  {
+   "say": "Ему́ сожгло́ бро́ви, не́сколько раз загора́лись во́лосы. И ка́ждый раз он вы́жил.",
+   "audio": "assets/audio/lightning/s12.mp3",
+   "image": "assets/img/lightning/s12.png",
+   "sfx": [
+    "boing"
+   ]
+  },
+  {
+   "say": "Так что запо́мни: е́сли слы́шишь гром, ты уже́ в зо́не уда́ра. Сра́зу в дом. А тебя́ когда́-ни́будь заста́ла гроза́ в по́ле? Напиши́ в коммента́риях.",
+   "audio": "assets/audio/lightning/s13.mp3",
+   "image": "assets/img/lightning/s13.png",
+   "sfx": [
+    "thunder"
+   ],
+   "flash": [
+    0.3
+   ],
+   "hl": [
+    "гром"
+   ]
+  }
+ ]
+}

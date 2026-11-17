@@ -12,9 +12,10 @@
 | emotional | пианино и струнные (трогательные истории) |
 | synthwave | ретро 80-х синты (neon, технологии, будущее) |
 | underwater | маримба, пузыри (сериал про подводный дом) |
+| sitcom | фагот, кларнет, пиццикато, джазовые барабаны (немой бытовой юмор, коты) |
 Старые имена тоже работают: chill = lofi, sad = emotional, action = epic. `"synth:<mood>"` = старый генератор из кода.
 
-Эффекты (assets/sfx, поле `sfx`): pop, boing, ding, boom, riser, glitch, heart, tick, cash, notify, scratch, typing, swish (whoosh = swish), whoosh_big.
+Эффекты (assets/sfx, поле `sfx`): pop, boing, ding, boom, riser, glitch, heart, tick, cash, notify, scratch, typing, swish (whoosh = swish), whoosh_big, thunder (близкий удар грома), meow (недовольное мяу).
 
 ## Как пополнять (важно для разнообразия)
 - Одну и ту же музыку не ставить в два ролика подряд. Смотреть, что стояло в последних роликах (plans/*.json).
