@@ -511,6 +511,27 @@ V.stick = (e, lt, t, sd) => { // doodle stick figure with boiling lines
   ctx.fillStyle = T.line; ctx.beginPath(); ctx.arc(-18, -178, 6, 0, 7); ctx.arc(18, -178, 6, 0, 7); ctx.fill();
   ctx.beginPath(); ctx.arc(0, -158, 18, .2, Math.PI - .2); ctx.stroke(); ctx.lineCap = 'butt';
 };
+V.hang = (e, lt, t) => { // doodle pull-up bar with a stick figure hanging (mood: strain|calm|happy, shake, fire, sweat, stretch)
+  const sd2 = hash(e.id || 'hg'), mood = e.mood || 'calm', bw = e.bw || 300, by = -300;
+  ctx.strokeStyle = T.line; ctx.lineCap = 'round'; ctx.lineWidth = 14;
+  wobbleLine([[-bw, by], [bw, by]], sd2 + 'bar', t); ctx.stroke();
+  ctx.lineWidth = 10; wobbleLine([[-bw + 20, by], [-bw + 20, 330]], sd2 + 'p1', t); ctx.stroke(); wobbleLine([[bw - 20, by], [bw - 20, 330]], sd2 + 'p2', t); ctx.stroke();
+  const sh = e.shake ? Math.sin(t * 55) * 5 : 0, sw = (e.swing ?? 0.05) * Math.sin(t * 2.2), st = 1 + (e.stretch ? .08 * easeOut(lt / 1.2) : 0);
+  ctx.save(); ctx.translate(sh, by); ctx.rotate(sw); ctx.lineWidth = 9;
+  const hx = 70; // hands on bar
+  ctx.beginPath(); ctx.arc(-hx, 0, 13, 0, 7); ctx.arc(hx, 0, 13, 0, 7); ctx.fillStyle = e.fire ? '#e0452b' : T.line; ctx.fill();
+  wobbleLine([[-hx, 0], [0, 150 * st]], sd2 + 'a1', t); ctx.stroke(); wobbleLine([[hx, 0], [0, 150 * st]], sd2 + 'a2', t); ctx.stroke();
+  const b = Math.floor(t * 8), r2 = rng(sd2 + b); ctx.beginPath(); ctx.ellipse(r2() * 3, 92 * st, 48 + r2() * 3, 52, 0, 0, 7); ctx.fillStyle = T.bg0; ctx.fill(); ctx.stroke();
+  ctx.fillStyle = T.line; ctx.beginPath(); ctx.arc(-17, 84 * st, 6, 0, 7); ctx.arc(17, 84 * st, 6, 0, 7); ctx.fill();
+  ctx.beginPath();
+  if (mood === 'happy') ctx.arc(0, 104 * st, 16, .2, Math.PI - .2); else if (mood === 'strain') { ctx.moveTo(-18, 116 * st); ctx.lineTo(-6, 108 * st); ctx.lineTo(6, 116 * st); ctx.lineTo(18, 108 * st); } else { ctx.moveTo(-14, 112 * st); ctx.lineTo(14, 112 * st); }
+  ctx.stroke();
+  wobbleLine([[0, 146 * st], [0, 330 * st]], sd2 + 'b', t); ctx.stroke();
+  const lg = Math.sin(t * 3) * 8; wobbleLine([[0, 330 * st], [-34 + lg, 470 * st]], sd2 + 'l', t); ctx.stroke(); wobbleLine([[0, 330 * st], [34 + lg, 470 * st]], sd2 + 'r', t); ctx.stroke();
+  if (e.fire) { for (const sx of [-1, 1]) for (let k = 0; k < 3; k++) { const fl = (t * 3 + k / 3) % 1; ctx.strokeStyle = alphaCol(k % 2 ? '#ffb21a' : '#e0452b', 1 - fl); ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(sx * hx + (k - 1) * 18, -10 - fl * 110); ctx.quadraticCurveTo(sx * hx + (k - 1) * 18 + 18, -40 - fl * 110, sx * hx + (k - 1) * 18, -70 - fl * 110); ctx.stroke(); } ctx.strokeStyle = T.line; }
+  if (e.sweat) { ctx.fillStyle = '#2f6fd6'; for (let k = 0; k < 2; k++) { const f = (t * 1.3 + k * .5) % 1; ctx.globalAlpha *= 1; ctx.beginPath(); ctx.ellipse((k ? 70 : -70), 70 * st + f * 120, 9, 14, 0, 0, 7); ctx.fill(); } }
+  ctx.restore(); ctx.lineCap = 'butt';
+};
 V.arrow = (e, lt, t) => { // drawn arrow from (0,0) to (dx,dy)
   const p = easeOut(lt / .5), dx = (e.dx || 300) * p, dy = (e.dy || 0) * p;
   ctx.strokeStyle = e.color || T.acc; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(dx, dy); ctx.stroke();

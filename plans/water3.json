@@ -1,0 +1,192 @@
+{
+ "id": "water3",
+ "title": "Что будет, если не пить воду 3 дня?",
+ "description": "Проверили на Саше. Что происходит с телом через 12 часов, сутки и трое суток без воды, и как парень, которого забыли в камере, продержался 18 дней.\n\nА вы сколько воды пьёте в день? Пишите в комментариях 💧\n\n#наука #факты #вода #тело #мультик #shorts",
+ "format": "science_character",
+ "style": "2d_sitcom",
+ "palette": "fire",
+ "music": "funny",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "3 дня без воды",
+ "captions": "pop",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли три дня не пить во́ду?",
+   "hl": [
+    "три"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "audio": "assets/audio/water3/s0.mp3",
+   "image": "assets/img/water3/s0.png"
+  },
+  {
+   "say": "Прове́рим на Са́ше.",
+   "hl": [
+    "Саше"
+   ],
+   "sfx": [
+    "pop"
+   ],
+   "audio": "assets/audio/water3/s1.mp3",
+   "image": "assets/img/water3/s1.png"
+  },
+  {
+   "say": "Двена́дцать часо́в. Са́ша потеря́л всего́ оди́н проце́нт воды́.",
+   "hl": [
+    "процент"
+   ],
+   "sfx": [
+    "tick"
+   ],
+   "audio": "assets/audio/water3/s2.mp3",
+   "image": "assets/img/water3/s2.png"
+  },
+  {
+   "say": "А мозг уже́ кричи́т: пить!",
+   "hl": [
+    "пить"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "audio": "assets/audio/water3/s3.mp3",
+   "image": "assets/img/water3/s3.png"
+  },
+  {
+   "say": "Су́тки. Боли́т голова́.",
+   "hl": [
+    "голова"
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "audio": "assets/audio/water3/s4.mp3",
+   "image": "assets/img/water3/s4.png"
+  },
+  {
+   "say": "Са́ша ду́мает ме́дленнее и зли́тся на всех.",
+   "hl": [
+    "злится"
+   ],
+   "sfx": [
+    "boing"
+   ],
+   "audio": "assets/audio/water3/s5.mp3",
+   "image": "assets/img/water3/s5.png"
+  },
+  {
+   "say": "Кровь стано́вится гу́ще, и се́рдце стучи́т быстре́е.",
+   "hl": [
+    "сердце"
+   ],
+   "sfx": [
+    "heart"
+   ],
+   "audio": "assets/audio/water3/s6.mp3",
+   "image": "assets/img/water3/s6.png"
+  },
+  {
+   "say": "Вторы́е су́тки. Во рту настоя́щая пусты́ня.",
+   "hl": [
+    "пустыня"
+   ],
+   "sfx": [
+    "whoosh"
+   ],
+   "audio": "assets/audio/water3/s7.mp3",
+   "image": "assets/img/water3/s7.png"
+  },
+  {
+   "say": "А по́чки берегу́т ка́ждую ка́плю.",
+   "hl": [
+    "каплю"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "audio": "assets/audio/water3/s8.mp3",
+   "image": "assets/img/water3/s8.png"
+  },
+  {
+   "say": "Тре́тьи су́тки. Кружи́тся голова́, пу́таются мы́сли.",
+   "hl": [
+    "Третьи"
+   ],
+   "sfx": [
+    "glitch",
+    "heart"
+   ],
+   "audio": "assets/audio/water3/s9.mp3",
+   "image": "assets/img/water3/s9.png"
+  },
+  {
+   "say": "Врачи́ говоря́т: без воды́ челове́к живёт всего́ о́коло трёх дней.",
+   "hl": [
+    "трёх"
+   ],
+   "sfx": [
+    "tick"
+   ],
+   "audio": "assets/audio/water3/s10.mp3",
+   "image": "assets/img/water3/s10.png"
+  },
+  {
+   "say": "Но оди́н челове́к продержа́лся бо́льше.",
+   "hl": [
+    "больше"
+   ],
+   "sfx": [
+    "riser"
+   ],
+   "audio": "assets/audio/water3/s11.mp3",
+   "image": "assets/img/water3/s11.png"
+  },
+  {
+   "say": "Ты́сяча девятьсо́т се́мьдесят девя́тый год, А́встрия. Восемнадцатиле́тнего па́рня посади́ли в ка́меру.",
+   "hl": [
+    "камеру"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "audio": "assets/audio/water3/s12.mp3",
+   "image": "assets/img/water3/s12.png"
+  },
+  {
+   "say": "И забы́ли. Три полице́йских, и ка́ждый ду́мал, что его́ уже́ отпусти́л друго́й.",
+   "hl": [
+    "забыли"
+   ],
+   "sfx": [
+    "boing"
+   ],
+   "audio": "assets/audio/water3/s13.mp3",
+   "image": "assets/img/water3/s13.png"
+  },
+  {
+   "say": "Он сли́зывал ка́пли со сте́н и продержа́лся восемна́дцать дней.",
+   "hl": [
+    "восемнадцать"
+   ],
+   "sfx": [
+    "tick"
+   ],
+   "audio": "assets/audio/water3/s14.mp3",
+   "image": "assets/img/water3/s14.png"
+  },
+  {
+   "say": "Э́то реко́рд Ги́ннесса, кото́рый никто́ не хо́чет повтори́ть. А вы ско́лько воды́ пьёте в день? Пиши́те в коммента́риях.",
+   "hl": [
+    "Гиннесса"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "audio": "assets/audio/water3/s15.mp3",
+   "image": "assets/img/water3/s15.png"
+  }
+ ]
+}
