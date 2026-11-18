@@ -662,6 +662,62 @@ V.oldphone = (e, lt, t) => { // 2000s push-button phone: full battery bars + sna
   for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) { ctx.fillStyle = '#c9d2e4'; rr(-100 + c * 72, 0 + r * 72, 56, 50, 16); ctx.fill(); }
   if (e.shine !== false) { const g = ctx.createLinearGradient(-150, -360, 150, 360); g.addColorStop(0, 'rgba(255,255,255,0.18)'); g.addColorStop(.4, 'rgba(255,255,255,0)'); ctx.fillStyle = g; rr(-150, -360, 300, 720, 70); ctx.fill(); }
 };
+V.jeans = (e, lt, t) => { // front of blue jeans: 5 pockets, copper rivets. hl: watch|rivets (from hlAt / hlAt_on), watch: true = pocket watch rises (watchAt), tear: true = ripped pocket
+  const hlOn = e.hl && lt >= (e.hlAt || 0), hk = hlOn ? clamp((lt - (e.hlAt || 0)) / .4) : 0;
+  const body = () => { ctx.beginPath(); ctx.moveTo(-360, -430); ctx.lineTo(360, -430); ctx.lineTo(380, -360); ctx.quadraticCurveTo(415, 0, 400, 200); ctx.lineTo(390, 470); ctx.lineTo(30, 470); ctx.lineTo(10, 190); ctx.lineTo(0, 165); ctx.lineTo(-10, 190); ctx.lineTo(-30, 470); ctx.lineTo(-390, 470); ctx.lineTo(-400, 200); ctx.quadraticCurveTo(-415, 0, -380, -360); ctx.closePath(); };
+  ctx.save(); ctx.shadowColor = 'rgba(30,40,80,0.35)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 20;
+  const g = ctx.createLinearGradient(0, -430, 0, 470); g.addColorStop(0, '#3a6bb8'); g.addColorStop(1, '#22457f'); ctx.fillStyle = g; body(); ctx.fill(); noGlow(); ctx.shadowOffsetY = 0;
+  body(); ctx.clip(); ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 3; ctx.beginPath(); for (let k = -900; k < 900; k += 14) { ctx.moveTo(k, -450); ctx.lineTo(k + 920, 470); } ctx.stroke();
+  for (const sx of [-1, 1]) { ctx.save(); ctx.translate(sx * 215, 330); ctx.scale(.55, 1); const lg = ctx.createRadialGradient(0, 0, 0, 0, 0, 230); lg.addColorStop(0, 'rgba(200,222,255,0.22)'); lg.addColorStop(1, 'rgba(200,222,255,0)'); ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(0, 0, 230, 0, 7); ctx.fill(); ctx.restore(); }
+  ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(-400, -430, 800, 70); ctx.restore();
+  const stitch = (fn) => { ctx.save(); ctx.setLineDash([16, 11]); ctx.strokeStyle = '#e9a93f'; ctx.lineWidth = 5; ctx.beginPath(); fn(); ctx.stroke(); ctx.restore(); };
+  stitch(() => { ctx.moveTo(-372, -358); ctx.lineTo(372, -358); ctx.moveTo(-362, -418); ctx.lineTo(362, -418); ctx.moveTo(48, -355); ctx.lineTo(48, 70); ctx.quadraticCurveTo(48, 140, 4, 158); });
+  for (const sx of [-1, 1]) { // front pocket openings
+    ctx.fillStyle = 'rgba(10,20,50,0.28)'; ctx.beginPath(); ctx.moveTo(sx * 200, -360); ctx.quadraticCurveTo(sx * 205, -150, sx * 398, -128); ctx.lineTo(sx * 392, -150); ctx.quadraticCurveTo(sx * 225, -170, sx * 218, -360); ctx.closePath(); ctx.fill();
+    stitch(() => { ctx.moveTo(sx * 190, -358); ctx.quadraticCurveTo(sx * 190, -135, sx * 396, -112); });
+  }
+  for (const x of [-300, -110, 110, 300]) { ctx.fillStyle = '#2d589d'; rr(x - 20, -446, 40, 96, 8); ctx.fill(); stitch(() => { ctx.moveTo(x - 10, -436); ctx.lineTo(x - 10, -360); ctx.moveTo(x + 10, -436); ctx.lineTo(x + 10, -360); }); }
+  ctx.fillStyle = '#b87333'; ctx.beginPath(); ctx.arc(0, -390, 24, 0, 7); ctx.fill(); ctx.strokeStyle = '#7a4a1e'; ctx.lineWidth = 5; ctx.stroke(); ctx.fillStyle = '#e3a56a'; ctx.beginPath(); ctx.arc(-6, -396, 8, 0, 7); ctx.fill();
+  if (e.watch) { // gold pocket watch rising out of the small pocket (patch is drawn over its lower half)
+    const r = easeOut((lt - (e.watchAt || 0)) / .7), wy = lerp(-290, -385, r), wx = -285;
+    if (r > 0) { ctx.strokeStyle = '#d9b44a'; ctx.lineWidth = 7; ctx.setLineDash([9, 5]); ctx.beginPath(); ctx.moveTo(wx, wy - 40); ctx.quadraticCurveTo(wx - 20, -470, -300, -440); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = '#e8c04f'; glow('rgba(255,210,80,0.8)', 30 * r); ctx.beginPath(); ctx.arc(wx, wy, 52, 0, 7); ctx.fill(); noGlow(); ctx.fillStyle = '#fffaf0'; ctx.beginPath(); ctx.arc(wx, wy, 38, 0, 7); ctx.fill();
+      ctx.strokeStyle = '#2a2433'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(wx, wy); ctx.lineTo(wx + Math.cos(t * 2) * 26, wy + Math.sin(t * 2) * 26); ctx.moveTo(wx, wy); ctx.lineTo(wx, wy - 18); ctx.stroke(); ctx.lineCap = 'butt'; }
+  }
+  // watch pocket patch (viewer's left = wearer's right)
+  ctx.fillStyle = '#4174c2'; rr(-345, -350, 115, 100, 6); ctx.fill(); ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fillRect(-345, -350, 115, 6);
+  stitch(() => { ctx.rect(-337, -342, 99, 84); });
+  const rivets = [[-336, -342], [-239, -342], [-198, -352], [-392, -118], [198, -352], [392, -118]];
+  rivets.forEach(([x, y], i) => {
+    const pop = e.hl === 'rivets' && hlOn ? spring(lt - (e.hlAt || 0) - i * .12) : 0, rs = 13 + pop * 7;
+    if (pop > 0) { glow('rgba(255,170,80,0.95)', 34); }
+    ctx.fillStyle = '#c47a3a'; ctx.beginPath(); ctx.arc(x, y, rs, 0, 7); ctx.fill(); noGlow(); ctx.fillStyle = '#f2b77a'; ctx.beginPath(); ctx.arc(x - 3, y - 4, rs * .38, 0, 7); ctx.fill();
+    if (pop > .2) { ctx.strokeStyle = alphaCol('#ffb35a', .7 * (1 - clamp((lt - (e.hlAt || 0) - i * .12) / 1.2))); ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(x, y, rs + 30 * clamp((lt - (e.hlAt || 0) - i * .12) / 1.2) + 8, 0, 7); ctx.stroke(); }
+  });
+  if (e.tear) { // ripped corner of the other front pocket, frayed threads
+    const k = clamp(lt / .5); ctx.save(); ctx.translate(300, -150); ctx.scale(k, k); ctx.fillStyle = '#16233f'; ctx.beginPath();
+    const r = rng(77); for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI * 2, rad = 70 + r() * 38; i ? ctx.lineTo(Math.cos(a) * rad * 1.3, Math.sin(a) * rad) : ctx.moveTo(Math.cos(a) * rad * 1.3, Math.sin(a) * rad); } ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#f3efe6'; ctx.lineWidth = 4; ctx.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, x = Math.cos(a) * 100, y = Math.sin(a) * 78; ctx.moveTo(x, y); ctx.lineTo(x * 1.22 + (r() - .5) * 20, y * 1.22 + (r() - .5) * 20); } ctx.stroke(); ctx.restore();
+  }
+  if (e.hl === 'watch' && hlOn) { // pulsing ring around the small pocket
+    const pu = .5 + .5 * Math.sin((lt - (e.hlAt || 0)) * 6); ctx.strokeStyle = alphaCol(T.acc, .55 + .45 * pu); ctx.lineWidth = 12; glow(alphaCol(T.acc, .8), 30);
+    rr(-345 - 26 - 10 * pu, -350 - 26 - 10 * pu, 167 + 20 * pu, 152 + 20 * pu, 30); ctx.globalAlpha *= hk; ctx.stroke(); ctx.globalAlpha /= hk || 1; noGlow();
+  }
+};
+V.pocketwatch = (e, lt, t) => { // big golden pocket watch, open, ticking second hand, chain
+  ctx.translate(0, Math.sin(t * 1.6) * 8); ctx.rotate(Math.sin(t * 1.3) * .05);
+  ctx.strokeStyle = '#d9b44a'; ctx.lineWidth = 12; ctx.setLineDash([18, 8]); ctx.beginPath(); ctx.moveTo(0, -270); ctx.quadraticCurveTo(160, -420, 320, -330); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#c9982e'; ctx.beginPath(); ctx.arc(0, -262, 34, 0, 7); ctx.fill(); ctx.fillStyle = '#c9982e'; rr(-26, -250, 52, 40, 10); ctx.fill();
+  const g = ctx.createRadialGradient(-60, -60, 20, 0, 0, 240); g.addColorStop(0, '#fff1a8'); g.addColorStop(.5, '#e8c04f'); g.addColorStop(1, '#a87a1c');
+  glow('rgba(255,200,60,0.6)', 60); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 230, 0, 7); ctx.fill(); noGlow();
+  ctx.fillStyle = '#fffaf0'; ctx.beginPath(); ctx.arc(0, 0, 185, 0, 7); ctx.fill(); ctx.strokeStyle = '#8a6418'; ctx.lineWidth = 6; ctx.stroke();
+  ctx.strokeStyle = '#2a2433'; for (let i = 0; i < 60; i++) { const a = i / 60 * Math.PI * 2, big = i % 5 === 0; ctx.lineWidth = big ? 8 : 3; ctx.beginPath(); ctx.moveTo(Math.cos(a) * (big ? 140 : 158), Math.sin(a) * (big ? 140 : 158)); ctx.lineTo(Math.cos(a) * 170, Math.sin(a) * 170); ctx.stroke(); }
+  const sp = e.speed || 1, sec = Math.floor(t * 2) / 2 * sp; ctx.lineCap = 'round';
+  const hand = (a, len, w, c) => { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.sin(a) * len, -Math.cos(a) * len); ctx.stroke(); };
+  hand(1.9 + t * .02 * sp, 90, 16, '#2a2433'); hand(.6 + t * .2 * sp, 135, 10, '#2a2433'); hand(sec / 60 * Math.PI * 2 * 6, 150, 4, '#e0452b'); ctx.lineCap = 'butt';
+  ctx.fillStyle = '#2a2433'; ctx.beginPath(); ctx.arc(0, 0, 14, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.ellipse(-70, -80, 70, 34, -.7, 0, 7); ctx.fill();
+};
 V.progress = (e, lt) => {
   const w = e.w || 760, p = lerp(e.from || 0, e.to ?? 1, easeOut(lt / (e.dur || 1.5)));
   ctx.fillStyle = alphaCol(T.fg, .12); rr(-w / 2, -22, w, 44, 22); ctx.fill(); ctx.fillStyle = e.color || T.acc; rr(-w / 2, -22, Math.max(44, w * p), 44, 22); ctx.fill();

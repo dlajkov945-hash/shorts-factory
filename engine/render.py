@@ -258,15 +258,22 @@ def hook_title(F, base, s, t, pal):
     s = noemoji(s)
     if not s or t > 2.6: return
     a = min(1, t / 0.2) * min(1, (2.6 - t) / 0.3)
-    f = font(F_BLACK, 70)
     layer = Image.new("RGBA", (F.W, F.H), (0, 0, 0, 0)); d = ImageDraw.Draw(layer)
-    lines = wrap(d, s.upper(), f, F.R - F.L - 80)
-    y = 330
-    for ln in lines:
+    size = 132  # big hook: the largest size where every line fits (was a small 70px label)
+    while size > 70:
+        f = font(F_BLACK, size); lines = wrap(d, s.upper(), f, F.R - F.L - 120)
+        if len(lines) <= 3 and all(text_size(d, ln, f)[0] <= F.R - F.L - 120 for ln in lines): break
+        size -= 6
+    y = 300
+    for i, ln in enumerate(lines):
         tw, th = text_size(d, ln, f)
-        d.rounded_rectangle((F.cx - tw // 2 - 28, y - 14, F.cx + tw // 2 + 28, y + th + 30), 18, fill=(255, 255, 255, int(240 * a)))
+        fill = (255, 214, 64, int(250 * a)) if i == len(lines) - 1 and len(lines) > 1 else (255, 255, 255, int(245 * a))
+        d.rounded_rectangle((F.cx - tw // 2 - 34, y - 18, F.cx + tw // 2 + 34, y + th + 36), 24, fill=fill)
         d.text((F.cx - tw // 2, y), ln, font=f, fill=(15, 15, 20, int(255 * a)))
-        y += th + 52
+        y += th + 70
+    k = min(1, t / 0.25); sc = 1.25 - 0.25 * (1 - (1 - k) ** 3)  # slam in: 125% -> 100%
+    if sc != 1:
+        w, h = int(F.W * sc), int(F.H * sc); layer = layer.resize((w, h)).crop(((w - F.W) // 2, (h - F.H) // 2, (w - F.W) // 2 + F.W, (h - F.H) // 2 + F.H))
     base.alpha_composite(layer)
 
 def caption_block(F, d, s, t, t0, pal):
@@ -363,7 +370,7 @@ def main(plan_path, out_path):
     photos = {i: load_photo(os.path.join(ROOT, sc.get("photo") or sc.get("image")), F.W, F.H) for i, sc in enumerate(scenes) if sc.get("photo") or sc.get("image")}
     chunks = chunk_words([w for sc in scenes for w in sc["_words"]])
     illus = any(sc.get("image") for sc in scenes)
-    if illus and F.vertical: F.cap_y = 600
+    if illus and F.vertical: F.cap_y = int(plan.get("cap_y", 600))  # "cap_y": 1180 = subtitles over the body, not the face
     grad = np.linspace(0, 1, F.H)[:, None]
     low = Image.fromarray((np.broadcast_to(np.clip((grad - 0.5) * 1.6, 0, 0.55), (F.H, F.W)) * 255).astype(np.uint8), "L")
     all_words = [w for sc in scenes for w in sc["_words"]]
@@ -444,7 +451,7 @@ def main(plan_path, out_path):
             particles(F, ImageDraw.Draw(bg, "RGBA"), tt, pal, si)
         has_chars = bool(sc.get("chars")) and si not in photos
         if F.vertical:
-            F.big_y, F.cap_y = (440, 580) if has_chars else (520, 600 if illus else 1180)
+            F.big_y, F.cap_y = (440, 580) if has_chars else (520, int(plan.get("cap_y", 600)) if illus else 1180)
         d = ImageDraw.Draw(bg, "RGBA")
         flash = 1 - (tt - sc["_t0"] + 0.2) / 0.18
         if si > 0 and 0 < flash <= 1 and not illus:

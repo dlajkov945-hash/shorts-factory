@@ -1,0 +1,204 @@
+{
+ "id": "blackout",
+ "title": "Что будет, если завтра во всём мире пропадёт электричество? ⚡",
+ "description": "Проверили на Саше: что происходит через минуту, час, сутки и три дня без света. И что на самом деле случилось в 1859 году, когда Солнце ударило по Земле.\n\nА вы что возьмёте первым: фонарик, воду или наличные? Пишите в комментариях 🔦\n\n#наука #факты #электричество #чтоесли #мультик #shorts",
+ "format": "science_character",
+ "style": "2d_sitcom",
+ "palette": "night",
+ "music": "mystery",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Мир без света",
+ "captions": "pop",
+ "image_style": "Vertical 9:16 high quality 2D cartoon illustration, modern adult animated sitcom style, clean bold outlines, soft cel shading, vibrant colors, cinematic lighting.",
+ "hero": "Sasha: a 25-year-old guy with messy wavy blond hair, big expressive eyes, dark green hoodie, grey sweatpants.",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли за́втра во всём ми́ре пропадёт электри́чество?",
+   "audio": "assets/audio/blackout/s0.mp3",
+   "image": "assets/img/blackout/s0.png",
+   "hl": [
+    "пропадёт"
+   ],
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "say": "Прове́рим на Са́ше.",
+   "audio": "assets/audio/blackout/s1.mp3",
+   "image": "assets/img/blackout/s1.png",
+   "hl": [
+    "Саше"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  },
+  {
+   "say": "Пе́рвая мину́та. Свет пога́с, ча́йник замолча́л, холоди́льник зати́х.",
+   "audio": "assets/audio/blackout/s2.mp3",
+   "image": "assets/img/blackout/s2.png",
+   "hl": [
+    "минута"
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "flash": [
+    0.15
+   ]
+  },
+  {
+   "say": "Са́ша споко́ен: телефо́н ведь заря́жен.",
+   "audio": "assets/audio/blackout/s3.mp3",
+   "image": "assets/img/blackout/s3.png",
+   "hl": [
+    "заряжен"
+   ],
+   "sfx": [
+    "notify"
+   ]
+  },
+  {
+   "say": "Пе́рвый час. На у́лицах пога́сли светофо́ры, ли́фты вста́ли ме́жду этажа́ми.",
+   "audio": "assets/audio/blackout/s4.mp3",
+   "image": "assets/img/blackout/s4.png",
+   "hl": [
+    "час"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Моби́льная связь де́ржится на запасны́х батаре́ях, но всего́ не́сколько часо́в.",
+   "audio": "assets/audio/blackout/s5.mp3",
+   "image": "assets/img/blackout/s5.png",
+   "hl": [
+    "несколько"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Су́тки. В многоэта́жках пропада́ет вода́: насо́сы то́же рабо́тают от то́ка.",
+   "audio": "assets/audio/blackout/s6.mp3",
+   "image": "assets/img/blackout/s6.png",
+   "hl": [
+    "Сутки"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Телефо́н сел. Банкома́ты и ка́рты не рабо́тают, нужны́ нали́чные.",
+   "audio": "assets/audio/blackout/s7.mp3",
+   "image": "assets/img/blackout/s7.png",
+   "hl": [
+    "наличные"
+   ],
+   "sfx": [
+    "cash"
+   ]
+  },
+  {
+   "say": "Тре́тий день. В холоди́льнике по́ртится еда́, а на запра́вках не кача́ют бензи́н.",
+   "audio": "assets/audio/blackout/s8.mp3",
+   "image": "assets/img/blackout/s8.png",
+   "hl": [
+    "Третий"
+   ],
+   "sfx": [
+    "boing"
+   ]
+  },
+  {
+   "say": "Но́чью весь го́род в темноте́. И Са́ша ви́дит то, чего́ не ви́дел никогда́.",
+   "audio": "assets/audio/blackout/s9.mp3",
+   "image": "assets/img/blackout/s9.png",
+   "hl": [
+    "никогда"
+   ],
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "say": "Ты́сячи звёзд и Мле́чный Путь, пря́мо над го́родом.",
+   "audio": "assets/audio/blackout/s10.mp3",
+   "image": "assets/img/blackout/s10.png",
+   "hl": [
+    "Млечный"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "Ду́маете, тако́го не быва́ло? В ты́сяча восемьсо́т пятьдеся́т девя́том году́ вспы́шка на Со́лнце уда́рила по Земле́.",
+   "audio": "assets/audio/blackout/s11.mp3",
+   "image": "assets/img/blackout/s11.png",
+   "hl": [
+    "пятьдесят",
+    "девятом"
+   ],
+   "sfx": [
+    "whoosh_big"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Провода́ телегра́фа искри́ли, а се́верное сия́ние ви́дели да́же на Ку́бе.",
+   "audio": "assets/audio/blackout/s12.mp3",
+   "image": "assets/img/blackout/s12.png",
+   "hl": [
+    "Кубе"
+   ],
+   "sfx": [
+    "thunder"
+   ],
+   "flash": [
+    0.2,
+    0.6
+   ],
+   "shake": true
+  },
+  {
+   "say": "А телеграфи́сты отключи́ли батаре́и и два часа́ передава́ли сообще́ния на то́ке от са́мой бу́ри.",
+   "audio": "assets/audio/blackout/s13.mp3",
+   "image": "assets/img/blackout/s13.png",
+   "hl": [
+    "бури"
+   ],
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "say": "Учёные счита́ют: така́я бу́ря сего́дня оста́вит без све́та це́лые стра́ны.",
+   "audio": "assets/audio/blackout/s14.mp3",
+   "image": "assets/img/blackout/s14.png",
+   "hl": [
+    "страны"
+   ],
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "say": "А вы что возьмёте пе́рвым: фона́рик, во́ду и́ли нали́чные? Пиши́те в коммента́риях.",
+   "audio": "assets/audio/blackout/s15.mp3",
+   "image": "assets/img/blackout/s15.png",
+   "hl": [
+    "первым"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  }
+ ],
+ "cap_y": 1180
+}

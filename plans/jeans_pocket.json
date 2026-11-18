@@ -1,0 +1,387 @@
+{
+ "id": "jeans_pocket",
+ "engine": "motion",
+ "theme": "light",
+ "title": "Зачем на джинсах этот маленький карман? 👖",
+ "description": "Его видели все, но почти никто им не пользуется. Маленький карман появился на джинсах ещё в 1873 году, вместе с медными заклёпками, и у него была очень конкретная работа.\n\n#историявещей #джинсы #факты #интересно #shorts",
+ "music": "happy",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "scenes": [
+  {
+   "hl": [
+    "маленький",
+    "карман"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.9,
+     "from": "none",
+     "hl": "watch",
+     "hlAt_on": "маленький"
+    },
+    {
+     "v": "note",
+     "text": "ЗАЧЕМ?",
+     "bubble": true,
+     "x": 0.27,
+     "y": 0.13,
+     "size": 72,
+     "from": "none",
+     "sfx": "pop",
+     "at": 0
+    }
+   ],
+   "say": "Заче́м на джи́нсах э́тот ма́ленький карма́н?",
+   "audio": "assets/audio/jeans_pocket/s0.mp3"
+  },
+  {
+   "hl": [
+    "ни",
+    "каждых"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.82,
+     "from": "none",
+     "hl": "watch",
+     "hlAt": 0
+    },
+    {
+     "v": "icon",
+     "name": "cross",
+     "x": 0.5,
+     "y": 0.4,
+     "s": 0.7,
+     "from": "pop",
+     "on": "телефон",
+     "until_on": "Но",
+     "sfx": "boing"
+    },
+    {
+     "v": "tag",
+     "text": "ПОЧТИ|НА ВСЕХ ДЖИНСАХ",
+     "y": 0.13,
+     "from": "up",
+     "on": "каждых",
+     "sfx": "ding",
+     "size": 46
+    }
+   ],
+   "say": "В него́ не влеза́ет ни телефо́н, ни ключи́. Но он есть почти́ на ка́ждых джи́нсах.",
+   "audio": "assets/audio/jeans_pocket/s1.mp3"
+  },
+  {
+   "hl": [
+    "семьдесят",
+    "Запад"
+   ],
+   "exit": "whip",
+   "els": [
+    {
+     "v": "image",
+     "src": "assets/img/jeans_pocket/i0.png",
+     "y": 0.38,
+     "w": 860,
+     "h": 860,
+     "from": "right",
+     "sfx": "whoosh"
+    },
+    {
+     "v": "tag",
+     "text": "1873|ДИКИЙ ЗАПАД",
+     "y": 0.13,
+     "from": "up",
+     "on": "семьдесят",
+     "size": 46
+    }
+   ],
+   "say": "Ты́сяча восемьсо́т се́мьдесят тре́тий год. Ди́кий За́пад Аме́рики.",
+   "audio": "assets/audio/jeans_pocket/s2.mp3"
+  },
+  {
+   "hl": [
+    "рвутся"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.82,
+     "from": "left",
+     "tear": false,
+     "until_on": "рвутся"
+    },
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.82,
+     "from": "none",
+     "tear": true,
+     "on": "рвутся",
+     "sfx": "glitch",
+     "shake": true
+    }
+   ],
+   "say": "Рабо́чие жа́луются: карма́ны их штано́в рву́тся от тяжёлых инструме́нтов.",
+   "audio": "assets/audio/jeans_pocket/s3.mp3"
+  },
+  {
+   "hl": [
+    "медными",
+    "заклёпками"
+   ],
+   "els": [
+    {
+     "v": "image",
+     "src": "assets/img/jeans_pocket/i1.png",
+     "y": 0.38,
+     "w": 860,
+     "h": 860,
+     "from": "pop",
+     "sfx": "pop"
+    },
+    {
+     "v": "tag",
+     "text": "ЗАКЛЁПКИ|МЕДЬ",
+     "y": 0.13,
+     "from": "up",
+     "on": "медными",
+     "sfx": "tick",
+     "size": 46
+    }
+   ],
+   "say": "Портно́й Я́коб Де́йвис укрепля́ет их ме́дными заклёпками.",
+   "audio": "assets/audio/jeans_pocket/s4.mp3"
+  },
+  {
+   "hl": [
+    "патент",
+    "джинсы"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.82,
+     "from": "none",
+     "hl": "rivets",
+     "hlAt_on": "патент"
+    },
+    {
+     "v": "stamp",
+     "text": "ПАТЕНТ 1873",
+     "y": 0.47,
+     "s": 1.0,
+     "from": "slam",
+     "on": "патент",
+     "sfx": "boom",
+     "rot": -8
+    }
+   ],
+   "say": "А торго́вец тка́нями Ле́ви Стра́усс помога́ет получи́ть пате́нт. Так появи́лись джи́нсы.",
+   "audio": "assets/audio/jeans_pocket/s5.mp3"
+  },
+  {
+   "hl": [
+    "ценной"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.9,
+     "from": "none",
+     "hl": "watch",
+     "hlAt": 0.2
+    },
+    {
+     "v": "note",
+     "text": "???",
+     "bubble": true,
+     "x": 0.27,
+     "y": 0.13,
+     "size": 72,
+     "from": "pop",
+     "on": "ценной",
+     "sfx": "pop"
+    }
+   ],
+   "say": "А ма́ленький карма́н был для са́мой це́нной ве́щи рабо́чего.",
+   "audio": "assets/audio/jeans_pocket/s6.mp3"
+  },
+  {
+   "hl": [
+    "Карманных",
+    "часов"
+   ],
+   "els": [
+    {
+     "v": "pocketwatch",
+     "y": 0.38,
+     "s": 0.95,
+     "from": "slam",
+     "sfx": "ding",
+     "shake": true
+    }
+   ],
+   "say": "Карма́нных часо́в!",
+   "audio": "assets/audio/jeans_pocket/s7.mp3"
+  },
+  {
+   "hl": [
+    "Наручные",
+    "бились"
+   ],
+   "exit": "whip",
+   "els": [
+    {
+     "v": "image",
+     "src": "assets/img/jeans_pocket/i2.png",
+     "y": 0.38,
+     "w": 860,
+     "h": 860,
+     "from": "right",
+     "sfx": "whoosh"
+    },
+    {
+     "v": "sfx",
+     "on": "бились",
+     "sfx": "tick"
+    }
+   ],
+   "say": "На́ручные часы́ тогда́ почти́ никто́ не носи́л, а в большо́м карма́не часы́ би́лись о моне́ты и ключи́.",
+   "audio": "assets/audio/jeans_pocket/s8.mp3"
+  },
+  {
+   "hl": [
+    "часовой"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.42,
+     "s": 1.1,
+     "from": "none",
+     "hl": "watch",
+     "hlAt": 0,
+     "watch": true,
+     "watchAt_on": "часовой"
+    },
+    {
+     "v": "tag",
+     "text": "WATCH POCKET|ЧАСОВОЙ КАРМАН",
+     "y": 0.11,
+     "from": "up",
+     "on": "часовой",
+     "sfx": "ding",
+     "size": 46
+    }
+   ],
+   "say": "Поэ́тому его́ так и называ́ют: часово́й карма́н.",
+   "audio": "assets/audio/jeans_pocket/s9.mp3"
+  },
+  {
+   "hl": [
+    "телефон",
+    "остался"
+   ],
+   "els": [
+    {
+     "v": "phone",
+     "time": "12:00",
+     "y": 0.37,
+     "s": 0.85,
+     "from": "up",
+     "sfx": "notify",
+     "until_on": "остался"
+    },
+    {
+     "v": "jeans",
+     "x": 0.5,
+     "y": 0.4,
+     "s": 0.82,
+     "from": "pop",
+     "on": "остался",
+     "sfx": "pop",
+     "hl": "watch",
+     "hlAt": 0
+    }
+   ],
+   "say": "Часы́ давно́ перее́хали в телефо́н, а карма́н оста́лся.",
+   "audio": "assets/audio/jeans_pocket/s10.mp3"
+  },
+  {
+   "hl": [
+    "пустой"
+   ],
+   "els": [
+    {
+     "v": "jeans",
+     "y": 0.4,
+     "s": 0.82,
+     "from": "none",
+     "hl": "watch",
+     "hlAt": 0
+    },
+    {
+     "v": "icon",
+     "name": "coin",
+     "x": 0.3,
+     "y": 0.2,
+     "s": 0.45,
+     "from": "drop",
+     "on": "монеты",
+     "sfx": "cash"
+    },
+    {
+     "v": "note",
+     "text": "ПУСТО",
+     "x": 0.72,
+     "y": 0.62,
+     "size": 56,
+     "rot": -6,
+     "from": "pop",
+     "on": "пустой",
+     "sfx": "boing"
+    }
+   ],
+   "say": "Сего́дня в нём но́сят моне́ты, биле́ты и зажига́лки. Но ча́ще всего́ он про́сто пусто́й.",
+   "audio": "assets/audio/jeans_pocket/s11.mp3"
+  },
+  {
+   "hl": [
+    "пятьдесят",
+    "часы"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "els": [
+    {
+     "v": "text",
+     "text": "ЕМУ *150+* ЛЕТ",
+     "size": 104,
+     "y": 0.25,
+     "from": "slam",
+     "rot": -4,
+     "keepCaps": true,
+     "sfx": "boom"
+    },
+    {
+     "v": "pocketwatch",
+     "y": 0.45,
+     "s": 0.75,
+     "from": "pop",
+     "on": "ждёт",
+     "sfx": "tick"
+    }
+   ],
+   "say": "Сто пятьдеся́т лет он ждёт свои́ часы́.",
+   "audio": "assets/audio/jeans_pocket/s12.mp3"
+  }
+ ]
+}
