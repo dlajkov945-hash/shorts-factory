@@ -3,3 +3,4 @@ assets/voices/*.json
 out/
 __pycache__/
 *.conv.wav
+kids/*/sprites/
