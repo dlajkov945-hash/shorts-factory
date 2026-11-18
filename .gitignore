@@ -4,3 +4,4 @@ out/
 __pycache__/
 *.conv.wav
 kids/*/sprites/
+kids/fruits1/fruits1.mp4
