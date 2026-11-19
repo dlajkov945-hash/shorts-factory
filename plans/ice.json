@@ -1,0 +1,200 @@
+{
+ "id": "ice",
+ "title": "Что будет, если провалиться под лёд? 🧊",
+ "description": "Макс решил срезать дорогу через замёрзшее озеро. Что происходит с телом в ледяной воде и какое правило знают спасатели: 1, 10, 1. Сохраните, зимой пригодится.\n\n#наука #факты #лёд #зима #безопасность #мультик #shorts",
+ "format": "science_character",
+ "style": "comic",
+ "palette": "night",
+ "music": "tense",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Под лёд",
+ "captions": "pop",
+ "cap_y": 1180,
+ "image_style": "Vertical 9:16 high quality comic book illustration, bold ink outlines, subtle halftone shading, vibrant saturated colors, dramatic cinematic lighting.",
+ "hero": "Max: a 25-year-old guy with short messy black hair, red zip-up hooded jacket, grey t-shirt, blue jeans, white sneakers.",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли провали́ться под лёд?",
+   "image": "assets/img/ice/s0.png",
+   "hl": [
+    "лёд"
+   ],
+   "sfx": [
+    "splash",
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Ма́кс реши́л сре́зать доро́гу че́рез замёрзшее о́зеро.",
+   "image": "assets/img/ice/s1.png",
+   "hl": [
+    "озеро"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Под нога́ми что́-то тре́снуло.",
+   "image": "assets/img/ice/s2.png",
+   "hl": [
+    "треснуло"
+   ],
+   "sfx": [
+    "crack"
+   ],
+   "flash": [
+    0.4
+   ]
+  },
+  {
+   "say": "И он ушёл под во́ду с голово́й.",
+   "image": "assets/img/ice/s3.png",
+   "hl": [
+    "воду"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Ледяна́я вода́ бьёт, как ток.",
+   "image": "assets/img/ice/s4.png",
+   "hl": [
+    "ток"
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "flash": [
+    0.2
+   ]
+  },
+  {
+   "say": "Те́ло само́ де́лает глубо́кий вдох, да́же под водо́й.",
+   "image": "assets/img/ice/s0.png",
+   "hl": [
+    "вдох"
+   ],
+   "sfx": [
+    "splash"
+   ]
+  },
+  {
+   "say": "Спаса́тели на э́тот слу́чай зна́ют пра́вило: оди́н, де́сять, оди́н.",
+   "image": "assets/img/ice/s5.png",
+   "hl": [
+    "один",
+    "десять"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "Пе́рвая мину́та. Не дёргайся. Про́сто дыши́, пока́ дыха́ние не вы́ровняется.",
+   "image": "assets/img/ice/s6.png",
+   "hl": [
+    "минута",
+    "дыши"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Сле́дующие де́сять мину́т ру́ки ещё слу́шаются.",
+   "image": "assets/img/ice/s7.png",
+   "hl": [
+    "десять"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Пото́м па́льцы перестаю́т рабо́тать.",
+   "image": "assets/img/ice/s14.png",
+   "hl": [
+    "пальцы"
+   ],
+   "sfx": [
+    "crack"
+   ]
+  },
+  {
+   "say": "Поверни́сь туда́, отку́да пришёл. Там лёд то́чно вы́держал.",
+   "image": "assets/img/ice/s8.png",
+   "hl": [
+    "откуда"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Ляг на край гру́дью, рабо́тай нога́ми, как плове́ц, и выполза́й вперёд.",
+   "image": "assets/img/ice/s9.png",
+   "hl": [
+    "грудью",
+    "ногами"
+   ],
+   "sfx": [
+    "splash"
+   ]
+  },
+  {
+   "say": "Не встава́й! Кати́сь по льду́ пода́льше от дыры́.",
+   "image": "assets/img/ice/s10.png",
+   "hl": [
+    "вставай"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "И после́дняя едини́ца. Оди́н час.",
+   "image": "assets/img/ice/s11.png",
+   "hl": [
+    "час"
+   ],
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "say": "Приме́рно сто́лько прохо́дит, пока́ челове́к не потеря́ет созна́ние от хо́лода.",
+   "image": "assets/img/ice/s15.png",
+   "hl": [
+    "сознание"
+   ],
+   "sfx": [
+    "heart"
+   ]
+  },
+  {
+   "say": "Зна́чит, вре́мя есть. Гла́вное, пережи́ть пе́рвую мину́ту без пани́ки.",
+   "image": "assets/img/ice/s12.png",
+   "hl": [
+    "первую"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "Ма́кс вы́брался. Отпра́вь э́то тому́, кто зимо́й хо́дит на рыба́лку.",
+   "image": "assets/img/ice/s13.png",
+   "hl": [
+    "выбрался"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  }
+ ]
+}

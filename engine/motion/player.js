@@ -580,6 +580,92 @@ V.button = (e, lt, t) => { // big glossy 3D push button: n (label on cap), color
   // press flash: expanding ring
   if (pt >= 0 && pt < .9) { const k = pt / .9; ctx.strokeStyle = alphaCol(c, (1 - k) * .9); ctx.lineWidth = 18 * (1 - k) + 2; ctx.beginPath(); ctx.ellipse(0, 10, 240 + 260 * k, 75 + 85 * k, 0, 0, 7); ctx.stroke(); }
 };
+V.voltmeter = (e, lt, t) => { // shock generator dial 0..max: v0 -> v1 over dur from go (sec) / go_on (word); zones, ОПАСНО and XXX at the end
+  const max = e.max || 450, go = e.go ?? 0.2, k = easeIO((lt - go) / (e.dur || 1.2));
+  const v = lerp(e.v0 ?? 0, e.v1 ?? 0, clamp(k)), R = 380, cy = 60;
+  const ang = (x) => Math.PI + Math.PI * clamp(x / max);
+  // body
+  ctx.fillStyle = '#17141b'; rr(-470, -420, 940, 640, 46); ctx.fill(); ctx.strokeStyle = '#3a3340'; ctx.lineWidth = 6; ctx.stroke();
+  for (const sx of [-430, 430]) for (const sy of [-380, 180]) { ctx.fillStyle = '#4a4450'; ctx.beginPath(); ctx.arc(sx, sy, 10, 0, 7); ctx.fill(); }
+  // zones
+  const zones = [[0, 75, '#2fe08a'], [75, 195, '#c8e02f'], [195, 300, '#ffb21a'], [300, 375, '#ff6a1a'], [375, 435, '#ff2b2b'], [435, max, '#7a0f1a']];
+  ctx.lineWidth = 46; ctx.lineCap = 'butt';
+  for (const [a, b, c] of zones) { ctx.strokeStyle = c; ctx.globalAlpha *= v >= a ? 1 : .28; ctx.beginPath(); ctx.arc(0, cy, R, ang(a), ang(b)); ctx.stroke(); ctx.globalAlpha /= v >= a ? 1 : .28; }
+  // ticks every 15 V
+  for (let x = 0; x <= max; x += 15) {
+    const a = ang(x), big = x % 75 === 0, r0 = R - 40, r1 = R - (big ? 80 : 58);
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = big ? 6 : 3; ctx.beginPath();
+    ctx.moveTo(Math.cos(a) * r0, cy + Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * r1, cy + Math.sin(a) * r1); ctx.stroke();
+    if (big || x === max) { font('Mono', 30, 700); ctx.fillStyle = '#d8d0dc'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(x), Math.cos(a) * (R - 118), cy + Math.sin(a) * (R - 118)); }
+  }
+  // danger labels
+  font('IDX', 34); ctx.textBaseline = 'middle';
+  const lab = (x, s, c) => { const a = ang(x); ctx.save(); ctx.translate(Math.cos(a) * (R + 46), cy + Math.sin(a) * (R + 46)); ctx.rotate(a + Math.PI / 2); ctx.fillStyle = c; ctx.textAlign = 'center'; ctx.fillText(s, 0, 0); ctx.restore(); };
+  lab(405, 'ОПАСНО', v >= 375 ? '#ff4a4a' : 'rgba(255,90,90,0.45)'); lab(443, 'XXX', v >= 435 ? '#ffffff' : 'rgba(255,255,255,0.4)');
+  // needle (trembles while moving and at high voltage)
+  const tremble = (k > 0 && k < 1 ? 1 : 0) * .02 + clamp((v - 300) / 150) * .012;
+  const a = ang(v) + Math.sin(t * 47) * tremble;
+  const hot = v >= 375 ? '#ff2b2b' : v >= 195 ? '#ffb21a' : '#2fe08a';
+  glow(alphaCol(hot, .9), 30); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 12; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(Math.cos(a) * (R - 30), cy + Math.sin(a) * (R - 30)); ctx.stroke(); noGlow();
+  ctx.fillStyle = '#2a242e'; ctx.beginPath(); ctx.arc(0, cy, 42, 0, 7); ctx.fill(); ctx.fillStyle = hot; ctx.beginPath(); ctx.arc(0, cy, 18, 0, 7); ctx.fill();
+  // digital readout
+  ctx.fillStyle = '#0a080c'; rr(-210, 100, 420, 100, 18); ctx.fill();
+  font('IDX', 76); ctx.fillStyle = hot; ctx.textAlign = 'center'; glow(alphaCol(hot, .7), 24); ctx.fillText(Math.round(v / 15) * 15 + ' В', 0, 152); noGlow();
+  ctx.textBaseline = 'alphabetic'; ctx.lineCap = 'butt';
+  // spark when moving
+  if (k > 0 && k < 1) { const sx = Math.cos(a) * (R - 30), sy = cy + Math.sin(a) * (R - 30); ctx.strokeStyle = '#bfe9ff'; ctx.lineWidth = 4; glow('#7fd3ff', 20);
+    for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(sx, sy); const r = rng(hash('sp' + Math.floor(t * 20) + i)); ctx.lineTo(sx + (r() - .5) * 120, sy + (r() - .5) * 120); ctx.stroke(); } noGlow(); }
+};
+V.shiplock = (e, lt, t) => { // ship lock (шлюз), side view. Keyframes [[sec, value], ...] relative to element start:
+  // level (0 low .. 1 high water in chamber), ship (x 0..1 across), gA (lower gate open 0..1), gB (upper gate open 0..1), valve (0..1 water flowing)
+  const kf = (arr, d) => { if (!arr) return d; let v = arr[0][1]; for (let i = 0; i < arr.length; i++) { const [ts, vs] = arr[i]; if (lt >= ts) { v = vs; const n = arr[i + 1]; if (n && lt < n[0]) v = lerp(vs, n[1], easeIO((lt - ts) / (n[0] - ts))); } } return v; };
+  const lvl = kf(e.level, 0), sx = kf(e.ship, .1), gA = kf(e.gA, 0), gB = kf(e.gB, 0), valve = kf(e.valve, 0), drain = kf(e.drain, 0);
+  const Wd = 1060, x0 = -Wd / 2, lowY = 230, highY = -250, chamberL = -200, chamberR = 200, floor = 430;
+  // scenery: hills, clouds, trees on the upper bank
+  ctx.fillStyle = '#cfe3b8'; ctx.beginPath(); ctx.moveTo(x0, highY - 40); for (let x = x0; x <= x0 + Wd; x += 40) ctx.lineTo(x, highY - 120 - 70 * Math.sin(x * .006 + 1) - 30 * Math.sin(x * .017)); ctx.lineTo(x0 + Wd, lowY); ctx.lineTo(x0, lowY); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.85)'; for (let i = 0; i < 2; i++) { const cx = ((i * 520 + t * 18) % 1300) - 650, cyy = -620 + i * 90; for (const [dx, r] of [[-50, 40], [0, 58], [55, 42]]) { ctx.beginPath(); ctx.arc(cx + dx, cyy, r, 0, 7); ctx.fill(); } }
+  const ink = '#2a2622', paper = T.panel || '#fbf7ee', water = '#5fb6ff', waterD = '#2f7fd6';
+  const wob = (k) => Math.sin(t * 2.2 + k) * 4;
+  // ground blocks: low riverbed left, chamber, high dam right
+  ctx.fillStyle = '#d9c9a8'; ctx.fillRect(x0, floor, Wd, 360); // earth
+  ctx.fillStyle = '#c7b48e'; ctx.fillRect(chamberR + 20, highY + 60, x0 + Wd - chamberR - 20, floor - highY - 60); // upper level ground under high river
+  // water: low river (left), chamber (lvl), high river (right)
+  const chY = lerp(lowY, highY, lvl);
+  const wfill = (xa, xb, y) => { const g = ctx.createLinearGradient(0, y, 0, floor); g.addColorStop(0, water); g.addColorStop(1, waterD); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(xa, floor); ctx.lineTo(xa, y + wob(xa)); for (let x = xa; x <= xb; x += 20) ctx.lineTo(x, y + Math.sin(t * 2.4 + x * .02) * 5); ctx.lineTo(xb, floor); ctx.closePath(); ctx.fill(); };
+  wfill(x0, chamberL, lowY);
+  wfill(chamberL, chamberR, chY);
+  ctx.save(); ctx.beginPath(); ctx.rect(chamberR + 20, -400, 400, highY + 60 + 400); ctx.clip(); wfill(chamberR + 20, x0 + Wd, highY); ctx.restore();
+  ctx.fillStyle = '#c7b48e'; ctx.fillRect(chamberR + 20, highY + 60, x0 + Wd - chamberR - 20, floor - highY - 60);
+  for (const [tx, ts] of [[-470, 1], [-410, .8], [460, .9]]) { const ty = tx > 0 ? highY - 20 : lowY - 10; ctx.save(); ctx.translate(tx, ty + (tx > 0 ? 0 : 0)); ctx.scale(ts, ts); ctx.fillStyle = '#7a5a3a'; ctx.fillRect(-8, -30, 16, 40); ctx.fillStyle = '#4f9a5a'; ctx.strokeStyle = ink; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, -150 + Math.sin(t * 1.5 + tx) * 3); ctx.lineTo(55, -25); ctx.lineTo(-55, -25); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+  // chamber walls
+  ctx.strokeStyle = ink; ctx.lineWidth = 8; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(chamberL, floor); ctx.lineTo(chamberR + 20, floor); ctx.lineTo(chamberR + 20, highY + 60); ctx.lineTo(x0 + Wd, highY + 60); ctx.stroke();
+  // valve stream (from upper river into chamber through pipe)
+  if (valve > 0.01) { ctx.strokeStyle = alphaCol(water, .9); ctx.lineWidth = 26 * valve; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(chamberR + 20, highY + 110 + i * 14); ctx.quadraticCurveTo(chamberR - 30, highY + 140 + i * 10, chamberR - 60 - i * 20, chY + 10); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(255,255,255,0.8)'; for (let i = 0; i < 10; i++) { const r = rng(hash('bub' + i)); const yy = chY + 20 + ((t * 120 + r() * 200) % 200); ctx.beginPath(); ctx.arc(chamberR - 80 - r() * 120, yy, 4 + r() * 6, 0, 7); ctx.fill(); } }
+  if (drain > 0.01) { ctx.strokeStyle = alphaCol(water, .9); ctx.lineWidth = 24 * drain; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(chamberL + 40, floor - 20 - i * 12); ctx.quadraticCurveTo(chamberL - 10, floor - 10, chamberL - 90 - i * 30, lowY + 12); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(255,255,255,0.8)'; for (let i = 0; i < 8; i++) { const r = rng(hash('dr' + i)); const xx = chamberL - 60 - ((t * 140 + r() * 160) % 160); ctx.beginPath(); ctx.arc(xx, lowY + 14 + r() * 30, 4 + r() * 5, 0, 7); ctx.fill(); } }
+  // gates: rise up out of water when open (vertical lift gates)
+  const gate = (gx, top, open, col) => { const h = floor - top + 20, lift = open * (h + 40); ctx.fillStyle = col; ctx.strokeStyle = ink; ctx.lineWidth = 6; rr(gx - 18, top - lift, 36, h, 6); ctx.fill(); ctx.stroke();
+    for (let y = top - lift + 30; y < top - lift + h - 10; y += 50) { ctx.beginPath(); ctx.moveTo(gx - 18, y); ctx.lineTo(gx + 18, y); ctx.stroke(); } };
+  gate(chamberL, highY - 30, gA, '#e0452b'); gate(chamberR + 20, highY - 30, gB, '#e0452b');
+  // ship rides chamber water when inside, else river level
+  const shipX = lerp(x0 + 60, x0 + Wd - 60, sx);
+  const inCh = shipX > chamberL && shipX < chamberR + 20;
+  const sy = shipX <= chamberL ? lowY : shipX >= chamberR + 20 ? highY : chY;
+  ctx.save(); ctx.translate(shipX, sy + Math.sin(t * 2) * 4); ctx.rotate(Math.sin(t * 1.6) * .015); ctx.scale(1.15, 1.15); if (e.flip) ctx.scale(-1, 1);
+  ctx.fillStyle = '#ffffff'; ctx.strokeStyle = ink; ctx.lineWidth = 6;
+  ctx.beginPath(); ctx.moveTo(-140, -50); ctx.lineTo(150, -50); ctx.lineTo(110, 26); ctx.lineTo(-120, 26); ctx.closePath(); ctx.fill(); ctx.stroke(); // hull
+  ctx.fillStyle = e.color || '#2f6fd6'; ctx.fillRect(-128, -18, 262, 14);
+  ctx.fillStyle = '#ffffff'; rr(-80, -120, 130, 70, 8); ctx.fill(); ctx.stroke(); // cabin
+  ctx.fillStyle = '#9fdcff'; for (let i = 0; i < 3; i++) { rr(-66 + i * 40, -104, 26, 24, 4); ctx.fill(); }
+  ctx.fillStyle = '#e0452b'; rr(-10, -170, 34, 52, 6); ctx.fill(); ctx.stroke(); // funnel
+  if (e.smoke !== false) { ctx.fillStyle = 'rgba(120,110,100,0.35)'; for (let i = 0; i < 4; i++) { const k = ((t * .8 + i * .25) % 1); ctx.beginPath(); ctx.arc(7 - k * 90, -190 - k * 120, 14 + k * 26, 0, 7); ctx.fill(); } }
+  if (e.face) { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(110, -20, 6, 0, 7); ctx.fill(); }
+  ctx.restore();
+  void inCh;
+};
 V.keys = (e, lt, t) => { // keyboard: layout ru|en, hl letters light up at hlAt, typing = random presses
   const rows = e.layout === 'en' ? ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'] : ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ'];
   const k = 76, g = 10, light = D.theme === 'light' || D.theme === 'doodle', hl = e.hl || '', hk = clamp((lt - (e.hlAt ?? .6)) / .4);

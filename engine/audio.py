@@ -200,4 +200,32 @@ def _sfx_proc(kind, seed=0):
     if kind == "glitch":
         n = int(0.25 * SR); x = np.sign(np.sin(2 * np.pi * rng.uniform(80, 400) * np.arange(n) / SR))
         return 0.25 * x * (rng.random(n) > 0.3)
+    if kind == "splash":  # body hits water: noise burst + bubbles
+        n = int(1.1 * SR); t = np.arange(n) / SR
+        x = rng.standard_normal(n); x = x - np.convolve(x, np.ones(6) / 6, "same")
+        out = 0.7 * x * np.exp(-t * 7) + 0.4 * np.convolve(rng.standard_normal(n), np.ones(40) / 40, "same") * np.exp(-t * 3)
+        for _ in range(14):
+            o = int(rng.uniform(0.15, 0.95) * SR); L = int(0.05 * SR); tt = np.arange(L) / SR
+            f = rng.uniform(500, 1400); out[o:o + L] += 0.18 * np.sin(2 * np.pi * (f + 3000 * tt) * tt) * np.exp(-tt * 60)
+        return out
+    if kind == "crack":  # ice / wood cracking: sharp clicks
+        n = int(0.7 * SR); out = np.zeros(n)
+        for k in range(9):
+            o = int((0.02 + 0.07 * k + rng.uniform(0, .03)) * SR); L = int(0.03 * SR); tt = np.arange(L) / SR
+            out[o:o + L] += (0.9 - 0.07 * k) * rng.standard_normal(L) * np.exp(-tt * 180)
+        return out
+    if kind == "water":  # water rushing in (2.5 s)
+        n = int(2.5 * SR); t = np.arange(n) / SR
+        x = np.convolve(rng.standard_normal(n), np.ones(18) / 18, "same")
+        return 0.6 * x * np.clip(t / .3, 0, 1) * np.clip((t[-1] - t) / .6, 0, 1) * (1 + .3 * np.sin(2 * np.pi * 3 * t))
+    if kind == "horn":  # ship horn
+        n = int(1.6 * SR); t = np.arange(n) / SR
+        env = np.clip(t / .08, 0, 1) * np.clip((t[-1] - t) / .3, 0, 1)
+        x = sum(np.sin(2 * np.pi * f * t) / (h + 1) for h, f in enumerate((110, 220, 330, 440, 555)))
+        return 0.35 * np.tanh(2 * x) * env
+    if kind == "creak":  # heavy gate moving: low grinding
+        n = int(1.4 * SR); t = np.arange(n) / SR
+        f = 70 + 25 * np.sin(2 * np.pi * 1.3 * t)
+        x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * (rng.random(n) > .5)
+        return 0.18 * np.convolve(x, np.ones(12) / 12, "same") * np.sin(np.pi * t / t[-1])
     return np.zeros(1)
