@@ -228,4 +228,18 @@ def _sfx_proc(kind, seed=0):
         f = 70 + 25 * np.sin(2 * np.pi * 1.3 * t)
         x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * (rng.random(n) > .5)
         return 0.18 * np.convolve(x, np.ones(12) / 12, "same") * np.sin(np.pi * t / t[-1])
+    if kind == "snap":  # steel rope snapping: whip crack + metallic twang
+        n = int(1.0 * SR); t = np.arange(n) / SR
+        crackp = rng.standard_normal(n) * np.exp(-t * 90)
+        twang = sum(np.sin(2 * np.pi * f * t + 3 * np.sin(2 * np.pi * 7 * t)) for f in (310, 467, 731)) / 3 * np.exp(-t * 4)
+        return 0.9 * crackp + 0.35 * twang
+    if kind == "screech":  # metal brake grinding on rail (1.4 s)
+        n = int(1.4 * SR); t = np.arange(n) / SR
+        f = 2400 - 900 * t / t[-1] + 80 * np.sin(2 * np.pi * 23 * t)
+        x = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.6 * np.convolve(rng.standard_normal(n), np.ones(3) / 3, "same")
+        return 0.3 * x * np.clip(t / .05, 0, 1) * np.clip((t[-1] - t) / .4, 0, 1)
+    if kind == "motor":  # electric motor hum (2 s)
+        n = int(2.0 * SR); t = np.arange(n) / SR
+        x = np.sin(2 * np.pi * 100 * t) + 0.5 * np.sin(2 * np.pi * 200 * t) + 0.25 * np.sign(np.sin(2 * np.pi * 50 * t))
+        return 0.18 * x * np.clip(t / .2, 0, 1) * np.clip((t[-1] - t) / .3, 0, 1)
     return np.zeros(1)

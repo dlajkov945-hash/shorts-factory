@@ -556,6 +556,44 @@ V.choices = (e, lt, t) => { // answer options A / B / C
     font('IDX', 50); ctx.fillStyle = T.fg; ctx.textAlign = 'left'; ctx.fillText(o.text, -270, 3); ctx.textBaseline = 'alphabetic'; ctx.restore();
   });
 };
+V.lines = (e, lt, t) => { // Asch test card: sample line on the left, options 1 2 3 on the right. mark (correct idx 1..3, markAt), wrong (idx, wrongAt), len [s, a, b, c]
+  const L = e.len || [300, 230, 300, 370], pw = 880, ph = 640;
+  ctx.fillStyle = D.theme === 'light' || D.theme === 'doodle' ? '#ffffff' : '#f3efe6'; glow('rgba(0,0,0,0.5)', 40); rr(-pw / 2, -ph / 2, pw, ph, 30); ctx.fill(); noGlow();
+  ctx.strokeStyle = '#1b1820'; ctx.lineWidth = 6; ctx.setLineDash([14, 12]); ctx.beginPath(); ctx.moveTo(-pw / 2 + 280, -ph / 2 + 40); ctx.lineTo(-pw / 2 + 280, ph / 2 - 40); ctx.stroke(); ctx.setLineDash([]);
+  const base = ph / 2 - 120, draw = (x, len, k, col) => { ctx.strokeStyle = col; ctx.lineWidth = 26; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, base); ctx.lineTo(x, base - len * easeOut(k)); ctx.stroke(); ctx.lineCap = 'butt'; };
+  draw(-pw / 2 + 140, L[0], lt / .5, '#1b1820');
+  font('IDX', 40); ctx.fillStyle = '#7a7480'; ctx.textAlign = 'center'; ctx.fillText('ОБРАЗЕЦ', -pw / 2 + 140, base + 80);
+  for (let i = 0; i < 3; i++) {
+    const x = -pw / 2 + 400 + i * 175, st = (e.step ?? .35) * i + .3, k = (lt - st) / .45; if (k <= 0) continue;
+    const isMark = e.mark === i + 1 && lt >= (e.markAt ?? 99), isWrong = e.wrong === i + 1 && lt >= (e.wrongAt ?? 99);
+    const col = isMark ? '#18b85a' : isWrong ? '#e2322f' : '#1b1820';
+    if (isMark || isWrong) { const q = spring(lt - (isMark ? e.markAt : e.wrongAt)); ctx.fillStyle = alphaCol(col, .14); rr(x - 70, base - 420, 140, 520, 24); ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 8 * q; ctx.stroke(); }
+    draw(x, L[i + 1], k, col);
+    font('IDB', 70); ctx.fillStyle = col; ctx.fillText(String(i + 1), x, base + 88);
+  }
+};
+V.crowd = (e, lt, t) => { // row of n heads, bubbles with answers appear one by one (go + step*i); last head = "ВЫ". look: heads turn to you; ally: index that answers allyAns in green
+  const n = e.n || 8, gap = 112, x0 = -(n - 1) * gap / 2, go = e.go ?? 0, step = e.step ?? .5;
+  for (let i = 0; i < n; i++) {
+    const you = i === n - 1, x = x0 + i * gap, bob = Math.sin(t * 2 + i) * 4;
+    const isAlly = e.ally !== undefined && i === e.ally;
+    ctx.save(); ctx.translate(x, bob);
+    ctx.fillStyle = you ? T.acc : isAlly ? '#18b85a' : '#5d5566'; ctx.beginPath(); ctx.ellipse(0, 120, 52, 62, 0, Math.PI, 0); ctx.fill(); // shoulders
+    ctx.fillStyle = you ? '#ffd9c2' : '#e8d5c4'; ctx.beginPath(); ctx.arc(0, 30, 42, 0, 7); ctx.fill();
+    const lk = e.look && lt >= (e.lookAt ?? 0) && !you ? 7 : 0;
+    ctx.fillStyle = '#1b1820'; ctx.beginPath(); ctx.arc(-14 + lk, 26, 6, 0, 7); ctx.arc(14 + lk, 26, 6, 0, 7); ctx.fill();
+    if (you && e.sweat) { ctx.fillStyle = '#7fd3ff'; const yy = 10 + ((t * 60) % 40); ctx.beginPath(); ctx.arc(40, yy, 7, 0, 7); ctx.fill(); }
+    // bubble
+    const ans = you ? e.you : isAlly ? (e.allyAns || '2') : e.ans; const at = go + step * i, k = spring(lt - at);
+    if (ans !== undefined && ans !== '' && lt >= at) {
+      const col = you ? T.acc : isAlly ? '#18b85a' : '#ffffff'; ctx.save(); ctx.translate(0, -60); ctx.scale(k, k);
+      ctx.fillStyle = col; rr(-46, -92, 92, 84, 22); ctx.fill(); ctx.beginPath(); ctx.moveTo(-12, -10); ctx.lineTo(0, 12); ctx.lineTo(12, -10); ctx.fill();
+      font('IDB', 62); ctx.fillStyle = you || isAlly ? '#ffffff' : '#1b1820'; ctx.textAlign = 'center'; ctx.fillText(ans, 0, -28); ctx.restore();
+    }
+    if (you) { font('IDX', 38); ctx.fillStyle = T.acc; ctx.textAlign = 'center'; ctx.fillText('ВЫ', 0, 230); }
+    ctx.restore();
+  }
+};
 V.button = (e, lt, t) => { // big glossy 3D push button: n (label on cap), color, press (sec after appear, or press_on word), pulse glow
   const c = e.color || '#ff2b2b', s = e.size || 1; ctx.scale(s, s);
   const pt = e.press !== undefined ? lt - e.press : -1;
@@ -665,6 +703,142 @@ V.shiplock = (e, lt, t) => { // ship lock (шлюз), side view. Keyframes [[sec
   if (e.face) { ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(110, -20, 6, 0, 7); ctx.fill(); }
   ctx.restore();
   void inCh;
+};
+V.elevator = (e, lt, t) => { // lift shaft in section (doodle). Keyframes [[sec, value], ...] from element start:
+  // pos (cab 0 ground .. 1 top), cw (counterweight 0 low .. 1 high, default 1-pos), cwv (counterweight visible 0..1),
+  // r1 r2 r3 (rope state: 0 ok, 0.3 frayed/glowing, 1 snapped), brake (safety wedges 0..1), sparks (0..1), gov (governor tripped 0..1),
+  // spd (governor speed), smoke (motor overload 0..1), mood: [[sec, "happy|scared|calm|wave"], ...] person in the cab.
+  // mode: "brake" close-up of the safety wedge on the rail, "governor" close-up of the speed governor.
+  const kf = (arr, d) => { if (arr === undefined) return d; if (!Array.isArray(arr)) return arr; let v = arr[0][1]; for (let i = 0; i < arr.length; i++) { const [ts, vs] = arr[i]; if (lt >= ts) { v = vs; const n = arr[i + 1]; if (n && lt < n[0] && typeof vs === 'number') v = lerp(vs, n[1], (e.linear ? clamp : easeIO)((lt - ts) / (n[0] - ts))); } } return v; };
+  const ink = '#2a2622', steel = '#9aa3ad', red = '#e0452b', yel = '#f2b51c';
+  const sd2 = hash(e.id || 'lift');
+  const brake = kf(e.brake, 0), sparks = kf(e.sparks, 0), gov = kf(e.gov, 0), spd = kf(e.spd, 1);
+  const sparkBurst = (x, y, dir, k) => { if (k <= .02) return; ctx.save(); glow('#ffcf4a', 24); ctx.lineCap = 'round';
+    for (let i = 0; i < 14; i++) { const r = rng(hash('sp' + Math.floor(t * 24) + i + x)); const a = -Math.PI / 2 + dir * (.3 + r() * 1.3), L = (40 + r() * 140) * k;
+      ctx.strokeStyle = r() > .5 ? '#ffe27a' : '#ff9a2b'; ctx.lineWidth = 3 + r() * 4; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a) * L, y - Math.sin(a) * L * -1); ctx.stroke(); }
+    noGlow(); ctx.restore(); };
+  if (e.mode === 'brake') { // close-up: rail in the middle, cab frame on the left, wedge rises and grips
+    ctx.fillStyle = '#e9e0cc'; rr(-420, -480, 840, 960, 40); ctx.fill(); ctx.strokeStyle = ink; ctx.lineWidth = 8; ctx.stroke();
+    const slide = (1 - brake) * Math.sin(t * 0) ; void slide;
+    const fall = kf(e.fall, 0); // rail texture scrolls while the cab falls
+    ctx.save(); rr(-420, -480, 840, 960, 40); ctx.clip();
+    ctx.fillStyle = steel; ctx.fillRect(40, -480, 90, 960); ctx.strokeStyle = ink; ctx.lineWidth = 6; ctx.strokeRect(40, -490, 90, 980);
+    ctx.strokeStyle = 'rgba(42,38,34,0.35)'; ctx.lineWidth = 4; for (let k = 0; k < 9; k++) { const y = ((k * 130 + fall * 2600) % 1170) - 585; ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(130, y); ctx.stroke(); }
+    // cab frame (left) with the wedge housing
+    ctx.fillStyle = '#ffffff'; ctx.strokeStyle = ink; ctx.lineWidth = 8; rr(-400, -300, 330, 560, 18); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#ffd36b'; rr(-70, -60, 110, 260, 10); ctx.fill(); ctx.stroke(); // housing
+    // wedge: slides up and right into the rail
+    const wy = lerp(150, 10, brake), wx = lerp(-40, 10, brake);
+    ctx.fillStyle = red; ctx.beginPath(); ctx.moveTo(wx, wy - 120); ctx.lineTo(wx + 30, wy - 120); ctx.lineTo(wx + 30, wy + 60); ctx.lineTo(wx - 30, wy + 60); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // lever from governor rope
+    ctx.strokeStyle = ink; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-200, 230); ctx.lineTo(wx - 10, wy + 60); ctx.stroke();
+    ctx.strokeStyle = '#6b5b4a'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-200, 230); ctx.lineTo(-200, 480); ctx.stroke(); ctx.lineCap = 'butt';
+    ctx.restore();
+    sparkBurst(40, wy - 40, 1, sparks); sparkBurst(40, wy + 20, 1, sparks * .7);
+    if (brake > .95) { const q = spring(lt - (e.lockAt || 0), 12, 7); void q; }
+    return;
+  }
+  if (e.mode === 'governor') { // close-up: wheel with flyweights; spins with spd, weights fly out, pawl catches at gov
+    ctx.fillStyle = '#e9e0cc'; rr(-420, -480, 840, 960, 40); ctx.fill(); ctx.strokeStyle = ink; ctx.lineWidth = 8; ctx.stroke();
+    const ang = (e._ang = (t * 2.2 * spd)) * (1 - gov * .999) + gov * 0; const R = 230;
+    ctx.save(); ctx.translate(0, -40);
+    ctx.lineWidth = 10; ctx.strokeStyle = ink; ctx.fillStyle = gov > .5 ? '#ffd9d2' : '#ffffff'; ctx.beginPath(); ctx.arc(0, 0, R, 0, 7); ctx.fill(); ctx.stroke();
+    // ratchet teeth on the rim
+    for (let k = 0; k < 16; k++) { const a = ang + k * Math.PI / 8; ctx.fillStyle = ink; ctx.save(); ctx.rotate(a); ctx.beginPath(); ctx.moveTo(R - 4, -14); ctx.lineTo(R + 30, 0); ctx.lineTo(R - 4, 14); ctx.fill(); ctx.restore(); }
+    // flyweights swing out with speed
+    const out = clamp((spd - 1) / 3); for (const sgn of [-1, 1]) { ctx.save(); ctx.rotate(ang); const px = sgn * lerp(60, 150, out); ctx.strokeStyle = ink; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(px, -40 * sgn); ctx.stroke(); ctx.fillStyle = out > .7 ? red : yel; ctx.beginPath(); ctx.arc(px, -40 * sgn, 38, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(0, 0, 22, 0, 7); ctx.fill();
+    // pawl (catch) on the right drops into teeth
+    ctx.save(); ctx.translate(R + 70, -120); ctx.rotate(lerp(-.5, .35, gov)); ctx.fillStyle = gov > .5 ? red : '#ffffff'; ctx.strokeStyle = ink; ctx.lineWidth = 8;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-30, 150); ctx.lineTo(10, 150); ctx.lineTo(24, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(12, 6, 10, 0, 7); ctx.fill(); ctx.restore();
+    // motion lines when fast
+    if (spd > 1.5 && gov < .5) { ctx.strokeStyle = 'rgba(42,38,34,0.5)'; ctx.lineWidth = 6; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.arc(0, 0, R + 60 + k * 22, ang * 1.0 + k, ang + k + .9); ctx.stroke(); } }
+    ctx.restore();
+    // rope going down to the cab
+    ctx.strokeStyle = '#6b5b4a'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-R, -40); ctx.lineTo(-R, 470); ctx.moveTo(R, -40); ctx.lineTo(R, 470); ctx.stroke();
+    if (gov > .5) sparkBurst(R + 50, -60, -1, clamp((1 - (lt - (e.tripAt || 0)) / 1.2)) * (sparks || 1));
+    return;
+  }
+  const pos = kf(e.pos, 0), cwp = kf(e.cw, 1 - pos), cwv = kf(e.cwv, 1), smoke = kf(e.smoke, 0);
+  const top = -700, mrB = -430, pit = 450, wl = -340, wr = 340, SH = 110, SX = 70, SY = -575;
+  const cabW = 280, cabH = 250, cabX = SX - SH; // cab centred under the sheave's left side
+  const cabB = lerp(pit - 10, mrB + 30 + cabH, pos), cabT = cabB - cabH;
+  const cwX = SX + SH, cwH = 190, cwT = lerp(pit - 10 - cwH, mrB + 40, cwp);
+  // building: machine room + shaft
+  ctx.fillStyle = '#e9e0cc'; ctx.fillRect(wl, top, wr - wl, pit - top);
+  ctx.fillStyle = '#d6c9ad'; ctx.fillRect(wl, top, wr - wl, mrB - top);
+  ctx.strokeStyle = ink; ctx.lineWidth = 9; ctx.lineJoin = 'round';
+  wobbleLine([[wl, top], [wr, top], [wr, pit], [wl, pit], [wl, top]], sd2 + 'box', t, 2); ctx.stroke();
+  ctx.lineWidth = 6; wobbleLine([[wl, mrB], [SX - SH - 40, mrB]], sd2 + 'mf1', t, 2); ctx.stroke(); wobbleLine([[SX - SH + 40, mrB], [SX + SH - 40, mrB]], sd2 + 'mf2', t, 2); ctx.stroke(); wobbleLine([[SX + SH + 40, mrB], [wr, mrB]], sd2 + 'mf3', t, 2); ctx.stroke();
+  // floors: landing marks + little doors on the left wall
+  for (let k = 0; k < 4; k++) { const fy = lerp(pit - 10, mrB + 30 + cabH, k / 3); ctx.strokeStyle = 'rgba(42,38,34,0.35)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(wl, fy); ctx.lineTo(wl - 40, fy); ctx.stroke();
+    ctx.fillStyle = Math.abs(pos - k / 3) < .04 ? '#7fd36b' : 'rgba(42,38,34,0.25)'; ctx.beginPath(); ctx.arc(wl - 22, fy - 40, 9, 0, 7); ctx.fill(); }
+  // rails
+  ctx.strokeStyle = steel; ctx.lineWidth = 10; for (const rx of [cabX - cabW / 2 - 14, cabX + cabW / 2 + 14]) { ctx.beginPath(); ctx.moveTo(rx, mrB); ctx.lineTo(rx, pit); ctx.stroke(); }
+  // governor (top left) + its rope down to the pit, tied to the cab
+  const GX = wl + 55, GY = top + 95, gr = 34, ga = t * (2 + 6 * clamp(spd - 1, 0, 3)) * (gov > .5 ? 0 : 1);
+  ctx.strokeStyle = '#6b5b4a'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(GX - gr, GY); ctx.lineTo(GX - gr, pit - 20); ctx.moveTo(GX + gr, GY); ctx.lineTo(GX + gr, cabB - 60); ctx.stroke();
+  ctx.fillStyle = gov > .5 ? red : '#ffffff'; ctx.strokeStyle = ink; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(GX, GY, gr, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(GX, GY); ctx.lineTo(GX + Math.cos(ga) * gr, GY + Math.sin(ga) * gr); ctx.moveTo(GX, GY); ctx.lineTo(GX - Math.cos(ga) * gr, GY - Math.sin(ga) * gr); ctx.stroke();
+  if (gov > .5) { ctx.strokeStyle = red; ctx.lineWidth = 6; for (let k = 0; k < 3; k++) { const a = -2.4 + k * .6; ctx.beginPath(); ctx.moveTo(GX + Math.cos(a) * (gr + 10), GY + Math.sin(a) * (gr + 10)); ctx.lineTo(GX + Math.cos(a) * (gr + 30), GY + Math.sin(a) * (gr + 30)); ctx.stroke(); } }
+  // motor + traction sheave
+  const shk = smoke > .05 ? Math.sin(t * 50) * 4 * smoke : 0;
+  ctx.save(); ctx.translate(shk, 0);
+  ctx.fillStyle = smoke > .3 ? '#ffb3a6' : '#8fb7e6'; ctx.strokeStyle = ink; ctx.lineWidth = 7; rr(SX - 60, SY - 105, 120, 70, 12); ctx.fill(); ctx.stroke();
+  const rot = pos * 9 + (e.spin ? t * 3 : 0);
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(SX, SY, SH - 30, 0, 7); ctx.fill(); ctx.lineWidth = 9; ctx.stroke();
+  ctx.lineWidth = 6; for (let k = 0; k < 4; k++) { const a = rot + k * Math.PI / 2; ctx.beginPath(); ctx.moveTo(SX, SY); ctx.lineTo(SX + Math.cos(a) * (SH - 34), SY + Math.sin(a) * (SH - 34)); ctx.stroke(); }
+  ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(SX, SY, 16, 0, 7); ctx.fill();
+  ctx.restore();
+  if (smoke > .02) { for (let i = 0; i < 6; i++) { const k = ((t * .9 + i / 6) % 1); ctx.fillStyle = `rgba(90,85,80,${.45 * smoke * (1 - k)})`; ctx.beginPath(); ctx.arc(SX - 20 + Math.sin(i * 3 + t) * 30, SY - 120 - k * 160, 16 + k * 40, 0, 7); ctx.fill(); } }
+  // ropes: 3 per side, over the top of the sheave
+  const ropes = [kf(e.r1, 0), kf(e.r2, 0), kf(e.r3, 0)];
+  ctx.lineCap = 'round';
+  ropes.forEach((st, i) => {
+    const dx = (i - 1) * 16, snapped = st > .5, fray = !snapped && st > .15;
+    ctx.strokeStyle = fray ? (Math.sin(t * 14) > 0 ? red : '#ff9a7a') : '#4a4a52'; ctx.lineWidth = 7;
+    if (fray) glow(alphaCol(red, .8), 18);
+    if (!snapped) {
+      ctx.beginPath(); ctx.arc(SX, SY, SH - 8 - i * 8, Math.PI, 0); ctx.stroke(); // over the sheave
+      ctx.beginPath(); ctx.moveTo(SX - SH + 8 + i * 8, SY); ctx.lineTo(cabX + dx, cabT); ctx.stroke();
+      if (cwv > .05) { ctx.beginPath(); ctx.moveTo(SX + SH - 8 - i * 8, SY); ctx.lineTo(cwX + dx * .6, cwT); ctx.stroke(); }
+    } else { // whipping loose ends
+      const k = clamp((st - .5) * 2), wv = Math.sin(t * 9 + i) * 30 * (1 - k * .5);
+      ctx.beginPath(); ctx.arc(SX, SY, SH - 8 - i * 8, Math.PI, Math.PI * 1.7); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(SX - SH + 8 + i * 8, SY); ctx.quadraticCurveTo(SX - SH - 40 + wv, SY + 90, SX - SH + 10 - wv, SY + 160 + i * 20); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cabX + dx, cabT); ctx.quadraticCurveTo(cabX + dx + wv, cabT - 50, cabX + dx + 30 - wv, cabT - 100 - i * 15); ctx.stroke();
+    }
+    noGlow();
+  });
+  ctx.lineCap = 'butt';
+  // counterweight
+  if (cwv > .02) { ctx.save(); ctx.translate(cwX, cwT + cwH / 2); const q = cwv; ctx.scale(q, q); ctx.fillStyle = '#5a5f6a'; ctx.strokeStyle = ink; ctx.lineWidth = 7; rr(-55, -cwH / 2, 110, cwH, 10); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 4; for (let k = 1; k < 5; k++) { ctx.beginPath(); ctx.moveTo(-45, -cwH / 2 + k * cwH / 5); ctx.lineTo(45, -cwH / 2 + k * cwH / 5); ctx.stroke(); } ctx.restore(); }
+  // cab
+  ctx.save(); ctx.translate(cabX, cabB);
+  ctx.fillStyle = '#fbf7ee'; ctx.strokeStyle = ink; ctx.lineWidth = 9; rr(-cabW / 2, -cabH, cabW, cabH, 14); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#ffd36b'; ctx.fillRect(-cabW / 2 + 8, -cabH + 8, cabW - 16, 16);
+  // safety wedges at both rails (bottom corners)
+  for (const sg of [-1, 1]) { const bx = sg * (cabW / 2 + 2), wy = lerp(-10, -40, brake); ctx.fillStyle = brake > .3 ? red : '#ffd36b'; ctx.strokeStyle = ink; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(bx, wy - 46); ctx.lineTo(bx + sg * lerp(4, 14, brake), wy - 46); ctx.lineTo(bx + sg * lerp(4, 14, brake), wy + 6); ctx.lineTo(bx - sg * 10, wy + 6); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  // person
+  const mood = kf(e.mood, 'calm'), scared = mood === 'scared', hap = mood === 'happy' || mood === 'wave';
+  const pj = scared ? Math.sin(t * 40) * 3 : 0; ctx.translate(pj, 0);
+  ctx.strokeStyle = ink; ctx.lineWidth = 7; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.ellipse(0, -180, 34, 37, 0, 0, 7); ctx.fillStyle = '#fbf7ee'; ctx.fill(); ctx.stroke();
+  wobbleLine([[0, -143], [0, -60]], sd2 + 'pb', t, 2); ctx.stroke();
+  wobbleLine([[0, -60], [-28, 0]], sd2 + 'pl', t, 2); ctx.stroke(); wobbleLine([[0, -60], [28, 0]], sd2 + 'pr', t, 2); ctx.stroke();
+  const wav = mood === 'wave' ? Math.sin(t * 10) * 20 : 0;
+  const arms = scared ? [[-60, -190], [60, -190]] : mood === 'wave' ? [[-40, -80], [70, -175 + wav]] : hap ? [[-55, -150], [55, -150]] : [[-38, -80], [38, -80]];
+  wobbleLine([[0, -125], arms[0]], sd2 + 'pa', t, 2); ctx.stroke(); wobbleLine([[0, -125], arms[1]], sd2 + 'pc', t, 2); ctx.stroke();
+  ctx.fillStyle = ink; if (scared) { ctx.beginPath(); ctx.arc(-12, -188, 8, 0, 7); ctx.arc(12, -188, 8, 0, 7); ctx.fill(); ctx.beginPath(); ctx.ellipse(0, -164, 10, 13, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5fb6ff'; for (let k = 0; k < 2; k++) { const yy = -205 + ((t * 80 + k * 30) % 60); ctx.beginPath(); ctx.arc(38 + k * 8, yy, 6, 0, 7); ctx.fill(); } }
+  else { ctx.beginPath(); ctx.arc(-12, -186, 5, 0, 7); ctx.arc(12, -186, 5, 0, 7); ctx.fill(); ctx.beginPath(); if (hap) ctx.arc(0, -172, 13, .2, Math.PI - .2); else { ctx.moveTo(-10, -165); ctx.lineTo(10, -165); } ctx.stroke(); }
+  ctx.lineCap = 'butt'; ctx.restore();
+  // sparks at the rails
+  sparkBurst(cabX - cabW / 2 - 14, cabB - 40, -1, sparks); sparkBurst(cabX + cabW / 2 + 14, cabB - 40, 1, sparks);
+  // pit buffer springs
+  ctx.strokeStyle = ink; ctx.lineWidth = 5; for (const bx of [cabX, cwX]) { ctx.beginPath(); for (let k = 0; k <= 8; k++) ctx.lineTo(bx + (k % 2 ? 18 : -18), pit - 2 - k * 6); ctx.stroke(); }
 };
 V.keys = (e, lt, t) => { // keyboard: layout ru|en, hl letters light up at hlAt, typing = random presses
   const rows = e.layout === 'en' ? ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'] : ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ'];
