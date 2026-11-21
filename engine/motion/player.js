@@ -594,6 +594,60 @@ V.crowd = (e, lt, t) => { // row of n heads, bubbles with answers appear one by 
     ctx.restore();
   }
 };
+V.smokeroom = (e, lt, t) => { // waiting room fills with smoke (Latané & Darley 1968). n seated people at desks, you (index, accent, "ВЫ"),
+  // smoke f0 -> f1 (0..1 of room height from ceiling) over dur from go / go_on; puff: vent spews; calm: others keep writing; stand / stand_on: you get up and walk to door (door: true)
+  const n = e.n || 1, you = e.you ?? 0, W = 940, H = 720, top = -360, bot = top + H;
+  const sg = e.go ?? 0, L = lerp(e.f0 ?? 0, e.f1 ?? (e.f0 ?? 0), easeIO((lt - sg) / (e.dur || 3)));
+  // room: back wall, floor, skirting
+  ctx.fillStyle = '#2a2730'; rr(-W / 2, top, W, H, 26); ctx.fill();
+  ctx.fillStyle = '#3a3440'; ctx.fillRect(-W / 2, bot - 210, W, 210);
+  ctx.fillStyle = '#4a4250'; ctx.fillRect(-W / 2, bot - 214, W, 8);
+  // vent top-left
+  const vx = -W / 2 + 70, vy = top + 70; ctx.fillStyle = '#9a9aa4'; rr(vx, vy, 130, 80, 10); ctx.fill();
+  ctx.strokeStyle = '#55555e'; ctx.lineWidth = 6; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(vx + 14, vy + 16 + i * 16); ctx.lineTo(vx + 116, vy + 16 + i * 16); ctx.stroke(); }
+  // clock on wall
+  ctx.fillStyle = '#efe9e0'; ctx.beginPath(); ctx.arc(W / 2 - 120, top + 110, 50, 0, 7); ctx.fill(); ctx.strokeStyle = '#1b1820'; ctx.lineWidth = 6;
+  ctx.beginPath(); ctx.moveTo(W / 2 - 120, top + 110); ctx.lineTo(W / 2 - 120 + 34 * Math.cos(t * 1.4), top + 110 + 34 * Math.sin(t * 1.4)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W / 2 - 120, top + 110); ctx.lineTo(W / 2 - 120, top + 84); ctx.stroke();
+  // door with exit sign
+  if (e.door) { const dx = W / 2 - 230, dy = bot - 470; ctx.fillStyle = '#5b4636'; rr(dx, dy, 170, 470, 8); ctx.fill(); ctx.fillStyle = '#e0b04a'; ctx.beginPath(); ctx.arc(dx + 30, dy + 250, 10, 0, 7); ctx.fill();
+    glow('#18e070', 30); ctx.fillStyle = '#18b85a'; rr(dx + 10, dy - 70, 150, 50, 8); ctx.fill(); noGlow(); font('IDX', 30); ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText('ВЫХОД', dx + 85, dy - 34); }
+  // people at desks
+  const gap = n > 1 ? 280 : 0, x0 = -(n - 1) * gap / 2 - (e.door ? 90 : 0);
+  const st = e.stand !== undefined ? clamp((lt - e.stand) / .5) : 0, walk = e.stand !== undefined ? easeIO((lt - e.stand - .7) / 1.6) : 0;
+  for (let i = 0; i < n; i++) {
+    const me = i === you, x = x0 + i * gap, deskY = bot - 150;
+    let px = x, py = deskY - 120 + Math.sin(t * 2 + i) * 3;
+    if (me) { py -= 110 * st; px = lerp(x, W / 2 - 145, walk); }
+    ctx.save(); ctx.translate(px, py);
+    ctx.fillStyle = me ? T.acc : '#6d6578'; ctx.beginPath(); ctx.ellipse(0, 110, 62, 72, 0, Math.PI, 0); ctx.fill(); if (me && st > 0) { ctx.fillRect(-58, 108, 116, 110 * st); }
+    ctx.fillStyle = me ? '#ffd9c2' : '#e8d5c4'; ctx.beginPath(); ctx.arc(0, 20, 48, 0, 7); ctx.fill();
+    const worried = me && L > .25; ctx.fillStyle = '#1b1820';
+    ctx.beginPath(); ctx.arc(-16, 16 - (worried ? 4 : 0), worried ? 8 : 6, 0, 7); ctx.arc(16, 16 - (worried ? 4 : 0), worried ? 8 : 6, 0, 7); ctx.fill();
+    if (!me && e.calm) { ctx.strokeStyle = '#1b1820'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-12, 44); ctx.lineTo(12, 44); ctx.stroke(); }
+    if (worried) { ctx.beginPath(); ctx.ellipse(0, 46, 9, 12, 0, 0, 7); ctx.fill(); ctx.fillStyle = '#7fd3ff'; const yy = -6 + ((t * 60) % 40); ctx.beginPath(); ctx.arc(46, yy, 8, 0, 7); ctx.fill(); }
+    if (me) { font('IDX', 34); ctx.fillStyle = T.acc; ctx.textAlign = 'center'; ctx.fillText('ВЫ', 0, -48); }
+    ctx.restore();
+    // desk + paper + writing hand
+    ctx.fillStyle = '#8a6a4a'; rr(x - 120, deskY, 240, 34, 6); ctx.fill(); ctx.fillStyle = '#6a4f36'; ctx.fillRect(x - 108, deskY + 34, 16, 110); ctx.fillRect(x + 92, deskY + 34, 16, 110);
+    ctx.fillStyle = '#f4f1ea'; ctx.save(); ctx.translate(x, deskY - 4); ctx.rotate(-.06); ctx.fillRect(-60, -12, 120, 16); ctx.restore();
+    if (!(me && st > 0)) { const hx = x + 30 + (e.calm || !me ? Math.sin(t * 9 + i) * 14 : 0); ctx.fillStyle = me ? '#ffd9c2' : '#e8d5c4'; ctx.beginPath(); ctx.arc(hx, deskY - 8, 16, 0, 7); ctx.fill(); }
+  }
+  // smoke: layer from ceiling down to L, wavy edge, drifting blobs
+  if (L > 0.005) {
+    ctx.save(); rr(-W / 2, top, W, H, 26); ctx.clip();
+    const edge = top + L * H;
+    const g = ctx.createLinearGradient(0, top, 0, edge + 40); g.addColorStop(0, 'rgba(200,200,206,0.92)'); g.addColorStop(1, 'rgba(170,170,178,0.62)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(-W / 2, top);
+    for (let x = -W / 2; x <= W / 2; x += 20) ctx.lineTo(x, edge + Math.sin(x / 70 + t * 1.3) * 22 + Math.sin(x / 31 - t * 2.1) * 10);
+    ctx.lineTo(W / 2, top); ctx.closePath(); ctx.fill();
+    for (let i = 0; i < 9; i++) { const r = rng(hash('sm' + i)); const bx = -W / 2 + ((r() * W + t * (20 + r() * 30)) % W), by = top + r() * L * H, br = 70 + r() * 90;
+      ctx.fillStyle = 'rgba(225,225,232,0.22)'; ctx.beginPath(); ctx.arc(bx, by, br, 0, 7); ctx.fill(); }
+    ctx.restore();
+  }
+  if (e.puff && L < .98) for (let i = 0; i < 6; i++) { const k = ((t * .8 + i / 6) % 1); ctx.fillStyle = `rgba(215,215,222,${.7 * (1 - k)})`;
+    ctx.beginPath(); ctx.arc(vx + 65 + k * 160 + Math.sin(i * 3 + t) * 20, vy + 90 + k * 60, 26 + k * 70, 0, 7); ctx.fill(); }
+};
 V.button = (e, lt, t) => { // big glossy 3D push button: n (label on cap), color, press (sec after appear, or press_on word), pulse glow
   const c = e.color || '#ff2b2b', s = e.size || 1; ctx.scale(s, s);
   const pt = e.press !== undefined ? lt - e.press : -1;

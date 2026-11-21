@@ -1,0 +1,169 @@
+{
+ "id": "avalanche",
+ "title": "Что будет, если тебя накроет лавина? ❄️",
+ "description": "Макс съехал с трассы, и склон поехал вниз. Два правила, которые дают воздух под снегом, и почему всё решают первые 15 минут (данные по 422 засыпанным лыжникам в Швейцарии). Отправь тому, кто едет в горы.\n\n#наука #факты #лавина #горы #зима #безопасность #сноуборд #shorts",
+ "format": "science_character",
+ "style": "comic",
+ "palette": "night",
+ "music": "epic",
+ "voice": "dmitri",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Лавина",
+ "captions": "pop",
+ "cap_y": 1180,
+ "image_style": "Vertical 9:16 high quality comic book illustration, bold ink outlines, subtle halftone shading, vibrant saturated colors, dramatic cinematic lighting.",
+ "hero": "Max: a 25-year-old guy with short messy black hair, red zip-up hooded jacket, grey t-shirt, blue jeans, white sneakers.",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли тебя́ накро́ет лави́на?",
+   "image": "assets/img/avalanche/s0.png",
+   "hl": [
+    "лавина"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Ма́кс съе́хал с тра́ссы на целину́. И снег под доско́й тре́снул.",
+   "image": "assets/img/avalanche/s1.png",
+   "hl": [
+    "треснул"
+   ],
+   "sfx": [
+    "crack"
+   ],
+   "flash": [
+    1.6
+   ]
+  },
+  {
+   "say": "Склон пое́хал вниз це́ликом. Лави́на несётся быстре́е ста киломе́тров в час.",
+   "image": "assets/img/avalanche/s2.png",
+   "hl": [
+    "ста"
+   ],
+   "sfx": [
+    "whoosh"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Пе́рвое пра́вило: греби́ рука́ми, как в воде́, что́бы оста́ться све́рху.",
+   "image": "assets/img/avalanche/s3.png",
+   "hl": [
+    "греби"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Второ́е: пока́ снег ещё дви́жется, прикро́й лицо́ руко́й.",
+   "image": "assets/img/avalanche/s4.png",
+   "hl": [
+    "лицо"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  },
+  {
+   "say": "Лави́на остана́вливается. И снег за секу́нды схва́тывается, как бето́н.",
+   "image": "assets/img/avalanche/s5.png",
+   "hl": [
+    "бетон"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Ма́кс не мо́жет пошевели́ть да́же па́льцем.",
+   "image": "assets/img/avalanche/s6.png",
+   "hl": [
+    "пальцем"
+   ],
+   "sfx": [
+    "heart"
+   ]
+  },
+  {
+   "say": "Но пе́ред лицо́м оста́лся карма́н во́здуха. Его́ рука́ спасла́ ему́ вре́мя.",
+   "image": "assets/img/avalanche/s4.png",
+   "hl": [
+    "воздуха"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "Тепе́рь счёт на мину́ты. Е́сли откопа́ть за пятна́дцать мину́т, выжива́ют девяно́сто два челове́ка из ста.",
+   "image": "assets/img/avalanche/s7.png",
+   "hl": [
+    "пятнадцать",
+    "девяносто"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Че́рез три́дцать пять мину́т то́лько три́дцать.",
+   "image": "assets/img/avalanche/s5.png",
+   "hl": [
+    "тридцать"
+   ],
+   "sfx": [
+    "heart"
+   ],
+   "flash": [
+    0.2
+   ]
+  },
+  {
+   "say": "Поэ́тому в гора́х спаса́ет не вертолёт. Он про́сто не успе́ет.",
+   "image": "assets/img/avalanche/s11.png",
+   "hl": [
+    "вертолёт"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Спаса́ет друг ря́дом. У Ле́ны да́тчик, щуп и лопа́та. Она́ идёт на сигна́л.",
+   "image": "assets/img/avalanche/s8.png",
+   "hl": [
+    "друг"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Лопа́та, снег, рука́! Двена́дцать мину́т.",
+   "image": "assets/img/avalanche/s9.png",
+   "hl": [
+    "рука"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Ма́кс жив. Отпра́вь э́тот ро́лик тому́, кто е́дет в го́ры.",
+   "image": "assets/img/avalanche/s10.png",
+   "hl": [
+    "жив"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  }
+ ]
+}
