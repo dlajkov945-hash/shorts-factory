@@ -532,6 +532,35 @@ V.hang = (e, lt, t) => { // doodle pull-up bar with a stick figure hanging (mood
   if (e.sweat) { ctx.fillStyle = '#2f6fd6'; for (let k = 0; k < 2; k++) { const f = (t * 1.3 + k * .5) % 1; ctx.globalAlpha *= 1; ctx.beginPath(); ctx.ellipse((k ? 70 : -70), 70 * st + f * 120, 9, 14, 0, 0, 7); ctx.fill(); } }
   ctx.restore(); ctx.lineCap = 'butt';
 };
+V.squat = (e, lt, t) => { // doodle stick figure doing squats, side view. speed (reps/s), mood: calm|strain|happy, fire (thighs burn), sweat, shake,
+  // stuck (frozen low and trembling, can't stand up), reps: true small counter "xN" (n0 start), depth 0..1, ground: false
+  const sd2 = hash(e.id || 'sq'), mood = e.mood || 'calm', sp = e.speed ?? .8, n0 = e.n0 || 0;
+  const ph = lt * sp, d = e.stuck ? .82 + Math.sin(t * 40) * .03 : (e.depth ?? 1) * (1 - Math.cos(ph * 2 * Math.PI)) / 2;
+  const sh = e.shake || e.stuck ? Math.sin(t * 55) * 4 : 0;
+  ctx.save(); ctx.translate(sh, -250); ctx.strokeStyle = T.line; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 10;
+  if (e.ground !== false) { wobbleLine([[-260, 478], [260, 478]], sd2 + 'g', t); ctx.stroke(); }
+  const F = [0, 470], L1 = 78, L2 = 74, hip = [-95 * d, 470 - 148 + 120 * d];
+  const dx = F[0] - hip[0], dy = F[1] - hip[1], dd = Math.min(L1 + L2 - .01, Math.hypot(dx, dy));
+  const a0 = Math.atan2(dy, dx), a1 = Math.acos(clamp((L1 * L1 + dd * dd - L2 * L2) / (2 * L1 * dd), -1, 1));
+  const knee = [hip[0] + L1 * Math.cos(a0 - a1), hip[1] + L1 * Math.sin(a0 - a1)];
+  const lean = .62 * d, tl = 180, sho = [hip[0] + Math.sin(lean) * tl, hip[1] - Math.cos(lean) * tl];
+  const head = [sho[0] + Math.sin(lean) * 62, sho[1] - Math.cos(lean) * 62];
+  wobbleLine([hip, knee, F], sd2 + 'lg', t); ctx.stroke();
+  wobbleLine([[F[0], F[1]], [F[0] + 44, F[1]]], sd2 + 'ft', t); ctx.stroke();
+  wobbleLine([hip, sho], sd2 + 'tr', t); ctx.stroke();
+  const aa = lerp(Math.PI / 2 - .15, -.05, d) + Math.sin(t * 2) * .03, al = 140;
+  wobbleLine([sho, [sho[0] + Math.cos(aa) * al, sho[1] + Math.sin(aa) * al]], sd2 + 'ar', t); ctx.stroke();
+  const b = Math.floor(t * 8), r2 = rng(sd2 + b); ctx.beginPath(); ctx.ellipse(head[0] + r2() * 3, head[1], 46 + r2() * 3, 50, 0, 0, 7); ctx.fillStyle = T.bg0; ctx.fill(); ctx.stroke();
+  ctx.fillStyle = T.line; ctx.beginPath(); ctx.arc(head[0] + 4, head[1] - 8, 6, 0, 7); ctx.arc(head[0] + 28, head[1] - 8, 6, 0, 7); ctx.fill();
+  ctx.beginPath(); const mx = head[0] + 16, my = head[1] + 18;
+  if (mood === 'happy') ctx.arc(mx, my - 6, 15, .2, Math.PI - .2); else if (mood === 'strain' || e.stuck) { ctx.moveTo(mx - 17, my + 4); ctx.lineTo(mx - 6, my - 4); ctx.lineTo(mx + 6, my + 4); ctx.lineTo(mx + 17, my - 4); } else { ctx.moveTo(mx - 13, my); ctx.lineTo(mx + 13, my); }
+  ctx.stroke();
+  if (e.fire) { const mid = [(hip[0] + knee[0]) / 2, (hip[1] + knee[1]) / 2]; for (let k = 0; k < 3; k++) { const fl = (t * 3 + k / 3) % 1; ctx.strokeStyle = alphaCol(k % 2 ? '#ffb21a' : '#e0452b', 1 - fl); ctx.lineWidth = 10; const x0 = mid[0] + (k - 1) * 24; ctx.beginPath(); ctx.moveTo(x0, mid[1] - 14 - fl * 100); ctx.quadraticCurveTo(x0 + 18, mid[1] - 44 - fl * 100, x0, mid[1] - 74 - fl * 100); ctx.stroke(); } ctx.strokeStyle = T.line; }
+  if (e.sweat) { ctx.fillStyle = '#2f6fd6'; for (let k = 0; k < 2; k++) { const f = (t * 1.3 + k * .5) % 1; ctx.beginPath(); ctx.ellipse(head[0] + (k ? 58 : -52), head[1] + f * 140, 9, 14, 0, 0, 7); ctx.fill(); } }
+  if (e.stuck) { ctx.strokeStyle = '#e0452b'; ctx.lineWidth = 6; for (const s2 of [-1, 1]) { ctx.beginPath(); ctx.moveTo(knee[0] + s2 * 30, knee[1] - 20); ctx.lineTo(knee[0] + s2 * 44, knee[1] - 34); ctx.stroke(); } }
+  if (e.reps) { const n = n0 + Math.floor(ph + .5); font('Hand', 96); ctx.fillStyle = e.repColor || '#e0452b'; ctx.textAlign = 'center'; ctx.fillText('×' + n, 200, 120); }
+  ctx.restore(); ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+};
 V.arrow = (e, lt, t) => { // drawn arrow from (0,0) to (dx,dy)
   const p = easeOut(lt / .5), dx = (e.dx || 300) * p, dy = (e.dy || 0) * p;
   ctx.strokeStyle = e.color || T.acc; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(dx, dy); ctx.stroke();

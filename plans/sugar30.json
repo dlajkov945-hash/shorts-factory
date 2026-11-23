@@ -1,0 +1,177 @@
+{
+ "id": "sugar30",
+ "title": "Что будет, если месяц не есть сахар? 🍬",
+ "description": "Проверили на Саше: что происходит через день, 3 дня, неделю, 2 недели и месяц без сладкого. Где прячется сахар, сколько его можно по рекомендации ВОЗ (до 25 г в день в идеале), и почему после отказа обычное яблоко кажется сладким: в опыте центра Монелл (Филадельфия, 2016) люди 3 месяца ели меньше сахара, и пудинг стал казаться им на 40% слаще.\n\n#сахар #здоровье #наука #тело #мультик #shorts",
+ "format": "science_character",
+ "style": "2d_sitcom",
+ "palette": "clean",
+ "music": "happy",
+ "voice": "eleven",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "Месяц без сахара",
+ "captions": "pop",
+ "cap_y": 1180,
+ "image_style": "Vertical 9:16 high quality 2D cartoon illustration, modern adult animated sitcom style, clean bold outlines, soft cel shading, vibrant colors, cinematic lighting.",
+ "hero": "Sasha: a 25-year-old guy with messy wavy blond hair, big expressive eyes, dark green hoodie, grey sweatpants.",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли ме́сяц не есть са́хар?",
+   "image": "assets/img/sugar30/s0.png",
+   "audio": "assets/audio/sugar30/s0.mp3",
+   "hl": [
+    "сахар"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Прове́рим на Са́ше. Никаки́х конфе́т, сла́дкой газиро́вки и пече́нья.",
+   "image": "assets/img/sugar30/s1.png",
+   "audio": "assets/audio/sugar30/s1.mp3",
+   "hl": [
+    "Никаких"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Пе́рвый день. Легко́! Са́ша да́же горди́тся собо́й.",
+   "image": "assets/img/sugar30/s2.png",
+   "audio": "assets/audio/sugar30/s2.mp3",
+   "hl": [
+    "Легко"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "Тре́тий день. Рука́ сама́ тя́нется к шокола́дке.",
+   "image": "assets/img/sugar30/s3.png",
+   "audio": "assets/audio/sugar30/s3.mp3",
+   "hl": [
+    "Третий"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Э́то тя́га. Мозг привы́к к сла́дкой награ́де и тре́бует её обра́тно.",
+   "image": "assets/img/sugar30/s4.png",
+   "audio": "assets/audio/sugar30/s4.mp3",
+   "hl": [
+    "тяга"
+   ],
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "say": "Неде́ля. Тя́га слабе́ет. Зато́ Са́ша замеча́ет, ско́лько са́хара пря́чется вокру́г.",
+   "image": "assets/img/sugar30/s5.png",
+   "audio": "assets/audio/sugar30/s5.mp3",
+   "hl": [
+    "Неделя"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Он есть в ке́тчупе, йо́гурте, хло́пьях и да́же в колбасе́.",
+   "image": "assets/img/sugar30/s6.png",
+   "audio": "assets/audio/sugar30/s6.mp3",
+   "hl": [
+    "колбасе"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  },
+  {
+   "say": "ВОЗ сове́тует не бо́льше двадцати́ пяти́ гра́ммов в день. Э́то шесть ча́йных ло́жек.",
+   "image": "assets/img/sugar30/s7.png",
+   "audio": "assets/audio/sugar30/s7.mp3",
+   "hl": [
+    "шесть"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "А в одно́й ба́нке газиро́вки до сорока́ гра́ммов. Почти́ де́сять ло́жек.",
+   "image": "assets/img/sugar30/s8.png",
+   "audio": "assets/audio/sugar30/s8.mp3",
+   "hl": [
+    "десять"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Две неде́ли. Са́ша ест обы́чное я́блоко и не ве́рит: оно́ сла́дкое!",
+   "image": "assets/img/sugar30/s9.png",
+   "audio": "assets/audio/sugar30/s9.mp3",
+   "hl": [
+    "сладкое"
+   ],
+   "sfx": [
+    "ding"
+   ],
+   "flash": [
+    0.2
+   ]
+  },
+  {
+   "say": "И э́то не самовнуше́ние. Э́то прове́рили учёные в Филаде́льфии.",
+   "image": "assets/img/sugar30/s10.png",
+   "audio": "assets/audio/sugar30/s10.mp3",
+   "hl": [
+    "Филадельфии"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Лю́ди три ме́сяца е́ли ме́ньше са́хара. И тот же са́мый пу́динг стал каза́ться им на со́рок проце́нтов сла́ще.",
+   "image": "assets/img/sugar30/s11.png",
+   "audio": "assets/audio/sugar30/s11.mp3",
+   "hl": [
+    "сорок"
+   ],
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "say": "Ме́сяц. Са́ша про́бует свой люби́мый торт, и он ему́ сли́шком прито́рный.",
+   "image": "assets/img/sugar30/s12.png",
+   "audio": "assets/audio/sugar30/s12.mp3",
+   "hl": [
+    "приторный"
+   ],
+   "sfx": [
+    "boing"
+   ]
+  },
+  {
+   "say": "Так что са́мое тру́дное то́лько пе́рвая неде́ля. А пото́м сла́дкой ока́жется да́же морко́вка.",
+   "image": "assets/img/sugar30/s13.png",
+   "audio": "assets/audio/sugar30/s13.mp3",
+   "hl": [
+    "морковка"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  }
+ ]
+}
