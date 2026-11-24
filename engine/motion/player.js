@@ -561,6 +561,38 @@ V.squat = (e, lt, t) => { // doodle stick figure doing squats, side view. speed 
   if (e.reps) { const n = n0 + Math.floor(ph + .5); font('Hand', 96); ctx.fillStyle = e.repColor || '#e0452b'; ctx.textAlign = 'center'; ctx.fillText('×' + n, 200, 120); }
   ctx.restore(); ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
 };
+V.plank = (e, lt, t) => { // doodle stick figure in a forearm plank, side view. mood: calm|strain|happy, shake (arms tremble), fire (belly burns),
+  // sweat, sag 0..1 (hips drop: bad form, red cross), timer: true big M:SS above (t0 start sec, rate speed), wall: true = wall sit instead of plank
+  const sd2 = hash(e.id || 'pl'), mood = e.mood || 'calm', sh = e.shake ? Math.sin(t * 55) * 4 : 0, br = Math.sin(t * 2.2) * 4;
+  ctx.save(); ctx.translate(sh, 0); ctx.strokeStyle = T.line; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 10;
+  const G = 130; if (e.ground !== false) { wobbleLine([[-330, G + 8], [330, G + 8]], sd2 + 'g', t); ctx.stroke(); }
+  let head, belly, face = 1;
+  if (e.wall) {
+    wobbleLine([[-190, -380], [-190, G + 8]], sd2 + 'w', t); ctx.stroke();
+    const hip = [-150, -10], sho = [-150, -190 + br], knee = [30, -10], foot = [30, G];
+    head = [-140, -250 + br]; belly = [-120, -100];
+    wobbleLine([hip, knee, foot], sd2 + 'lg', t); ctx.stroke(); wobbleLine([[foot[0], G], [foot[0] + 44, G]], sd2 + 'ft', t); ctx.stroke();
+    wobbleLine([hip, sho], sd2 + 'tr', t); ctx.stroke(); wobbleLine([sho, [-40, -120], [10, -150]], sd2 + 'ar', t); ctx.stroke();
+  } else {
+    const sag = (e.sag || 0) * 70, elb = [-210, G], hand = [-110, G], sho = [-205, -10 + br], foot = [260, G - 6];
+    const hip = [40, (sho[1] + foot[1]) / 2 - 18 + sag];
+    head = [-275, -40 + br]; belly = [-60, hip[1] - 20]; face = -1;
+    wobbleLine([sho, elb, hand], sd2 + 'ar', t); ctx.stroke();
+    wobbleLine([sho, hip], sd2 + 'tr', t); ctx.stroke(); wobbleLine([hip, foot], sd2 + 'lg', t); ctx.stroke();
+    wobbleLine([[foot[0], foot[1]], [foot[0] + 26, G + 4]], sd2 + 'ft', t); ctx.stroke();
+    if (e.sag) { ctx.strokeStyle = '#e0452b'; ctx.lineWidth = 9; const c = [hip[0] + 60, hip[1] - 70]; ctx.beginPath(); ctx.moveTo(c[0] - 24, c[1] - 24); ctx.lineTo(c[0] + 24, c[1] + 24); ctx.moveTo(c[0] + 24, c[1] - 24); ctx.lineTo(c[0] - 24, c[1] + 24); ctx.stroke(); ctx.strokeStyle = T.line; ctx.lineWidth = 10; }
+  }
+  const b = Math.floor(t * 8), r2 = rng(sd2 + b); ctx.beginPath(); ctx.ellipse(head[0] + r2() * 3, head[1], 46 + r2() * 3, 50, 0, 0, 7); ctx.fillStyle = T.bg0; ctx.fill(); ctx.stroke();
+  const ex = head[0] + face * 16; ctx.fillStyle = T.line; ctx.beginPath(); ctx.arc(ex - 12, head[1] - 8, 6, 0, 7); ctx.arc(ex + 12, head[1] - 8, 6, 0, 7); ctx.fill();
+  ctx.beginPath(); const mx = ex, my = head[1] + 18;
+  if (mood === 'happy') ctx.arc(mx, my - 6, 15, .2, Math.PI - .2); else if (mood === 'strain') { ctx.moveTo(mx - 17, my + 4); ctx.lineTo(mx - 6, my - 4); ctx.lineTo(mx + 6, my + 4); ctx.lineTo(mx + 17, my - 4); } else { ctx.moveTo(mx - 13, my); ctx.lineTo(mx + 13, my); }
+  ctx.stroke();
+  if (e.fire) for (let k = 0; k < 3; k++) { const fl = (t * 3 + k / 3) % 1; ctx.strokeStyle = alphaCol(k % 2 ? '#ffb21a' : '#e0452b', 1 - fl); ctx.lineWidth = 10; const x0 = belly[0] + (k - 1) * 30; ctx.beginPath(); ctx.moveTo(x0, belly[1] - 10 - fl * 100); ctx.quadraticCurveTo(x0 + 18, belly[1] - 40 - fl * 100, x0, belly[1] - 70 - fl * 100); ctx.stroke(); }
+  if (e.sweat) { ctx.fillStyle = '#2f6fd6'; for (let k = 0; k < 2; k++) { const f = (t * 1.3 + k * .5) % 1; ctx.beginPath(); ctx.ellipse(head[0] + (k ? 50 : -50), head[1] + 30 + f * 120, 9, 14, 0, 0, 7); ctx.fill(); } }
+  if (e.timer) { const s = Math.max(0, (e.t0 || 0) + lt * (e.rate ?? 1)), lim = e.limit ?? 9e9, v = Math.min(s, lim), m = Math.floor(v / 60), ss = Math.floor(v % 60);
+    font('Hand', e.tsize || 130); ctx.textAlign = 'center'; ctx.fillStyle = v >= (e.red ?? 180) ? '#e0452b' : (e.tcolor || T.line); ctx.fillText(m + ':' + String(ss).padStart(2, '0'), e.tx ?? 0, e.ty ?? -260); }
+  ctx.restore(); ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+};
 V.arrow = (e, lt, t) => { // drawn arrow from (0,0) to (dx,dy)
   const p = easeOut(lt / .5), dx = (e.dx || 300) * p, dy = (e.dy || 0) * p;
   ctx.strokeStyle = e.color || T.acc; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(dx, dy); ctx.stroke();

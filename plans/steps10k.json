@@ -1,0 +1,190 @@
+{
+ "id": "steps10k",
+ "title": "Что будет, если каждый день проходить 10 000 шагов? 🚶",
+ "description": "Проверили на Саше: первый день, неделя, месяц по 10 000 шагов. И главный сюрприз: число 10 000 придумали не врачи. В 1960-х в Японии продавали шагомер с названием «счётчик 10 000 шагов». А когда учёные из Гарварда (I-Min Lee, JAMA Internal Medicine, 2019) проследили за 16 тысячами пожилых женщин, риск умереть раньше заметно снижался уже примерно с 4400 шагов, а после 7500 польза почти переставала расти.\n\n#шаги #ходьба #здоровье #наука #тело #мультик #shorts",
+ "format": "science_character",
+ "style": "2d_sitcom",
+ "palette": "clean",
+ "music": "lofi",
+ "voice": "eleven",
+ "voice_engine": "elevenlabs:ZHIn0jcgR6VIvVAXkwWV:eleven_flash_v2_5",
+ "hook": "10 000 шагов",
+ "captions": "pop",
+ "cap_y": 1180,
+ "image_style": "Vertical 9:16 high quality 2D cartoon illustration, modern adult animated sitcom style, clean bold outlines, soft cel shading, vibrant colors, cinematic lighting.",
+ "hero": "Sasha: a 25-year-old guy with messy wavy blond hair, big expressive eyes, dark green hoodie, grey sweatpants.",
+ "scenes": [
+  {
+   "say": "Что бу́дет, е́сли ка́ждый день проходи́ть де́сять ты́сяч шаго́в?",
+   "image": "assets/img/steps10k/s0.png",
+   "audio": "assets/audio/steps10k/s0.mp3",
+   "hl": [
+    "десять"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Прове́рим на Са́ше. Обы́чно он прохо́дит три ты́сячи шаго́в: от крова́ти до холоди́льника.",
+   "image": "assets/img/steps10k/s1.png",
+   "audio": "assets/audio/steps10k/s1.mp3",
+   "hl": [
+    "холодильника"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Пе́рвый день. Уже́ ве́чер, а на часа́х то́лько шесть ты́сяч.",
+   "image": "assets/img/steps10k/s2.png",
+   "audio": "assets/audio/steps10k/s2.mp3",
+   "hl": [
+    "шесть"
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "shake": true
+  },
+  {
+   "say": "Са́ша хо́дит кру́гами вокру́г до́ма в темноте́.",
+   "image": "assets/img/steps10k/s3.png",
+   "audio": "assets/audio/steps10k/s3.mp3",
+   "hl": [
+    "кругами"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Неде́ля. Но́ги гудя́т, зато́ спит он как младе́нец.",
+   "image": "assets/img/steps10k/s4.png",
+   "audio": "assets/audio/steps10k/s4.mp3",
+   "hl": [
+    "младенец"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  },
+  {
+   "say": "А ле́стница на пя́тый эта́ж бо́льше не пуга́ет.",
+   "image": "assets/img/steps10k/s5.png",
+   "audio": "assets/audio/steps10k/s5.mp3",
+   "hl": [
+    "лестница"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Ме́сяц. Три́ста ты́сяч шаго́в. Э́то бо́льше двухсо́т киломе́тров.",
+   "image": "assets/img/steps10k/s6.png",
+   "audio": "assets/audio/steps10k/s6.mp3",
+   "hl": [
+    "двухсот"
+   ],
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "say": "А тепе́рь сюрпри́з. Число́ де́сять ты́сяч приду́мали не врачи́.",
+   "image": "assets/img/steps10k/s7.png",
+   "audio": "assets/audio/steps10k/s7.mp3",
+   "hl": [
+    "врачи"
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "flash": [
+    0.2
+   ],
+   "shake": true
+  },
+  {
+   "say": "В шестидеся́тых в Япо́нии продава́ли шагоме́р. Он так и называ́лся: «счётчик десяти́ ты́сяч шаго́в».",
+   "image": "assets/img/steps10k/s8.png",
+   "audio": "assets/audio/steps10k/s8.mp3",
+   "hl": [
+    "Японии"
+   ],
+   "sfx": [
+    "ding"
+   ]
+  },
+  {
+   "say": "Кру́глая ци́фра про́сто хорошо́ продава́лась.",
+   "image": "assets/img/steps10k/s9.png",
+   "audio": "assets/audio/steps10k/s9.mp3",
+   "hl": [
+    "продавалась"
+   ],
+   "sfx": [
+    "cash"
+   ]
+  },
+  {
+   "say": "Пото́м учёные из Га́рварда наблюда́ли за шестна́дцатью ты́сячами пожилы́х же́нщин.",
+   "image": "assets/img/steps10k/s10.png",
+   "audio": "assets/audio/steps10k/s10.mp3",
+   "hl": [
+    "Гарварда"
+   ],
+   "sfx": [
+    "whoosh"
+   ]
+  },
+  {
+   "say": "Уже́ о́коло четырёх с полови́ной ты́сяч шаго́в в день заме́тно снижа́ли риск умере́ть ра́ньше.",
+   "image": "assets/img/steps10k/s11.png",
+   "audio": "assets/audio/steps10k/s11.mp3",
+   "hl": [
+    "четырёх"
+   ],
+   "sfx": [
+    "heart"
+   ]
+  },
+  {
+   "say": "А по́сле семи́ с полови́ной ты́сяч по́льза почти́ перестава́ла расти́.",
+   "image": "assets/img/steps10k/s12.png",
+   "audio": "assets/audio/steps10k/s12.mp3",
+   "hl": [
+    "семи"
+   ],
+   "sfx": [
+    "tick"
+   ]
+  },
+  {
+   "say": "Получа́ется, Са́ша мог ходи́ть ме́ньше. Но останови́ться он уже́ не мо́жет.",
+   "image": "assets/img/steps10k/s13.png",
+   "audio": "assets/audio/steps10k/s13.mp3",
+   "hl": [
+    "меньше"
+   ],
+   "sfx": [
+    "pop"
+   ]
+  },
+  {
+   "say": "Потому́ что соба́ка, кото́рую он завёл ра́ди прогу́лок, тре́бует свои́ де́сять ты́сяч.",
+   "image": "assets/img/steps10k/s14.png",
+   "audio": "assets/audio/steps10k/s14.mp3",
+   "hl": [
+    "собака"
+   ],
+   "sfx": [
+    "boing"
+   ],
+   "shake": true
+  }
+ ]
+}
