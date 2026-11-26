@@ -682,6 +682,99 @@ V.sneaker = (e, lt, t) => { // running shoe, side view, toe right. hl: true glow
   if (e.toe && toeHit > .7) { ctx.strokeStyle = '#e0452b'; ctx.lineWidth = 7; for (let k = 0; k < 3; k++) { const a = -.6 + k * .5; ctx.beginPath(); ctx.moveTo(400 + Math.cos(a) * 20, 60 + Math.sin(a) * 20); ctx.lineTo(400 + Math.cos(a) * 60, 60 + Math.sin(a) * 60); ctx.stroke(); } }
   ctx.restore(); ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
 };
+const KF = (arr, dflt, lt) => { if (arr === undefined) return dflt; if (!Array.isArray(arr)) return arr; let v = arr[0][1]; for (let i = 0; i < arr.length; i++) { const [ts, vs] = arr[i]; if (lt >= ts) { v = vs; const n = arr[i + 1]; if (n && lt < n[0]) v = lerp(vs, n[1], easeIO((lt - ts) / (n[0] - ts))); } } return v; };
+V.shower = (e, lt, t) => { // doodle stick figure under a shower, front view. cold 0..1 or [[sec, v]] (0 hot orange water + steam, 1 icy blue + snowflakes),
+  // mood: calm|shock|happy|flex (or [[sec, mood]]), shiver, therm: true thermometer left with °C (hot, coldT), water: false = tap off, eyes: shut
+  const cold = KF(e.cold, 0, lt), sd2 = hash(e.id || 'sh');
+  let mood = e.mood || 'calm'; if (Array.isArray(mood)) { let m = mood[0][1]; for (const [ts, v] of mood) if (lt >= ts) m = v; mood = m; }
+  const shv = (e.shiver || mood === 'shock') ? Math.sin(t * 62) * (e.shiver ? 6 : 4) : 0, G = 300;
+  const wc = cold < .5 ? '#ff8a3d' : '#2f9cff', wcol = cold < .5 ? lerp(0, 1, cold * 2) : 1;
+  ctx.save(); ctx.strokeStyle = T.line; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 10;
+  if (e.ground !== false) { wobbleLine([[-300, G + 8], [300, G + 8]], sd2 + 'g', t); ctx.stroke(); }
+  // pipe + shower head
+  wobbleLine([[250, G], [250, -470], [40, -470], [0, -440]], sd2 + 'p', t); ctx.stroke();
+  ctx.fillStyle = T.panel; ctx.beginPath(); ctx.moveTo(-80, -400); ctx.lineTo(80, -400); ctx.lineTo(30, -445); ctx.lineTo(-30, -445); ctx.closePath(); ctx.fill(); ctx.stroke();
+  // water
+  if (e.water !== false) {
+    const col = cold < .5 ? '#ff8a3d' : '#2f9cff'; const mix = clamp(cold);
+    const r = Math.round(lerp(255, 47, mix)), g = Math.round(lerp(138, 156, mix)), b = Math.round(lerp(61, 255, mix));
+    ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`; ctx.lineWidth = 6;
+    for (let k = 0; k < 22; k++) { const rr2 = rng(sd2 + k * 7); const x0 = -70 + rr2() * 140, spread = (x0) * 1.9, ph = (t * 1.6 + rr2()) % 1, y = -395 + ph * (G + 395);
+      const x = x0 + spread * ph; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + spread * .06, y + 34); ctx.stroke(); }
+    // splash at feet
+    for (let k = 0; k < 6; k++) { const f = (t * 2.2 + k / 6) % 1; ctx.beginPath(); ctx.arc((k - 2.5) * 60, G - f * 30, 6 * (1 - f) + 2, 0, 7); ctx.stroke(); }
+  }
+  if (cold < .35 && e.water !== false) { ctx.strokeStyle = alphaCol('#9a8f84', .5 * (1 - cold / .35)); ctx.lineWidth = 8; for (let k = 0; k < 4; k++) { const f = (t * .5 + k / 4) % 1, x0 = -180 + k * 120; ctx.beginPath(); ctx.moveTo(x0, -60 - f * 260); ctx.quadraticCurveTo(x0 + 30, -110 - f * 260, x0, -160 - f * 260); ctx.stroke(); } }
+  // body
+  ctx.save(); ctx.translate(shv, 0); ctx.strokeStyle = T.line; ctx.lineWidth = 10;
+  const hip = [0, 40], sho = [0, -170], head = [0, -245];
+  wobbleLine([[-55, G], hip, [55, G]], sd2 + 'lg', t); ctx.stroke();
+  wobbleLine([hip, sho], sd2 + 'tr', t); ctx.stroke();
+  let A; if (mood === 'shock') A = [[[-150, -270], [-120, -350]], [[150, -270], [120, -350]]];
+  else if (mood === 'flex') A = [[[-130, -170], [-130, -260]], [[130, -170], [130, -260]]];
+  else if (mood === 'happy') A = [[[-110, -60], [-150, 10]], [[130, -230], [110, -320]]];
+  else A = [[[-60, -90], [-80, 0]], [[60, -90], [80, 0]]];
+  for (const [el, hd] of A) { wobbleLine([sho, el, hd], sd2 + 'ar' + el[0], t); ctx.stroke(); }
+  if (mood === 'flex') { ctx.beginPath(); ctx.arc(-110, -200, 26, Math.PI, 0); ctx.arc(110, -200, 26, Math.PI, 0); ctx.stroke(); }
+  const b = Math.floor(t * 8), r2 = rng(sd2 + b); ctx.beginPath(); ctx.ellipse(head[0] + r2() * 3, head[1], 56 + r2() * 3, 60, 0, 0, 7); ctx.fillStyle = cold > .7 ? '#d9ecff' : T.bg0; ctx.fill(); ctx.stroke();
+  // hair spikes when shocked
+  if (mood === 'shock') { for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(head[0] + k * 22, head[1] - 58); ctx.lineTo(head[0] + k * 30, head[1] - 108 - Math.abs(Math.sin(t * 30 + k)) * 8); ctx.stroke(); } }
+  ctx.fillStyle = T.line;
+  if (mood === 'shock') { ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(head[0] - 22, head[1] - 12, 16, 0, 7); ctx.arc(head[0] + 22, head[1] - 12, 16, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.stroke(); ctx.fillStyle = T.line; ctx.beginPath(); ctx.arc(head[0] - 22, head[1] - 12, 6, 0, 7); ctx.arc(head[0] + 22, head[1] - 12, 6, 0, 7); ctx.fill();
+    ctx.lineWidth = 8; ctx.beginPath(); ctx.ellipse(head[0], head[1] + 28, 16, 20 + Math.sin(t * 20) * 3, 0, 0, 7); ctx.fillStyle = '#5a2620'; ctx.fill(); ctx.stroke(); }
+  else { if (e.eyes === 'shut' || mood === 'happy') { ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(head[0] - 20, head[1] - 6, 10, Math.PI + .3, -.3); ctx.moveTo(head[0] + 30, head[1] - 6); ctx.arc(head[0] + 20, head[1] - 6, 10, Math.PI + .3, -.3); ctx.stroke(); }
+    else { ctx.beginPath(); ctx.arc(head[0] - 20, head[1] - 10, 7, 0, 7); ctx.arc(head[0] + 20, head[1] - 10, 7, 0, 7); ctx.fill(); }
+    ctx.lineWidth = 9; ctx.beginPath(); if (mood === 'happy' || mood === 'flex') ctx.arc(head[0], head[1] + 14, 20, .2, Math.PI - .2); else if (e.shiver) { ctx.moveTo(head[0] - 22, head[1] + 26); for (let k = 1; k <= 4; k++) ctx.lineTo(head[0] - 22 + k * 11, head[1] + 26 + (k % 2 ? -7 : 7)); } else { ctx.moveTo(head[0] - 15, head[1] + 26); ctx.lineTo(head[0] + 15, head[1] + 26); } ctx.stroke(); }
+  if (e.shiver) { ctx.strokeStyle = alphaCol('#2f6fd6', .8); ctx.lineWidth = 6; for (const s2 of [-1, 1]) for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(s2 * (90 + k * 4), -150 + k * 60); ctx.lineTo(s2 * (120 + k * 4), -160 + k * 60); ctx.stroke(); } }
+  ctx.restore();
+  // frost
+  if (cold > .7) { ctx.strokeStyle = alphaCol('#2f9cff', clamp((cold - .7) / .3)); ctx.lineWidth = 5; for (let k = 0; k < 7; k++) { const rr2 = rng(sd2 + 99 + k); const x = -260 + rr2() * 520, y = -380 + rr2() * 520 + Math.sin(t * 2 + k) * 10, s = 14 + rr2() * 10; ctx.beginPath(); for (let a = 0; a < 3; a++) { const an = a * Math.PI / 3 + t * .5; ctx.moveTo(x - Math.cos(an) * s, y - Math.sin(an) * s); ctx.lineTo(x + Math.cos(an) * s, y + Math.sin(an) * s); } ctx.stroke(); } }
+  // thermometer
+  if (e.therm) { const hot = e.hot ?? 38, ct = e.coldT ?? 12, temp = Math.round(lerp(hot, ct, clamp(cold))), lvl = clamp((temp - 0) / 45);
+    const X = e.thx ?? -300, Y0 = -120; ctx.strokeStyle = T.line; ctx.lineWidth = 8; ctx.fillStyle = T.panel; rr(X - 22, Y0 - 300, 44, 300, 22); ctx.fill(); ctx.stroke();
+    const tc = temp > 25 ? '#e0452b' : '#2f6fd6'; ctx.fillStyle = tc; ctx.beginPath(); ctx.arc(X, Y0 + 30, 40, 0, 7); ctx.fill(); ctx.stroke(); rr(X - 11, Y0 - 290 * lvl, 22, 290 * lvl + 20, 11); ctx.fill();
+    font('Hand', 80); ctx.textAlign = 'center'; ctx.fillStyle = tc; ctx.fillText(temp + '°', X, Y0 - 330); }
+  ctx.restore(); ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+};
+V.knot = (e, lt, t) => { // close-up of a shoelace bow on the shoe. loose 0..1 or [[sec,v]] (loops shrink, free ends grow), swing 0..1 or [[sec,v]] (free ends whip),
+  // open 0..1 or [[sec,v]] (bow falls apart into two hanging laces), tilt deg or [[sec,v]] (granny bow twists lengthwise), stomp: true (impact jolts + lines, 1.4/s),
+  // mark: 'cross'|'check' (+ markAt / markAt_on), color (shoe), lace
+  const loose = KF(e.loose, 0, lt), sw = KF(e.swing, 0, lt), open = KF(e.open, 0, lt), tilt = KF(e.tilt, 0, lt) * Math.PI / 180;
+  const D = '#2a2733', LC = e.lace || '#ffffff', col = e.color || '#ff5a1f';
+  const sp = e.stompRate || 1.4, sph = (lt * sp) % 1, jolt = e.stomp ? Math.exp(-sph * 9) : 0;
+  ctx.save(); ctx.translate(0, jolt * 26); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  // shoe throat
+  ctx.fillStyle = col; ctx.strokeStyle = D; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(-420, 460); ctx.lineTo(-340, 80); ctx.quadraticCurveTo(0, 30, 340, 80); ctx.lineTo(420, 460); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fbf7ee'; ctx.beginPath(); ctx.moveTo(-120, 460); ctx.lineTo(-110, 55); ctx.quadraticCurveTo(0, 20, 110, 55); ctx.lineTo(120, 460); ctx.closePath(); ctx.fill(); ctx.stroke();
+  const eyes = [[-170, 150], [170, 150], [-180, 290], [180, 290]];
+  const lace = (draw, w = 16) => { ctx.strokeStyle = D; ctx.lineWidth = w + 10; draw(); ctx.stroke(); ctx.strokeStyle = LC; ctx.lineWidth = w; draw(); ctx.stroke(); };
+  lace(() => { ctx.beginPath(); ctx.moveTo(eyes[2][0], eyes[2][1]); ctx.lineTo(eyes[1][0], eyes[1][1]); ctx.moveTo(eyes[3][0], eyes[3][1]); ctx.lineTo(eyes[0][0], eyes[0][1]); });
+  for (const [x, y] of eyes) { ctx.fillStyle = D; ctx.beginPath(); ctx.arc(x, y, 22, 0, 7); ctx.fill(); ctx.fillStyle = '#d9d2c6'; ctx.beginPath(); ctx.arc(x, y, 10, 0, 7); ctx.fill(); }
+  const C = [0, -30], KS = e.ks ?? 1.45;
+  if (open < 1) {
+    ctx.save(); ctx.globalAlpha *= 1 - clamp(open * 1.3);
+    lace(() => { ctx.beginPath(); ctx.moveTo(eyes[0][0], eyes[0][1]); ctx.quadraticCurveTo(-70, 60, C[0], C[1] + 20); ctx.moveTo(eyes[1][0], eyes[1][1]); ctx.quadraticCurveTo(70, 60, C[0], C[1] + 20); });
+    ctx.translate(C[0], C[1]); ctx.rotate(tilt); ctx.scale(KS, KS);
+    const L = lerp(190, 55, loose) * (1 - open), H = lerp(80, 30, loose), E = lerp(130, 330, loose);
+    const w1 = Math.sin(t * 9) * sw * .55, w2 = Math.sin(t * 9 + 1.3) * sw * .55;
+    lace(() => { ctx.beginPath(); ctx.ellipse(-L / 2 - 10, -20, L / 2, H / 2, -.25, 0, 7); ctx.moveTo(L + 10, -20); ctx.ellipse(L / 2 + 10, -20, L / 2, H / 2, .25, 0, 7); });
+    const end = (sgn, w) => { const a = Math.PI / 2 + sgn * .35 + w; ctx.beginPath(); ctx.moveTo(0, 10); ctx.quadraticCurveTo(sgn * 40, 10 + E * .5, sgn * 20 + Math.cos(a) * E, 10 + Math.sin(a) * E); };
+    lace(() => end(-1, w1)); lace(() => end(1, w2));
+    for (const s2 of [-1, 1]) { const a = Math.PI / 2 + s2 * .35 + (s2 < 0 ? w1 : w2); ctx.fillStyle = D; ctx.save(); ctx.translate(s2 * 20 + Math.cos(a) * E, 10 + Math.sin(a) * E); ctx.rotate(a - Math.PI / 2); rr(-11, -6, 22, 46, 6); ctx.fill(); ctx.restore(); }
+    ctx.fillStyle = LC; ctx.strokeStyle = D; ctx.lineWidth = 8; rr(-38, -46, 76, 66, 22); ctx.fill(); ctx.stroke();
+    if (loose > .2) { ctx.strokeStyle = alphaCol('#e0452b', clamp((loose - .2) * 2)); ctx.lineWidth = 6; for (const s2 of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s2 * 52, -60); ctx.lineTo(s2 * 78, -84); ctx.stroke(); } }
+    ctx.restore();
+  }
+  if (open > 0) { ctx.save(); ctx.globalAlpha *= clamp(open * 1.5);
+    for (const s2 of [-1, 1]) { const ey = eyes[s2 < 0 ? 0 : 1], k = easeOut(open), len = 420;
+      lace(() => { ctx.beginPath(); ctx.moveTo(ey[0], ey[1]); const x2 = ey[0] + s2 * lerp(20, 160, k), y2 = ey[1] + len * k; ctx.bezierCurveTo(ey[0] + s2 * 60, ey[1] + 120 * k + Math.sin(t * 6 + s2) * 30 * sw, x2 - s2 * 80, y2 - 100, x2, y2); }); }
+    ctx.restore(); }
+  if (e.stomp && jolt > .3) { ctx.strokeStyle = alphaCol(D, jolt); ctx.lineWidth = 8; for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(k * 140, 470); ctx.lineTo(k * 160, 520); ctx.stroke(); } }
+  if (e.mark) { const c = spring(lt - (e.markAt || 0)); if (lt >= (e.markAt || 0)) { ctx.save(); ctx.translate(e.mx ?? 300, e.my ?? -200); ctx.scale(c, c);
+    ctx.fillStyle = e.mark === 'check' ? '#18b85a' : '#e0452b'; ctx.beginPath(); ctx.arc(0, 0, 66, 0, 7); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 16; ctx.beginPath();
+    if (e.mark === 'check') { ctx.moveTo(-28, 2); ctx.lineTo(-6, 24); ctx.lineTo(32, -20); } else { ctx.moveTo(-24, -24); ctx.lineTo(24, 24); ctx.moveTo(24, -24); ctx.lineTo(-24, 24); } ctx.stroke(); ctx.restore(); } }
+  ctx.restore(); ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+};
 V.arrow = (e, lt, t) => { // drawn arrow from (0,0) to (dx,dy)
   const p = easeOut(lt / .5), dx = (e.dx || 300) * p, dy = (e.dy || 0) * p;
   ctx.strokeStyle = e.color || T.acc; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(dx, dy); ctx.stroke();
