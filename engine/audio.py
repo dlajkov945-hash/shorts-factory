@@ -242,4 +242,19 @@ def _sfx_proc(kind, seed=0):
         n = int(2.0 * SR); t = np.arange(n) / SR
         x = np.sin(2 * np.pi * 100 * t) + 0.5 * np.sin(2 * np.pi * 200 * t) + 0.25 * np.sign(np.sin(2 * np.pi * 50 * t))
         return 0.18 * x * np.clip(t / .2, 0, 1) * np.clip((t[-1] - t) / .3, 0, 1)
+    if kind == "wind":  # roaring wind / decompression blast (2.5 s)
+        n = int(2.5 * SR); t = np.arange(n) / SR
+        x = np.convolve(rng.standard_normal(n), np.ones(6) / 6, "same")
+        lo = np.convolve(rng.standard_normal(n), np.ones(60) / 60, "same") * 6
+        return 0.5 * (x + lo) * np.clip(t / .05, 0, 1) * np.clip((t[-1] - t) / .8, 0, 1) * (1 + .4 * np.sin(2 * np.pi * 1.7 * t))
+    if kind == "jet":  # jet engine hum in the cabin (2 s)
+        n = int(2.0 * SR); t = np.arange(n) / SR
+        x = np.convolve(rng.standard_normal(n), np.ones(90) / 90, "same") * 8 + 0.3 * np.sin(2 * np.pi * 95 * t)
+        return 0.22 * x * np.clip(t / .3, 0, 1) * np.clip((t[-1] - t) / .4, 0, 1)
+    if kind == "chime":  # cabin seatbelt chime: ding-dong
+        n = int(1.1 * SR); t = np.arange(n) / SR; out = np.zeros(n)
+        for o, f in ((0, 880), (int(.35 * SR), 698)):
+            L = n - o; tt = np.arange(L) / SR
+            out[o:] += 0.3 * (np.sin(2 * np.pi * f * tt) + .3 * np.sin(2 * np.pi * 2 * f * tt)) * np.exp(-tt * 4)
+        return out
     return np.zeros(1)
